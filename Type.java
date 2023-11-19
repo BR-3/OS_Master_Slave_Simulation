@@ -1,5 +1,5 @@
 package yg;
 
-public class Type {
-
+public enum Type {
+	b, a;
 }
