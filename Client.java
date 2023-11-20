@@ -5,7 +5,7 @@ import java.net.*;
 
 public class Client {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         // this is going to be a temporary list to hold jobs
 
         // these args are hardcoded, but we can enter them if we want into the command line
@@ -21,6 +21,7 @@ public class Client {
         int portNumber = Integer.parseInt(args[1]);
 
         try (
+                //sockets for connections between client and master (server)
                 Socket clientSocket = new Socket(hostName, portNumber);
                 PrintWriter requestWriter = //stream to write text requests to server
                         new PrintWriter(clientSocket.getOutputStream(), true);
