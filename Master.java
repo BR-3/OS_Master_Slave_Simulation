@@ -6,7 +6,7 @@ import java.net.*;
 public class Master {
 
 	public static void main(String[] args) throws IOException {
-
+		//args = new String[]{"30121"};
 		if (args.length != 1)
 		{
 			System.out.println("Usage: java Master <port number>");
@@ -37,7 +37,7 @@ public class Master {
 			}
 
 			//enter code here for doing calculations to decide which slave to send to:
-
+			
 			//enter code here for sending job to slave
 
 			//enter code here for reciving messages from slave that job is done
