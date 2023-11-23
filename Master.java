@@ -44,9 +44,23 @@ public class Master {
 				}
 				newJob.setID(Integer.parseInt(inputLine.replaceAll("[^0-9]", "")));
 
-				//enter code here for doing calculations to decide which slave to send to:
-
-
+				// Calculations to decide which slave to send to:
+				// Spins while both are busy
+				while (!aIsOpen && !bIsOpen);
+				if (newJob.getType == 'a'){
+					if (aIsOpen()) {
+						// Method to send a job to a slave
+						sendCodeToSlaveA();
+					} else {
+						sendCodeToSlaveB();
+					}
+				} else {
+					if (bIsOpen()) {
+						sendCodeToSlaveB();
+					} else {
+						sendCodeToSlaveA();
+					}
+				}
 			}
 
 			//enter code here for sending job to slave
