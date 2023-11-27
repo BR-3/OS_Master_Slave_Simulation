@@ -21,6 +21,8 @@ public class Master {
 		try (
 				ServerSocket masterSocket = new ServerSocket(Integer.parseInt(args[0]));
 				Socket clientSocket = masterSocket.accept();
+				ObjectOutputStream masterObjectOutput = new ObjectOutputStream ( clientSocket.getOutputStream());
+				ObjectInputStream masterObjectInput = new ObjectInputStream ( clientSocket.getInputStream());
 				//to send messages out to client:
 				PrintWriter outClient = new PrintWriter(clientSocket.getOutputStream(), true);
 				//to read incoming messages from client:
@@ -79,12 +81,6 @@ public class Master {
 			System.out.println(exc.getMessage());
 		}
 	}
-
-
-
-	/*Client client;
-	Slave slavea;
-	Slave slaveb;*/
 
    
 

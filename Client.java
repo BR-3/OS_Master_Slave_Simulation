@@ -24,6 +24,7 @@ public class Client {
         try (
                 //sockets for connections between client and master (server)
                 Socket clientSocket = new Socket(hostName, portNumber);
+                ObjectOutputStream clientObjectOutput = new ObjectOutputStream (clientSocket.getOutputStream());
                 PrintWriter requestWriter = //stream to write text requests to server
                         new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader infoReader = //stream to read response from server
