@@ -70,12 +70,6 @@ public class Client {
             System.err.println("Couldn't get I/O for the connection to " + hostName);
             System.exit(1);
         }
-    /*private Type type;
-    private int ID;
-    public Client(Type type, int ID){
-        this.type = type;
-        this.ID = ID;
-    }*/
     }
 
     public static void getNewJob() {
