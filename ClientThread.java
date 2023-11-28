@@ -52,6 +52,8 @@ public class ClientThread extends Thread{
 
                 // this sends the newJob to the master
                 clientObjectOutput.writeObject(newJob);
+                //write message to console:
+                System.out.println("Sending job to master, Type: " + newJob.getType() + " ID: " + newJob.getID());
 
             }
         } catch (UnknownHostException e) {

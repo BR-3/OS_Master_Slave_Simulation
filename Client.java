@@ -22,10 +22,11 @@ public class Client {
         int portNumber = Integer.parseInt(args[1]);
 
         // everything the client does will be on a thread
-        ClientThread clientThread1 = new ClientThread(hostName, portNumber);
-        ClientThread clientThread2 = new ClientThread(hostName, portNumber);
-        clientThread1.start();
-        clientThread2.start();
+        //RB edited this since prof. Novick said on slack that we just run the same client program twice.
+        // so we only need one instanciation of it, but when we run it in command line we should run it twice.
+        ClientThread clientThread = new ClientThread(hostName, portNumber);
+        clientThread.start();
+
 
     }
 

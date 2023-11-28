@@ -30,7 +30,7 @@ public class Master {
 				BufferedReader inClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				)
 		{
-			System.out.println("The master is now connected to the client");
+			System.out.println("The client is now connected to the master");
 
 			// these will keep track of whether the slaves are available
 			boolean aIsOpen =true;
@@ -82,6 +82,8 @@ public class Master {
 	private static boolean sendCodeToSlaveB(ArrayList<Job> readyJobs) {
 		Job currJob = readyJobs.get(0);
 		readyJobs.remove(0);
+		//print to console to show each step
+		System.out.println("Sending to slave B: " + currJob);
 		// Logic to send it to the slave with sockets and everything
 
 		// When the slave is finished it comes back to this method
@@ -92,6 +94,8 @@ public class Master {
 	private static boolean sendCodeToSlaveA(ArrayList<Job> readyJobs) {
 		Job currJob = readyJobs.get(0);
 		readyJobs.remove(0);
+		//print to console to show each step
+		System.out.println("Sending to slave A: " + currJob);
 		// Logic to send it to the slave with sockets and everything
 
 		// When the slave is finished it comes back to this method

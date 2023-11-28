@@ -35,14 +35,27 @@ public class SlaveA {
             while(jobInputStream.readObject() != null) {
                 currentJob = (Job) jobInputStream.readObject();
                 if(currentJob.getType().equals(optimalJob)) {
-                    Thread.sleep(3000);// sleep for 3 seconds
+                    System.out.println("Job is optimal, takes 2 seconds to complete.");
+                    Thread.sleep(2000);// sleep for 2 seconds
                 } else {
-                    Thread.sleep(5000);// sleep for 5 seconds
+                    System.out.println("Job is not optimal, takes 10 seconds to complete.");
+                    Thread.sleep(10000);// sleep for 10 seconds
                 }
                 doneJobs.add(currentJob);
+                System.out.println("Completed job, type: " + currentJob.getType() + " ID: " + currentJob.getID());
 
                 // this tells the master that it is now available
                 requestWriter.println(true);
+
+                //loop through the doneJobs array and send them back to the master:
+                while(!doneJobs.isEmpty())
+                {
+                    //send 1st of array list back to the master to tell it that it's done
+                    //hardcoded message for now- later need to add sockets:
+                    Job curr = doneJobs.get(0);
+                    System.out.println("Sending done job to master, type: " + curr.getType() + " ID: " + curr.getID());
+                    doneJobs.remove(curr);
+                }
             }
 
 
