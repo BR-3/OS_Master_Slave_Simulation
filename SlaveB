@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.*;
 
 public class SlaveB {
+
+
     public static void main(String[] args) {
         args = new String[]{"127.0.0.1", "30122"};
 
@@ -24,7 +26,7 @@ public class SlaveB {
                         new BufferedReader(
                                 new InputStreamReader(clientSocket.getInputStream()));
         ) {
-        // code here
+
         } catch (UnknownHostException e) {
                     System.err.println("Don't know about host " + hostName);
                     System.exit(1);

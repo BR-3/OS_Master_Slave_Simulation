@@ -2,6 +2,7 @@ package yg;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 public class SlaveA {
     public static void main(String[] args) {
@@ -23,7 +24,15 @@ public class SlaveA {
                 BufferedReader infoReader = //stream to read response from server
                         new BufferedReader(
                                 new InputStreamReader(clientSocket.getInputStream()));
+                ObjectInputStream jobInputStream = new ObjectInputStream(clientSocket.getInputStream());
         ) {
+            String optimalJob = String.valueOf('a');
+            ArrayList<Job> doneJobs = new ArrayList<Job>;
+
+            Job currentJob;
+            while(jobInputStream.readObject() != null) {
+                currentJob = (Job) jobInputStream.readObject();
+            }
 
 
 
@@ -33,6 +42,8 @@ public class SlaveA {
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " + hostName);
             System.exit(1);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
