@@ -38,6 +38,13 @@ public class ClientThread extends Thread{
                     type = Type.a;
                 } else if(jobTypeInput.next().equals('b')) {
                     type = Type.b;
+                } else {
+                    System.out.println("Invalid. Please enter a type of job (a or b)");
+                    if(jobTypeInput.next().equals('a')) {
+                        type = Type.a;
+                    } else if(jobTypeInput.next().equals('b')) {
+                        type = Type.b;
+                    }
                 }
                 // this is the new job that it will send to master
                 Job newJob = new Job(type,id);

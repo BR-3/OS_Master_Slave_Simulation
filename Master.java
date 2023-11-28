@@ -2,6 +2,7 @@ package yg;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class Master {
 
@@ -35,11 +36,16 @@ public class Master {
 			boolean aIsOpen =true;
 			boolean bIsOpen= true;
 
+			// Arraylist of jobs that are waiting to be assigned to slaves
+			ArrayList<Job> readyJobs = new ArrayList<>();
+
 			while ((masterObjectInput.readObject()) != null)
 			{
 				Job newJob = (Job) masterObjectInput.readObject();
 				//print to console that we received a message from client:
 				System.out.println("\nReceived from client: " + newJob.getID());
+				// Add the new job to the arraylist of jobs
+				readyJobs.add(newJob);
 
 				// add some logic to read from slave if slave is busy
 
@@ -49,15 +55,15 @@ public class Master {
 				if (newJob.getType().equals('a')){
 					if (aIsOpen) {
 						// Method to send a job to a slave
-						sendCodeToSlaveA(); // need to create another socket to connect to slaves, then send the object
+						aIsOpen = sendCodeToSlaveA(readyJobs); // need to create another socket to connect to slaves, then send the object
 					} else {
-						sendCodeToSlaveB();
+						bIsOpen = sendCodeToSlaveB(readyJobs);
 					}
 				} else {
 					if (bIsOpen) {
-						sendCodeToSlaveB();
+						bIsOpen = sendCodeToSlaveB(readyJobs);
 					} else {
-						sendCodeToSlaveA();
+						aIsOpen = sendCodeToSlaveA(readyJobs);
 					}
 				}
 			}
@@ -73,7 +79,25 @@ public class Master {
         }
     }
 
-   
+	private static boolean sendCodeToSlaveB(ArrayList<Job> readyJobs) {
+		Job currJob = readyJobs.get(0);
+		readyJobs.remove(0);
+		// Logic to send it to the slave with sockets and everything
+
+		// When the slave is finished it comes back to this method
+		// and returns true, meaning it's ready for a new job
+		return true;
+	}
+
+	private static boolean sendCodeToSlaveA(ArrayList<Job> readyJobs) {
+		Job currJob = readyJobs.get(0);
+		readyJobs.remove(0);
+		// Logic to send it to the slave with sockets and everything
+
+		// When the slave is finished it comes back to this method
+		// and returns true, meaning it's ready for a new job
+		return true;
+	}
 
 
 }
