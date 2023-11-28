@@ -24,14 +24,25 @@ public class SlaveA {
                 BufferedReader infoReader = //stream to read response from server
                         new BufferedReader(
                                 new InputStreamReader(clientSocket.getInputStream()));
-                ObjectInputStream jobInputStream = new ObjectInputStream(clientSocket.getInputStream());
+                ObjectInputStream jobInputStream = new ObjectInputStream(clientSocket.getInputStream())
         ) {
+            // this is hwat it does better
             String optimalJob = String.valueOf('a');
-            ArrayList<Job> doneJobs = new ArrayList<Job>;
+            // this will hold done jobs
+            ArrayList<Job> doneJobs = new ArrayList<Job>();
 
             Job currentJob;
             while(jobInputStream.readObject() != null) {
                 currentJob = (Job) jobInputStream.readObject();
+                if(currentJob.getType().equals(optimalJob)) {
+                    Thread.sleep(3000);// sleep for 3 seconds
+                } else {
+                    Thread.sleep(5000);// sleep for 5 seconds
+                }
+                doneJobs.add(currentJob);
+
+                // this tells the master that it is now available
+                requestWriter.println(true);
             }
 
 
@@ -43,6 +54,8 @@ public class SlaveA {
             System.err.println("Couldn't get I/O for the connection to " + hostName);
             System.exit(1);
         } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

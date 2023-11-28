@@ -31,33 +31,30 @@ public class Master {
 		{
 			System.out.println("The master is now connected to the client");
 
-			//this is for recieving messages from client:
-			String inputLine;
-			while ((inputLine = inClient.readLine()) != null)
+			// these will keep track of whether the slaves are available
+			boolean aIsOpen =true;
+			boolean bIsOpen= true;
+
+			while ((masterObjectInput.readObject()) != null)
 			{
-				//print to console that we recived a message from client:
-				System.out.println("\nReceived from client: " + inputLine);
-				// this is a temporary Job
-				Job newJob = null;
-				if(inputLine.charAt(0) == 'a') {
-					newJob.setType(Type.a);
-				} else {
-					newJob.setType(Type.b);
-				}
-				newJob.setID(Integer.parseInt(inputLine.replaceAll("[^0-9]", "")));
+				Job newJob = (Job) masterObjectInput.readObject();
+				//print to console that we received a message from client:
+				System.out.println("\nReceived from client: " + newJob.getID());
+
+				// add some logic to read from slave if slave is busy
 
 				// Calculations to decide which slave to send to:
 				// Spins while both are busy
-				while (!aIsOpen && !bIsOpen);
-				if (newJob.getType == 'a'){
-					if (aIsOpen()) {
+				while (!aIsOpen || !bIsOpen);
+				if (newJob.getType().equals('a')){
+					if (aIsOpen) {
 						// Method to send a job to a slave
-						sendCodeToSlaveA();
+						sendCodeToSlaveA(); // need to create another socket to connect to slaves, then send the object
 					} else {
 						sendCodeToSlaveB();
 					}
 				} else {
-					if (bIsOpen()) {
+					if (bIsOpen) {
 						sendCodeToSlaveB();
 					} else {
 						sendCodeToSlaveA();
@@ -65,22 +62,16 @@ public class Master {
 				}
 			}
 
-			//enter code here for sending job to slave
-
-			//enter code here for reciving messages from slave that job is done
-
-			//enter code here for sending message to client that job is done
-
-			//^^all these steps will probably involve separate threads so that they can
-			// all be happening at the same time with sending messages in and out
 		}
 		catch (IOException exc)
 		{
 			System.out.println("Exception caught when trying to listen on port "
 					+ portNumber + " or listening for a connection");
 			System.out.println(exc.getMessage());
-		}
-	}
+		} catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
    
 
