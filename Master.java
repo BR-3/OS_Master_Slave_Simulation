@@ -20,14 +20,23 @@ public class Master {
 		int portNumber = Integer.parseInt(args[0]);
 
 		try (
-				ServerSocket masterSocket = new ServerSocket(Integer.parseInt(args[0]));
-				Socket clientSocket = masterSocket.accept();
-				ObjectOutputStream masterObjectOutput = new ObjectOutputStream ( clientSocket.getOutputStream());
+				// this is the master to connect to client
+				ServerSocket masterClientSocket = new ServerSocket(Integer.parseInt(args[0])); // connects to clients
+				Socket clientSocket = masterClientSocket.accept();
+				ObjectOutputStream masterClientObjectOutput = new ObjectOutputStream ( clientSocket.getOutputStream());
 				ObjectInputStream masterObjectInput = new ObjectInputStream ( clientSocket.getInputStream());
 				//to send messages out to client:
 				PrintWriter outClient = new PrintWriter(clientSocket.getOutputStream(), true);
 				//to read incoming messages from client:
 				BufferedReader inClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+				// master to connect to slave
+				ServerSocket masterSlaveSocket = new ServerSocket(Integer.parseInt(args[0]));
+				Socket slaveSocket = masterSlaveSocket.accept();
+				ObjectOutputStream masterSlaveObjectOutput = new ObjectOutputStream(slaveSocket.getOutputStream());
+				ObjectInputStream masterSlaveObjectInput = new ObjectInputStream(slaveSocket.getInputStream());
+				PrintWriter outSlave = new PrintWriter(slaveSocket.getOutputStream(),true);
+				BufferedReader inSlave = new BufferedReader(new InputStreamReader(slaveSocket.getInputStream()));
 				)
 		{
 			System.out.println("The client is now connected to the master");
@@ -55,15 +64,15 @@ public class Master {
 				if (newJob.getType().equals('a')){
 					if (aIsOpen) {
 						// Method to send a job to a slave
-						aIsOpen = sendCodeToSlaveA(readyJobs); // need to create another socket to connect to slaves, then send the object
+						aIsOpen = sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave); // need to create another socket to connect to slaves, then send the object
 					} else {
-						bIsOpen = sendCodeToSlaveB(readyJobs);
+						bIsOpen = sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
 					}
 				} else {
 					if (bIsOpen) {
-						bIsOpen = sendCodeToSlaveB(readyJobs);
+						bIsOpen = sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
 					} else {
-						aIsOpen = sendCodeToSlaveA(readyJobs);
+						aIsOpen = sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
 					}
 				}
 			}
@@ -79,27 +88,32 @@ public class Master {
         }
     }
 
-	private static boolean sendCodeToSlaveB(ArrayList<Job> readyJobs) {
+	private static boolean sendCodeToSlaveB(ArrayList<Job> readyJobs,
+											ObjectOutputStream output, BufferedReader inSlave) throws IOException {
 		Job currJob = readyJobs.get(0);
 		readyJobs.remove(0);
 		//print to console to show each step
 		System.out.println("Sending to slave B: " + currJob);
 		// Logic to send it to the slave with sockets and everything
-
+		output.writeObject(currJob);
 		// When the slave is finished it comes back to this method
 		// and returns true, meaning it's ready for a new job
+		while(inSlave.readLine() == null);
 		return true;
 	}
 
-	private static boolean sendCodeToSlaveA(ArrayList<Job> readyJobs) {
+	private static boolean sendCodeToSlaveA(ArrayList<Job> readyJobs,
+											ObjectOutputStream output, BufferedReader inSlave) throws IOException {
 		Job currJob = readyJobs.get(0);
 		readyJobs.remove(0);
 		//print to console to show each step
 		System.out.println("Sending to slave A: " + currJob);
-		// Logic to send it to the slave with sockets and everything
-
+		// this sends the job to the slave
+		output.writeObject(currJob);
 		// When the slave is finished it comes back to this method
 		// and returns true, meaning it's ready for a new job
+		// it will spin until the slave input sends something back (which will be true)
+		while(inSlave.readLine() == null);
 		return true;
 	}
 
