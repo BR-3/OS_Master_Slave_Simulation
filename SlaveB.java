@@ -1,10 +1,11 @@
 package yg;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 
-public class SlaveA {
+public class SlaveB {
     public static void main(String[] args) {
         args = new String[]{"127.0.0.1", "30122"};
 
@@ -27,7 +28,7 @@ public class SlaveA {
                 ObjectInputStream jobInputStream = new ObjectInputStream(clientSocket.getInputStream())
         ) {
             // this is what it does better
-            String optimalJob = String.valueOf('a');
+            String optimalJob = String.valueOf('b');
             // this will hold done jobs
             ArrayList<Job> doneJobs = new ArrayList<Job>();
 

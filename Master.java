@@ -56,8 +56,6 @@ public class Master {
 				// Add the new job to the arraylist of jobs
 				readyJobs.add(newJob);
 
-				// add some logic to read from slave if slave is busy
-
 				// Calculations to decide which slave to send to:
 				// Spins while both are busy
 				while (!aIsOpen || !bIsOpen);
@@ -76,7 +74,6 @@ public class Master {
 					}
 				}
 			}
-
 		}
 		catch (IOException exc)
 		{
@@ -116,6 +113,4 @@ public class Master {
 		while(inSlave.readLine() == null);
 		return true;
 	}
-
-
 }
