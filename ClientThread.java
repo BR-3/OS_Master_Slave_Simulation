@@ -28,23 +28,26 @@ public class ClientThread extends Thread{
                                 new InputStreamReader(clientSocket.getInputStream()));
         ) {
             while(runThread) {
-                System.out.println("Please enter a type of job (a or b");
                 // this will read from the user
-                Scanner jobTypeInput = new Scanner(System.in);
+                Scanner kb = new Scanner(System.in);
+                System.out.println("Please enter a type of job (a or b): ");
+                String jobType = kb.nextLine();
+                if (jobType.equals("a") || jobType.equals("b"))
+                {
+                    System.out.println("Received: User entered a new job of type: " + jobType);
+                }
+                else
+                {
+                    System.out.println("Invalid entry. Please enter a type of job (a or b): ");
+                }
+
 
                 // this determines the type
                 Type type = null;
-                if(jobTypeInput.next().equals('a')) {
+                if(jobType.equals('a')) {
                     type = Type.a;
-                } else if(jobTypeInput.next().equals('b')) {
+                } else if(jobType.equals('b')) {
                     type = Type.b;
-                } else {
-                    System.out.println("Invalid. Please enter a type of job (a or b)");
-                    if(jobTypeInput.next().equals('a')) {
-                        type = Type.a;
-                    } else if(jobTypeInput.next().equals('b')) {
-                        type = Type.b;
-                    }
                 }
                 // this is the new job that it will send to master
                 Job newJob = new Job(type,id);
