@@ -59,16 +59,34 @@ public class Master {
 				// Calculations to decide which slave to send to:
 				int slaveALoad = SlaveA.getCurrentLoad();
 				int slaveBLoad = SlaveA.getCurrentLoad(); //switch to slaveB later after edit slaveB
-				if (slaveALoad - slaveBLoad >= 10) // not sure if calculations are 100% accurate...
+
+				if (newJob.getType().equals('a'))
 				{
-					//add code for sending to Slave A
-					sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
+					if (slaveALoad - slaveBLoad >= 10) // not sure if calculations are 100% accurate...
+					{
+						//add code for sending to Slave B
+						sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
+					}
+					else
+					{
+						//add code for sending to Slave A
+						sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
+					}
 				}
-				else
+				else if (newJob.getType().equals('b'))
 				{
-					//add code for sending to Slave B
-					sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
+					if (slaveBLoad - slaveALoad >= 10) // not sure if calculations are 100% accurate...
+					{
+						//add code for sending to Slave A
+						sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
+					}
+					else
+					{
+						//add code for sending to Slave B
+						sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
+					}
 				}
+
 
 
 
