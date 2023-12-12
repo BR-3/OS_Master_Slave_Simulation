@@ -5,6 +5,20 @@ import java.net.*;
 import java.util.*;
 
 public class SlaveA {
+
+    // a count for the current load:
+           /*  when it gets a job,
+             it will increase the load by 2 if it's optimal type
+             or by 10 if it's the non-optimal job.
+             (might need to add a lock on this for when master accesses this
+             to determine which slave to send a job to)
+             */
+    static int currentLoad = 0;
+
+    public static int getCurrentLoad() {
+        return currentLoad;
+    }
+
     public static void main(String[] args) {
         args = new String[]{"127.0.0.1", "30122"};
 
@@ -28,6 +42,11 @@ public class SlaveA {
         ) {
             // this is what it does better
             String optimalJob = String.valueOf('a');
+
+
+
+
+
             // this will hold done jobs
             ArrayList<Job> doneJobs = new ArrayList<Job>();
 
@@ -36,14 +55,24 @@ public class SlaveA {
                 currentJob = (Job) jobInputStream.readObject();
                 if(currentJob.getType().equals(optimalJob)) {
                     System.out.println("Job is optimal, takes 2 seconds to complete.");
-                    Thread.sleep(2000);// sleep for 2 seconds
+                    // increase load by 2 and sleep for 2 seconds
+                    currentLoad += 2;
+                    Thread.sleep(2000);
+                    // when finish job, decrease load by 2
+                    currentLoad -= 2;
                 } else {
                     System.out.println("Job is not optimal, takes 10 seconds to complete.");
-                    Thread.sleep(10000);// sleep for 10 seconds
+                    // increase load by 10 and sleep for 10 seconds
+                    currentLoad += 10;
+                    Thread.sleep(10000);
+                    // when finish job, decrease load by 10
+                    currentLoad -= 10;
                 }
                 doneJobs.add(currentJob);
                 System.out.println("Completed job, type: " + currentJob.getType() + " ID: " + currentJob.getID());
 
+                // *** don't think we need this bc the master just needs
+                // to know the current load (added above) ***
                 // this tells the master that it is now available
                 requestWriter.println(true);
 

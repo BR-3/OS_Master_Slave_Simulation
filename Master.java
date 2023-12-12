@@ -57,6 +57,21 @@ public class Master {
 				readyJobs.add(newJob);
 
 				// Calculations to decide which slave to send to:
+				int slaveALoad = SlaveA.getCurrentLoad();
+				int slaveBLoad = SlaveA.getCurrentLoad(); //switch to slaveB later after edit slaveB
+				if (slaveALoad - slaveBLoad >= 10) // not sure if calculations are 100% accurate...
+				{
+					//add code for sending to Slave A
+					sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
+				}
+				else
+				{
+					//add code for sending to Slave B
+					sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
+				}
+
+
+
 				// Spins while both are busy
 				while (!aIsOpen || !bIsOpen);
 				if (newJob.getType().equals('a')){
