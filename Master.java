@@ -62,28 +62,28 @@ public class Master {
 
 				if (newJob.getType().equals('a'))
 				{
-					if (slaveALoad - slaveBLoad >= 10) // not sure if calculations are 100% accurate...
+					if (slaveALoad + 2 <= slaveBLoad + 10) // not sure if calculations are 100% accurate...
 					{
 						//add code for sending to Slave B
-						sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
+						sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
 					}
 					else
 					{
 						//add code for sending to Slave A
-						sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
+						sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
 					}
 				}
 				else if (newJob.getType().equals('b'))
 				{
-					if (slaveBLoad - slaveALoad >= 10) // not sure if calculations are 100% accurate...
+					if (slaveBLoad + 2 <= slaveALoad + 10) // not sure if calculations are 100% accurate...
 					{
 						//add code for sending to Slave A
-						sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
+						sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
 					}
 					else
 					{
 						//add code for sending to Slave B
-						sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
+						sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
 					}
 				}
 
