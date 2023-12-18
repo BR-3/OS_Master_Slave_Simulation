@@ -37,6 +37,7 @@ public class Master {
 				ObjectInputStream masterSlaveObjectInput = new ObjectInputStream(slaveSocket.getInputStream());
 				PrintWriter outSlave = new PrintWriter(slaveSocket.getOutputStream(),true);
 				BufferedReader inSlave = new BufferedReader(new InputStreamReader(slaveSocket.getInputStream()));
+
 				)
 		{
 			System.out.println("The client is now connected to the master");
@@ -86,8 +87,6 @@ public class Master {
 						sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
 					}
 				}
-
-
 
 
 				// Spins while both are busy
