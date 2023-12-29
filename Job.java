@@ -13,7 +13,7 @@ public class Job {
 		this.ID=ID;
 	}
 
-
+	//getters and setters
 	public char getType() {
 		return type;
 	}
