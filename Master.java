@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class Master {
 
 	public static void main(String[] args) throws IOException {
-		args = new String[]{"30121"};
-		if (args.length != 1)
+		args = new String[]{"30121", "30122"};
+		if (args.length != 2)
 		{
 			System.out.println("Usage: java Master <port number>");
 			System.exit(1);
@@ -31,7 +31,7 @@ public class Master {
 				BufferedReader inClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
 				// master to connect to slave
-				ServerSocket masterSlaveSocket = new ServerSocket(Integer.parseInt(args[0]));
+				ServerSocket masterSlaveSocket = new ServerSocket(Integer.parseInt(args[1]));
 				Socket slaveSocket = masterSlaveSocket.accept();
 				ObjectOutputStream masterSlaveObjectOutput = new ObjectOutputStream(slaveSocket.getOutputStream());
 				ObjectInputStream masterSlaveObjectInput = new ObjectInputStream(slaveSocket.getInputStream());
@@ -42,9 +42,6 @@ public class Master {
 		{
 			System.out.println("The client is now connected to the master");
 
-			// these will keep track of whether the slaves are available
-			boolean aIsOpen =true;
-			boolean bIsOpen= true;
 
 			// Arraylist of jobs that are waiting to be assigned to slaves
 			ArrayList<Job> readyJobs = new ArrayList<>();
@@ -61,7 +58,7 @@ public class Master {
 				int slaveALoad = SlaveA.getCurrentLoad();
 				int slaveBLoad = SlaveA.getCurrentLoad(); //switch to slaveB later after edit slaveB
 
-				if (newJob.getType().equals('a'))
+				if (newJob.getType() == 'a')
 				{
 					if (slaveALoad + 2 <= slaveBLoad + 10) // not sure if calculations are 100% accurate...
 					{
@@ -74,7 +71,7 @@ public class Master {
 						sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
 					}
 				}
-				else if (newJob.getType().equals('b'))
+				else if (newJob.getType()== 'b')
 				{
 					if (slaveBLoad + 2 <= slaveALoad + 10) // not sure if calculations are 100% accurate...
 					{
@@ -89,7 +86,7 @@ public class Master {
 				}
 
 
-				// Spins while both are busy
+				/*// Spins while both are busy
 				while (!aIsOpen || !bIsOpen);
 				if (newJob.getType().equals('a')){
 					if (aIsOpen) {
@@ -104,7 +101,7 @@ public class Master {
 					} else {
 						aIsOpen = sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
 					}
-				}
+				}*/
 			}
 		}
 		catch (IOException exc)

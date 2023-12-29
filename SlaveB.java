@@ -28,14 +28,14 @@ public class SlaveB {
                 ObjectInputStream jobInputStream = new ObjectInputStream(clientSocket.getInputStream())
         ) {
             // this is what it does better
-            String optimalJob = String.valueOf('b');
+            char optimalJob = 'b';
             // this will hold done jobs
             ArrayList<Job> doneJobs = new ArrayList<Job>();
 
             Job currentJob;
             while(jobInputStream.readObject() != null) {
                 currentJob = (Job) jobInputStream.readObject();
-                if(currentJob.getType().equals(optimalJob)) {
+                if(currentJob.getType() == optimalJob) {
                     System.out.println("Job is optimal, takes 2 seconds to complete.");
                     Thread.sleep(2000);// sleep for 2 seconds
                 } else {

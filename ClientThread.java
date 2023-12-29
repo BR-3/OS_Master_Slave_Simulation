@@ -35,6 +35,22 @@ public class ClientThread extends Thread{
                 if (jobType.equals("a") || jobType.equals("b"))
                 {
                     System.out.println("Received: User entered a new job of type: " + jobType);
+                    char type = jobType.charAt(0);  // Extract the first character
+                    /*char type ='a';
+                    if(jobType.equals('a')) {
+                        type = 'a';
+                    } else if(jobType.equals('b')) {
+                        type = 'b';
+                    }*/
+                    // this is the new job that it will send to master
+                    Job newJob = new Job(type,id);
+                    id++;
+
+                    // this sends the newJob to the master
+                clientObjectOutput.writeObject(newJob);
+                    //write message to console:
+                    System.out.println("Sending job to master, Type: " + newJob.getType() + " ID: " + newJob.getID());
+
                 }
                 else
                 {
@@ -42,27 +58,15 @@ public class ClientThread extends Thread{
                 }
 
 
-                // this determines the type
-                Type type = null;
-                if(jobType.equals('a')) {
-                    type = Type.a;
-                } else if(jobType.equals('b')) {
-                    type = Type.b;
-                }
-                // this is the new job that it will send to master
-                Job newJob = new Job(type,id);
-                id++;
 
-                // this sends the newJob to the master
-                clientObjectOutput.writeObject(newJob);
-                //write message to console:
-                System.out.println("Sending job to master, Type: " + newJob.getType() + " ID: " + newJob.getID());
+
 
             }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
         } catch (IOException e) {
+            e.printStackTrace();
             System.err.println("Couldn't get I/O for the connection to " + hostName);
             System.exit(1);
         }

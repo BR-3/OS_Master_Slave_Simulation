@@ -41,7 +41,7 @@ public class SlaveA {
                 ObjectInputStream jobInputStream = new ObjectInputStream(clientSocket.getInputStream())
         ) {
             // this is what it does better
-            String optimalJob = String.valueOf('a');
+            char optimalJob = 'a';
 
 
 
@@ -53,7 +53,7 @@ public class SlaveA {
             Job currentJob;
             while(jobInputStream.readObject() != null) {
                 currentJob = (Job) jobInputStream.readObject();
-                if(currentJob.getType().equals(optimalJob)) {
+                if(currentJob.getType() == optimalJob) {
                     System.out.println("Job is optimal, takes 2 seconds to complete.");
                     // increase load by 2 and sleep for 2 seconds
                     currentLoad += 2;

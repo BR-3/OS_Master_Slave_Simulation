@@ -2,23 +2,24 @@ package yg;
 public class Job {
 	
 	//Fields
-	private Type type;
+//	private charachter type;
 	private int ID;
+	private char type;
 	
 	
 	//Constructor
-	public Job(Type type,int ID) {
+	public Job(char type, int ID) {
 		this.type=type;
 		this.ID=ID;
 	}
 
 
-	public Type getType() {
+	public char getType() {
 		return type;
 	}
 
 
-	public void setType(Type type) {
+	public void setType(char type) {
 		this.type = type;
 	}
 
