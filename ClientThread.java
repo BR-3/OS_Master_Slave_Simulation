@@ -1,3 +1,4 @@
+// don't need this anymore bc incorporated in the other files...
 package yg;
 
 import java.io.*;
@@ -21,9 +22,9 @@ public class ClientThread extends Thread{
                 //sockets for connections between client and master (server)
                 Socket clientSocket = new Socket(hostName, portNumber);
                 ObjectOutputStream clientObjectOutput = new ObjectOutputStream (clientSocket.getOutputStream());
-                PrintWriter requestWriter = //stream to write text requests to server
+                PrintWriter out = //stream to write text requests to server
                         new PrintWriter(clientSocket.getOutputStream(), true);
-                BufferedReader infoReader = //stream to read response from server
+                BufferedReader in = //stream to read response from server
                         new BufferedReader(
                                 new InputStreamReader(clientSocket.getInputStream()));
         ) {

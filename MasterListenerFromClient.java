@@ -1,12 +1,15 @@
+/*
+dont think we need this anymore...
+see ServerThread instead
 package yg;
 
 import java.io.*;
 import java.net.*;
 
-public class MasterClientListener extends Thread {
+public class MasterListenerFromClient extends Thread {
     int args;
 
-    public MasterClientListener(int args) {
+    public MasterListenerFromClient(int args) {
         this.args = args;
     }
 
@@ -14,10 +17,10 @@ public class MasterClientListener extends Thread {
            try (
                 ServerSocket masterClientSocket = new ServerSocket(args); // connects to clients
                 Socket clientSocket = masterClientSocket.accept();
-                ObjectOutputStream masterClientObjectOutput = new ObjectOutputStream ( clientSocket.getOutputStream());
+//                ObjectOutputStream masterClientObjectOutput = new ObjectOutputStream ( clientSocket.getOutputStream());
                 ObjectInputStream masterObjectInput = new ObjectInputStream ( clientSocket.getInputStream());
                 //to send messages out to client:
-                PrintWriter outClient = new PrintWriter(clientSocket.getOutputStream(), true);
+//                PrintWriter outClient = new PrintWriter(clientSocket.getOutputStream(), true);
                 //to read incoming messages from client:
                 BufferedReader inClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                    ) {
@@ -30,3 +33,4 @@ public class MasterClientListener extends Thread {
         }
     }
 
+*/

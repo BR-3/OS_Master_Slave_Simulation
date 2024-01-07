@@ -1,3 +1,5 @@
+
+
 package yg;
 
 import java.io.*;
@@ -31,12 +33,13 @@ public class Master {
 				BufferedReader inClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
 				// master to connect to slave
-				ServerSocket masterSlaveSocket = new ServerSocket(Integer.parseInt(args[1]));
+ServerSocket masterSlaveSocket = new ServerSocket(Integer.parseInt(args[1]));
 				Socket slaveSocket = masterSlaveSocket.accept();
 				ObjectOutputStream masterSlaveObjectOutput = new ObjectOutputStream(slaveSocket.getOutputStream());
 				ObjectInputStream masterSlaveObjectInput = new ObjectInputStream(slaveSocket.getInputStream());
 				PrintWriter outSlave = new PrintWriter(slaveSocket.getOutputStream(),true);
 				BufferedReader inSlave = new BufferedReader(new InputStreamReader(slaveSocket.getInputStream()));
+
 
 				)
 		{
@@ -51,7 +54,7 @@ public class Master {
 				Job newJob = (Job) masterObjectInput.readObject();
 				//print to console that we received a message from client:
 				System.out.println("\nReceived from client: " + newJob.getID());
-				// Add the new job to the arraylist of jobs
+				// Add the new job to the arraylist of jobs - don't need?
 				readyJobs.add(newJob);
 
 				// Calculations to decide which slave to send to:
@@ -62,12 +65,12 @@ public class Master {
 				{
 					if (slaveALoad + 2 <= slaveBLoad + 10) // not sure if calculations are 100% accurate...
 					{
-						//add code for sending to Slave B
+						//send to slave A
 						sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
 					}
 					else
 					{
-						//add code for sending to Slave A
+						//send to Slave B
 						sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
 					}
 				}
@@ -86,22 +89,7 @@ public class Master {
 				}
 
 
-				/*// Spins while both are busy
-				while (!aIsOpen || !bIsOpen);
-				if (newJob.getType().equals('a')){
-					if (aIsOpen) {
-						// Method to send a job to a slave
-						aIsOpen = sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave); // need to create another socket to connect to slaves, then send the object
-					} else {
-						bIsOpen = sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
-					}
-				} else {
-					if (bIsOpen) {
-						bIsOpen = sendCodeToSlaveB(readyJobs, masterSlaveObjectOutput, inSlave);
-					} else {
-						aIsOpen = sendCodeToSlaveA(readyJobs, masterSlaveObjectOutput, inSlave);
-					}
-				}*/
+
 			}
 		}
 		catch (IOException exc)
