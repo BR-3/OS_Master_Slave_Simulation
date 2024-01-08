@@ -1,6 +1,7 @@
 package yg.Master;
 
 import yg.Job;
+import yg.SharedMemory;
 
 import java.io.*;
 import java.net.*;
@@ -12,17 +13,18 @@ import java.util.*;
  */
 public class ServerThreadSlaveListener implements Runnable{
     private ServerSocket serverSocket = null;
+    private SharedMemory sharedMemory;
     int id;
     int args;
     ArrayList<Job> doneJobs;
     private Object doneJobs_Lock;
     public ServerThreadSlaveListener(ServerSocket serverSocket, int id, int args,
-                                     ArrayList<Job> doneJobs, Object doneJobs_Lock) {
+                                     SharedMemory sharedMemory) {
         this.args = args;
         this.id = id;
         this.serverSocket = serverSocket;
-        this.doneJobs = doneJobs;
-        this.doneJobs_Lock = doneJobs_Lock;
+        this.doneJobs = sharedMemory.getDoneJobs();
+        this.doneJobs_Lock = sharedMemory.getDoneJobs_LOCK();
     }
     public void run() {
         try (

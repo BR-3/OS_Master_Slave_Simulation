@@ -1,6 +1,7 @@
 package yg.Master;
 
 import yg.Job;
+import yg.SharedMemory;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -19,14 +20,16 @@ public class ServerThreadClientListener implements Runnable{
     private ServerSocket serverSocket = null;
     int clientID;
 //    private volatile ArrayList<Job> jobsToComplete;
-    jobsToCompleteClass jobsToComplete2;
+    //jobsToCompleteClass jobsToComplete2;
+    private SharedMemory sharedMemory;
+    private ArrayList<Job> jobsToComplete;
     private Object jobsToComplete_LOCK;
 
-    public ServerThreadClientListener(ServerSocket serverSocket, int clientID, jobsToCompleteClass jobsToComplete2, Object jobsToComplete_LOCK) {
+    public ServerThreadClientListener(ServerSocket serverSocket, int clientID, SharedMemory sharedMemory) {
         this.serverSocket = serverSocket;
         this.clientID = clientID;
-        this.jobsToComplete2 = jobsToComplete2;
-        this.jobsToComplete_LOCK = jobsToComplete_LOCK;
+        this.jobsToComplete = sharedMemory.getJobsToComplete();
+        this.jobsToComplete_LOCK = sharedMemory.getJobsToComplete_LOCK();
     }
 
     @Override
@@ -51,7 +54,7 @@ public class ServerThreadClientListener implements Runnable{
 
                 // place new job on shared arraylist with lock
                 synchronized(jobsToComplete_LOCK) {
-                    jobsToComplete2.getJobsToCompleteArray().add(newJob);
+                    sharedMemory.getJobsToCompleteArray().add(newJob);
                     // somehow update the array?
 //                    jobsToComplete2.s
                     System.out.println("Added new job to array in shared memory");

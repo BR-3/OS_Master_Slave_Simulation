@@ -8,33 +8,32 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * needs to be split into threads...
- * right now it's only writing to master
- * but need to split up so that 1 threads writes to master
- * and 1 thread reads from master
+ *
  */
 public class Client {
 
     public static void main(String[] args) {
-        // this is going to be a temporary list to hold jobs
-
         // these args are hardcoded, but we can enter them if we want into the command line
         args = new String[]{"127.0.0.1", "30121"};
 
-        if (args.length != 2) {
+        if (args.length != 2)
+        {
             System.err.println("Usage: java client <host name> <port number>");
             System.exit(1);
         }
 
         String hostName = args[0];
-        int portNumber = Integer.parseInt(args[1]);
+        int portNumberC = Integer.parseInt(args[1]);
+
+        final int CLIENT_THREADS = 2;
 
         /*------------------------------------------------------------*/
         try (
                 //sockets for connections between client and master (server)
-                Socket clientSocket = new Socket(hostName, portNumber);
+                Socket clientSocket = new Socket(hostName, portNumberC);
+
 //                ObjectOutputStream clientObjectOutput = new ObjectOutputStream (clientSocket.getOutputStream());
-                ObjectOutputStream clientObjectOutput = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
+                /*ObjectOutputStream clientObjectOutput = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
                 PrintWriter out = //stream to write text requests to server
                         new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader in = //stream to read response from server
@@ -42,9 +41,46 @@ public class Client {
                                 new InputStreamReader(clientSocket.getInputStream()));
                 BufferedReader stdIn = // read from user
                         new BufferedReader(
-                                new InputStreamReader(System.in))
+                                new InputStreamReader(System.in))*/
                 )
         {
+            // array for the client threads:
+            ArrayList<Thread> clientThreads = new ArrayList<>();
+
+            // need some instance of shared memory here
+
+            // creating the threads
+            for(int i = 0;i<CLIENT_THREADS;i++)
+            {
+                clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, i)));
+            }
+
+            for(int i = 0; i<CLIENT_THREADS;i++)
+            {
+                clientThreads.add(new Thread(new ClientThreadServerWriter(clientSocket, i)));
+            }
+
+            // starting the client threads
+            for (Thread t : clientThreads)
+            {
+                t.start();
+            }
+
+            // waiting for all the threads to finish
+            for(Thread t : clientThreads)
+            {
+                try
+                {
+                    t.join();
+                } catch (InterruptedException e)
+                {
+                    e.printStackTrace();;
+                }
+            }
+
+           /*
+           this needs to be worked through and divided into threads.
+
             String userInput;
             int id = 0;
             while((userInput = stdIn.readLine()) != null)
@@ -69,7 +105,7 @@ public class Client {
                 {
                     System.out.println("Invalid entry. Please enter a type of job (a or b): ");
                 }
-            }
+            }*/
 
 
 

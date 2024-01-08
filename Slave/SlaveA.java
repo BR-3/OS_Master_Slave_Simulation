@@ -1,36 +1,24 @@
 package yg.Slave;
 
 import yg.Job;
+import yg.SharedMemory;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 
 public class SlaveA {
-
-    // a count for the current load:
-           /*  when it gets a job,
-             it will increase the load by 2 if it's optimal type
-             or by 10 if it's the non-optimal job.
-             (might need to add a lock on this for when master accesses this
-             to determine which slave to send a job to)
-             */
     static int currentLoad = 0;
     static boolean isOpen = true;
+    private SharedMemory sharedMemory;
 
     public SlaveA() {
-        this.currentLoad = currentLoad;
-        this.isOpen = isOpen;
+        this.currentLoad = sharedMemory.getSlaveALoad();
+        this.isOpen = sharedMemory.getSlaveAIsOpen();
     }
-
-    public static int getCurrentLoad() {
-        return currentLoad;
-    }
-
-    public static boolean getIsOpen() {return isOpen;}
 
     public static void main(String[] args) {
-        args = new String[]{"127.0.0.1", "30122"};
+       // args = new String[]{"127.0.0.1", "30122"};
 
         if (args.length != 2) {
             System.err.println("Usage: java client <host name> <port number>");

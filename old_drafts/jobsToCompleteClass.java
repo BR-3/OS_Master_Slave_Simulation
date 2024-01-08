@@ -1,4 +1,4 @@
-package yg.Master;
+package yg.old_drafts;
 
 import yg.Job;
 
