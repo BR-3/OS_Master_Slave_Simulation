@@ -19,11 +19,13 @@ public class ServerThreadClientListener implements Runnable{
     private ServerSocket serverSocket = null;
     int clientID;
     private ArrayList<Job> jobsToComplete;
+    private Object jobsToComplete_Lock;
 
-    public ServerThreadClientListener(ServerSocket serverSocket, int clientID, ArrayList<Job> jobsToComplete) {
+    public ServerThreadClientListener(ServerSocket serverSocket, int clientID, ArrayList<Job> jobsToComplete, Object jobsToComplete_Lock) {
         this.serverSocket = serverSocket;
         this.clientID = clientID;
         this.jobsToComplete = jobsToComplete;
+        this.jobsToComplete_Lock = jobsToComplete_Lock;
     }
 
     @Override
@@ -46,8 +48,11 @@ public class ServerThreadClientListener implements Runnable{
                         ", Type: " + newJob.getType() +
                         ", ID: " + newJob.getID());
 
-                // place new job on shared arraylist
-                jobsToComplete.add(newJob);
+                // place new job on shared arraylist with lock
+                synchronized(jobsToComplete_Lock) {
+                    jobsToComplete.add(newJob);
+                }
+
                 System.out.println(jobsToComplete);
             }
 

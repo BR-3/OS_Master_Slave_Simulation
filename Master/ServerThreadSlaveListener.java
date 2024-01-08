@@ -1,30 +1,49 @@
 package yg.Master;
 
+import yg.Job;
+
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
+import java.util.*;
 
 /**
- * Will need to edit this, but this file could be used
- * for threads that will listen to incoming done jobs from slaves
+ * This thread will listen for finished jobs from the slave
+ * and add them to the arraylist of done jobs in shared memory.
  */
-public class ServerThreadSlaveListener {
+public class ServerThreadSlaveListener implements Runnable{
+    private ServerSocket serverSocket = null;
+    int id;
     int args;
-    public ServerThreadSlaveListener(int args) {this.args = args;}
+    ArrayList<Job> doneJobs;
+    private Object doneJobs_Lock;
+    public ServerThreadSlaveListener(ServerSocket serverSocket, int id, int args,
+                                     ArrayList<Job> doneJobs, Object doneJobs_Lock) {
+        this.args = args;
+        this.id = id;
+        this.serverSocket = serverSocket;
+        this.doneJobs = doneJobs;
+        this.doneJobs_Lock = doneJobs_Lock;
+    }
     public void run() {
         try (
-                ServerSocket MasterSlaveSocket = new ServerSocket(args); // connects to clients
-                Socket slaveSocket = MasterSlaveSocket.accept();
-                ObjectOutputStream masterSlaveObjectOutput = new ObjectOutputStream ( slaveSocket.getOutputStream());
-                ObjectInputStream masterObjectInput = new ObjectInputStream (slaveSocket.getInputStream());
-                //to send messages out to client:
-                PrintWriter outSlave = new PrintWriter(slaveSocket.getOutputStream(), true);
-                //to read incoming messages from client:
-                BufferedReader inSlave = new BufferedReader(new InputStreamReader(slaveSocket.getInputStream()));
+                Socket clientSocket = serverSocket.accept();
+                ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
+                //to read incoming messages from slave:
+                BufferedReader inSlave = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         ) {
-
+            Object input;
+            while ((input = objectIn.readObject()) != null)
+            {
+                Job finishedJob = (Job) input;
+                synchronized(doneJobs_Lock)
+                {
+                    doneJobs.add(finishedJob); // need a synchronized lock on this
+                }
+            }
 
         }   catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 

@@ -17,11 +17,16 @@ public class ServerThreadDecider implements Runnable{
     private ArrayList<Job> jobsToComplete;
     private ArrayList<Job> jobsForSlaveA;
     private ArrayList<Job> jobsForSlaveB;
+    private Object jobsForSlaveA_Lock;
+    private Object jobsForSlaveB_Lock;
 
-    public ServerThreadDecider(ArrayList<Job> jobsToComplete, ArrayList<Job> jobsForSlaveA, ArrayList<Job> jobsForSlaveB) {
+    public ServerThreadDecider(ArrayList<Job> jobsToComplete, ArrayList<Job> jobsForSlaveA, ArrayList<Job> jobsForSlaveB,
+                               Object jobsForSlaveA_Lock, Object jobsForSlaveB_Lock) {
         this.jobsToComplete = jobsToComplete;
         this.jobsForSlaveA = jobsForSlaveA;
         this.jobsForSlaveB = jobsForSlaveB;
+        this.jobsForSlaveA_Lock = jobsForSlaveA_Lock;
+        this.jobsForSlaveB_Lock = jobsForSlaveB_Lock;
     }
 
     @Override
@@ -62,10 +67,6 @@ public class ServerThreadDecider implements Runnable{
                     jobsForSlaveB.add(currJob);
                 }
             }
-
-
-
         }
-
     }
 }

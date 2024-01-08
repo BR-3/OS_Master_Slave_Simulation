@@ -16,10 +16,18 @@ public class SlaveA {
              to determine which slave to send a job to)
              */
     static int currentLoad = 0;
+    static boolean isOpen = true;
+
+    public SlaveA() {
+        this.currentLoad = currentLoad;
+        this.isOpen = isOpen;
+    }
 
     public static int getCurrentLoad() {
         return currentLoad;
     }
+
+    public static boolean getIsOpen() {return isOpen;}
 
     public static void main(String[] args) {
         args = new String[]{"127.0.0.1", "30122"};
@@ -37,21 +45,12 @@ public class SlaveA {
                 Socket clientSocket = new Socket(hostName, portNumber);
                 PrintWriter requestWriter = //stream to write text requests to server
                         new PrintWriter(clientSocket.getOutputStream(), true);
-                BufferedReader infoReader = //stream to read response from server
-                        new BufferedReader(
-                                new InputStreamReader(clientSocket.getInputStream()));
-//                ObjectInputStream jobInputStream = new ObjectInputStream(clientSocket.getInputStream())
                 ObjectInputStream jobInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
+                ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream())
         ) {
             // this is what it does better
             char optimalJob = 'a';
 
-
-
-
-
-            // this will hold done jobs
-            ArrayList<Job> doneJobs = new ArrayList<Job>();
 
             Job currentJob;
             while(jobInputStream.readObject() != null) {
@@ -71,23 +70,8 @@ public class SlaveA {
                     // when finish job, decrease load by 10
                     currentLoad -= 10;
                 }
-                doneJobs.add(currentJob);
-                System.out.println("Completed job, type: " + currentJob.getType() + " ID: " + currentJob.getID());
-
-                // *** don't think we need this bc the master just needs
-                // to know the current load (added above) ***
-                // this tells the master that it is now available
-                requestWriter.println(true);
-
-                //loop through the doneJobs array and send them back to the master:
-                while(!doneJobs.isEmpty())
-                {
-                    //send 1st of array list back to the master to tell it that it's done
-                    //hardcoded message for now-later need to add sockets:
-                    Job curr = doneJobs.get(0);
-                    System.out.println("Sending done job to master, type: " + curr.getType() + " ID: " + curr.getID());
-                    doneJobs.remove(curr);
-                }
+                System.out.println("Completed job and sending to master, type: " + currentJob.getType() + " ID: " + currentJob.getID());
+                jobOutputStream.writeObject(currentJob); // sending the done job to the master
             }
 
 
