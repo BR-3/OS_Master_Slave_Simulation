@@ -1,4 +1,6 @@
-package yg;
+package yg.Slave;
+
+import yg.Job;
 
 import java.io.*;
 import java.net.Socket;

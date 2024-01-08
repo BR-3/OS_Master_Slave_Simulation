@@ -1,12 +1,15 @@
 
 
-package yg;
+package yg.old_drafts;
+
+import yg.Job;
+import yg.Slave.SlaveA;
 
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
-public class Master {
+public class Master_old {
 
 	public static void main(String[] args) throws IOException {
 		args = new String[]{"30121", "30122"};

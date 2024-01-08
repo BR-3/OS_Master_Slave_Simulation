@@ -1,10 +1,11 @@
 //This is what Master.java was doing, but now with threads
 //but not 100% finished
 
-package yg;
+package yg.Master;
+
+import yg.Job;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
@@ -30,20 +31,24 @@ public class ThreadedServer {
         )
         {
             //for now, but later split up into sepearte reader and writer threads
-            ArrayList<Thread> clientThreads = new ArrayList<>();
-            ArrayList<Thread> readerThreads = new ArrayList<>();
-            ArrayList<Thread> writerThreads = new ArrayList<>();
+            ArrayList<Thread> listenFromClientThreads = new ArrayList<>();
+
+            // shared memory: array list of jobs to complete:
+            // sent to decider thread. Writer threads from master to slave will also need access to these
+            ArrayList<Job> jobsToComplete = new ArrayList<>();
+            ArrayList<Job> jobsForSlaveA = new ArrayList<>();
+            ArrayList<Job> jobsForSlaveB = new ArrayList<>();
 
             ArrayList<Thread> slaveThreads = new ArrayList<>();
 
-            // FOR THE CLIENT -----------------------------------------------------------------------------
+            // FOR THE CLIENT LISTENERS-----------------------------------------------------------------------------
             for (int i = 0; i < CLIENT_THREADS; i++)
-                clientThreads.add(new Thread(new ServerThreadC(serverSocketC, i)));
+                listenFromClientThreads.add(new Thread(new ServerThreadClientListener(serverSocketC, i, jobsToComplete)));
 
-            for (Thread t : clientThreads)
+            for (Thread t : listenFromClientThreads)
                 t.start();
 
-            for (Thread t : clientThreads)
+            for (Thread t : listenFromClientThreads)
             {
                 try
                 {
@@ -55,9 +60,22 @@ public class ThreadedServer {
                 }
             }
 
+            // FOR DECIDING WHICH SLAVE TO SEND TO- DECIDER THREAD---------------------------------------
+            Thread deciderThread = new Thread(new ServerThreadDecider(jobsToComplete, jobsForSlaveA, jobsForSlaveB));
+            deciderThread.start();
+
+            try
+            {
+                deciderThread.join();
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+
             // FOR THE SLAVE -----------------------------------------------------------------------------
             for (int i = 0; i < SLAVE_THREADS; i++)
-                slaveThreads.add(new Thread(new ServerThreadS(serverSocketS, i)));
+                slaveThreads.add(new Thread(new ServerThreadSlaveWriter(serverSocketS, i)));
 
             for (Thread t : slaveThreads)
                 t.start();

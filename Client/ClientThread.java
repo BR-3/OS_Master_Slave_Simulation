@@ -1,5 +1,8 @@
 // don't need this anymore bc incorporated in the other files...
-package yg;
+//need to edit to make threads in line with how Prof. Novick did threads in video 5D
+package yg.Client;
+
+import yg.Job;
 
 import java.io.*;
 import java.net.Socket;
@@ -44,7 +47,7 @@ public class ClientThread extends Thread{
                         type = 'b';
                     }*/
                     // this is the new job that it will send to master
-                    Job newJob = new Job(type,id);
+                    Job newJob = new Job(type,id, 0);
                     id++;
 
                     // this sends the newJob to the master

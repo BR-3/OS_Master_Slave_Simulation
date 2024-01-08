@@ -52,6 +52,9 @@ public class SlaveA {
 
             Job currentJob;
             while(jobInputStream.readObject() != null) {
+                //add each one to array list and adjust current loads accordingly (shared memory)
+                // then loop through arrays and sleep and then when done put in done array
+
                 currentJob = (Job) jobInputStream.readObject();
                 if(currentJob.getType() == optimalJob) {
                     System.out.println("Job is optimal, takes 2 seconds to complete.");

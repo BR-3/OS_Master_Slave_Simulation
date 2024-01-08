@@ -1,12 +1,16 @@
-package yg;
+package yg.Master;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class MasterSlaveListener {
+/**
+ * Will need to edit this, but this file could be used
+ * for threads that will listen to incoming done jobs from slaves
+ */
+public class ServerThreadSlaveListener {
     int args;
-    public  MasterSlaveListener (int args) {this.args = args;}
+    public ServerThreadSlaveListener(int args) {this.args = args;}
     public void run() {
         try (
                 ServerSocket MasterSlaveSocket = new ServerSocket(args); // connects to clients
