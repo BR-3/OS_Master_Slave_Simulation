@@ -30,116 +30,81 @@ public class ThreadedServer {
                 ServerSocket serverSocketS = new ServerSocket(portNumberS);
         )
         {
-
-            // these are our reader and writer threads
+            //Array for all threads:
+            ArrayList<Thread> allThreads = new ArrayList<>();
+            // these are arrays for our reader and writer threads
             ArrayList<Thread> listenFromClientThreads = new ArrayList<>();
             ArrayList<Thread> writeToClientThreads = new ArrayList<>();
             ArrayList<Thread> writeToSlaveThreads = new ArrayList<>();
             ArrayList<Thread> listenFromSlaveThreads = new ArrayList<>();
 
-            // shared memory: array list of jobs to complete:
+            //SHARED MEMORY
+            // array list of jobs to complete:
             // sent to decider thread. Writer threads from master to slave will also need access to these
             ArrayList<Job> jobsToComplete = new ArrayList<>();
+
             // these two arraylists are sent to the writers for the slaves
             ArrayList<Job> jobsForSlaveA = new ArrayList<>();
             ArrayList<Job> jobsForSlaveB = new ArrayList<>();
+            // current loads of slave A and slave B
+            int slaveALoad = 0;
+            int slaveBLoad = 0;
             // this is sent to the listener for the slaves
             ArrayList<Job> doneJobs = new ArrayList<>();
 
+            // new attampt with Loads class:
+            SlaveALoad slaveALoad_new = new SlaveALoad(0);
+            SlaveBLoad slaveBLoad_new = new SlaveBLoad(0);
+            jobsToCompleteClass jobsToComplete2 = new jobsToCompleteClass(jobsToComplete);
+
             // these will be the locks that we can create synchronized blocks
-            Object jobsToComplete_Lock = new Object();
-            Object jobsForSlaveA_Lock = new Object();
-            Object jobsForSlaveB_Lock = new Object();
-            Object doneJobs_Lock = new Object();
+            Object jobsToComplete_LOCK = new Object();
+            Object jobsForSlaveA_LOCK = new Object();
+            Object jobsForSlaveB_LOCK = new Object();
+            Object doneJobs_LOCK = new Object();
+            Object slaveALoad_LOCK = new Object();
+            Object slaveBLoad_LOCK = new Object();
 
 
 
             // FOR THE CLIENT LISTENERS-----------------------------------------------------------------------------
             for (int i = 0; i < CLIENT_THREADS; i++)
-                listenFromClientThreads.add(new Thread(new ServerThreadClientListener(serverSocketC, i, jobsToComplete, jobsToComplete_Lock)));
-
-            for (Thread t : listenFromClientThreads)
-                t.start();
-
-            for (Thread t : listenFromClientThreads)
-            {
-                try
-                {
-                    t.join();
-                }
-                catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+                allThreads.add(new Thread(new ServerThreadClientListener(serverSocketC, i, jobsToComplete2, jobsToComplete_LOCK)));
 
             // FOR THE CLIENT WRITERS-----------------------------------------------
             for(int i = 0;i< CLIENT_THREADS; i++)
-                writeToClientThreads.add(new Thread(new ServerThreadClientWriter(serverSocketC, i)));
+                allThreads.add(new Thread(new ServerThreadClientWriter(serverSocketC, i)));
 
-            for (Thread t : writeToClientThreads)
-                t.start();
-
-            for(Thread t : writeToClientThreads)
-            {
-                try
-                {
-                    t.join();
-                } catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-            }
             // FOR DECIDING WHICH SLAVE TO SEND TO- DECIDER THREAD---------------------------------------
-            Thread deciderThread = new Thread(new ServerThreadDecider(jobsToComplete, jobsForSlaveA, jobsForSlaveB, jobsForSlaveA_Lock, jobsForSlaveB_Lock));
-            deciderThread.start();
-
-            try
-            {
-                deciderThread.join();
-            }
-            catch (InterruptedException e)
-            {
-                e.printStackTrace();
-            }
+            Thread deciderThread = new Thread(new ServerThreadDecider( jobsToComplete2,
+                    jobsToComplete2.getJobsToCompleteArray(), jobsForSlaveA, jobsForSlaveB, slaveALoad_new, slaveBLoad_new,
+                    jobsToComplete_LOCK, jobsForSlaveA_LOCK, jobsForSlaveB_LOCK, slaveALoad_LOCK, slaveBLoad_LOCK));
+            allThreads.add(deciderThread);
 
             // FOR THE SLAVE WRITERS-----------------------------------------------------------------------------
             for (int i = 0; i < SLAVE_THREADS; i++)
-                writeToSlaveThreads.add(new Thread(new ServerThreadSlaveWriter(serverSocketS, i, jobsForSlaveA, jobsForSlaveB, jobsForSlaveA_Lock, jobsForSlaveB_Lock)));
-
-            for (Thread t : writeToSlaveThreads)
-                t.start();
-
-            for (Thread t : writeToSlaveThreads)
-            {
-                try
-                {
-                    t.join();
-                }
-                catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+                allThreads.add(new Thread(new ServerThreadSlaveWriter(serverSocketS, i, jobsForSlaveA, jobsForSlaveB, jobsForSlaveA_LOCK, jobsForSlaveB_LOCK)));
 
             // FOR THE SLAVE LISTENERS-------------------------------------
             for (int i = 0;i<SLAVE_THREADS;i++)
-                listenFromSlaveThreads.add(new Thread(new ServerThreadSlaveListener(serverSocketS, i, portNumberS, doneJobs, doneJobs_Lock)));
+                allThreads.add(new Thread(new ServerThreadSlaveListener(serverSocketS, i, portNumberS, doneJobs, doneJobs_LOCK)));
 
-            for (Thread t : listenFromSlaveThreads)
-                t.start();
-
-            for (Thread t : listenFromSlaveThreads)
+            // start all threads
+            for (Thread t : allThreads)
             {
-                try
-                {
+                t.start();
+            }
+
+            // Wait for all threads to finish
+            for (Thread t : allThreads) {
+                try {
                     t.join();
-                }
-                catch (InterruptedException e)
-                {
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            System.out.println("All threads have finished.");
+
         }
         catch (IOException e)
         {

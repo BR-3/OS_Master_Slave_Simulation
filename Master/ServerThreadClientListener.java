@@ -18,14 +18,15 @@ public class ServerThreadClientListener implements Runnable{
     // a reference to the server socket is passed in, all threads share it
     private ServerSocket serverSocket = null;
     int clientID;
-    private ArrayList<Job> jobsToComplete;
-    private Object jobsToComplete_Lock;
+//    private volatile ArrayList<Job> jobsToComplete;
+    jobsToCompleteClass jobsToComplete2;
+    private Object jobsToComplete_LOCK;
 
-    public ServerThreadClientListener(ServerSocket serverSocket, int clientID, ArrayList<Job> jobsToComplete, Object jobsToComplete_Lock) {
+    public ServerThreadClientListener(ServerSocket serverSocket, int clientID, jobsToCompleteClass jobsToComplete2, Object jobsToComplete_LOCK) {
         this.serverSocket = serverSocket;
         this.clientID = clientID;
-        this.jobsToComplete = jobsToComplete;
-        this.jobsToComplete_Lock = jobsToComplete_Lock;
+        this.jobsToComplete2 = jobsToComplete2;
+        this.jobsToComplete_LOCK = jobsToComplete_LOCK;
     }
 
     @Override
@@ -49,11 +50,15 @@ public class ServerThreadClientListener implements Runnable{
                         ", ID: " + newJob.getID());
 
                 // place new job on shared arraylist with lock
-                synchronized(jobsToComplete_Lock) {
-                    jobsToComplete.add(newJob);
+                synchronized(jobsToComplete_LOCK) {
+                    jobsToComplete2.getJobsToCompleteArray().add(newJob);
+                    // somehow update the array?
+//                    jobsToComplete2.s
+                    System.out.println("Added new job to array in shared memory");
                 }
 
-                System.out.println(jobsToComplete);
+
+
             }
 
 
