@@ -39,8 +39,10 @@ public class Client {
             ClientSharedMemory sharedMemory = new ClientSharedMemory();
 
             // creating the threads
-            clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, 1, sharedMemory)));
-            clientThreads.add(new Thread(new ClientThreadServerWriter(clientSocket, 1, sharedMemory)));
+                clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, 0, sharedMemory)));
+                clientThreads.add(new Thread(new ClientThreadServerWriter(clientSocket, 0, sharedMemory)));
+                // still need to: switch client id part bc each client needs to have a different id
+
 
             // starting the client threads
             for (Thread t : clientThreads)
@@ -72,5 +74,6 @@ public class Client {
             System.err.println("Couldn't get I/O for the connection to " + hostName);
             System.exit(1);
         }
-            }
+
+    }
 }

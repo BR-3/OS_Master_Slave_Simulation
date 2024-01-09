@@ -1,3 +1,4 @@
+/*
 
 
 package yg.old_drafts;
@@ -134,3 +135,4 @@ ServerSocket masterSlaveSocket = new ServerSocket(Integer.parseInt(args[1]));
 		return true;
 	}
 }
+*/

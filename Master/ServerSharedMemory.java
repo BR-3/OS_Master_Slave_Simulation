@@ -49,6 +49,15 @@ public class ServerSharedMemory {
         this.jobsForSlaveB = jobsForSlaveB;
     }
 
+    // add load to slaves:
+    public void addSlaveALoad(int add)
+    {
+        this.SlaveALoad = SlaveALoad + add;
+    }
+    public void addSlaveBLoad(int add)
+    {
+        this.SlaveBLoad = SlaveBLoad + add;
+    }
     public void setSlaveALoad(int load) {
         SlaveALoad = load;
     }
@@ -65,13 +74,10 @@ public class ServerSharedMemory {
         return SlaveBLoad;
     }
 
-    public void setJobsToCompleteArray(ArrayList<Job> jobsToComplete) {
+    /*public void setJobsToCompleteArray(ArrayList<Job> jobsToComplete) {
             this.jobsToComplete.clear();
             this.jobsToComplete.addAll(jobsToComplete);
-    }
-    public ArrayList<Job> getJobsToCompleteArray() {
-        return jobsToComplete;
-    }
+    }*/
     public ArrayList<Job> getDoneJobs() {return doneJobs;}
 
     public Object getJobsToComplete_LOCK() {return jobsToComplete_LOCK;}
