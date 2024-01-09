@@ -17,7 +17,7 @@ public class SlaveA {
     }
 
     public static void main(String[] args) {
-       // args = new String[]{"127.0.0.1", "30122"};
+       args = new String[]{"127.0.0.1", "30122"};
 
         if (args.length != 2) {
             System.err.println("Usage: java client <host name> <port number>");
@@ -37,7 +37,6 @@ public class SlaveA {
         ) {
             // this is what it does better
             char optimalJob = 'a';
-
 
             Job currentJob;
             while(jobInputStream.readObject() != null) {
@@ -60,9 +59,6 @@ public class SlaveA {
                 System.out.println("Completed job and sending to master, type: " + currentJob.getType() + " ID: " + currentJob.getID());
                 jobOutputStream.writeObject(currentJob); // sending the done job to the master
             }
-
-
-
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);

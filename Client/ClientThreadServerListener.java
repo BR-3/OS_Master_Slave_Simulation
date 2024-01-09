@@ -14,16 +14,12 @@ import java.util.ArrayList;
 
 public class ClientThreadServerListener implements Runnable{
     private Socket clientSocket;
-    private int id;
-    private ClientSharedMemory sharedMemory;
-    private Object jobList_LOCK;
+    private int clientID;
 
-    public ClientThreadServerListener(Socket clientSocket, int id, ClientSharedMemory sharedMemory)
+    public ClientThreadServerListener(Socket clientSocket, int clientID)
     {
         this.clientSocket = clientSocket;
-        this.id = id;
-        this.sharedMemory = sharedMemory;
-        this.jobList_LOCK= sharedMemory.getJobList_LOCK();
+        this.clientID = clientID;
     }
 
     public void run()
@@ -35,17 +31,12 @@ public class ClientThreadServerListener implements Runnable{
             while((input = objectIn.readObject()) != null)
             {
                 Job finishedJob = (Job) input;
-                // this will remove any finished job that is sent back to the client from the job list
-                synchronized (jobList_LOCK)
+
+                // this will print out the received job only if it is the client that sent it
+                if(clientID == finishedJob.getClient())
                 {
-                    ArrayList<Job> copyJobs = sharedMemory.getJobList();
-                    for(Job j : copyJobs)
-                    {
-                        if (j.equals(finishedJob))
-                        {
-                            sharedMemory.getJobList().remove(j);
-                        }
-                    }
+                    System.out.println("Client " + clientID + " received finished job type " + finishedJob.getType() + ", id " + finishedJob.getID());
+
                 }
             }
         } catch (IOException e) {

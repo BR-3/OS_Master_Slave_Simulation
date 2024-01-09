@@ -52,7 +52,7 @@ public class ServerThreadDecider implements Runnable{
         ArrayList<Job> currJobsToComplete;
         while (true)
         {
-            synchronized (sharedMemory.getJobsToComplete_LOCK())
+            synchronized (jobsToComplete_LOCK)
             {
                 currJobsToComplete = new ArrayList<>(sharedMemory.getJobsToComplete());
             }
@@ -61,37 +61,37 @@ public class ServerThreadDecider implements Runnable{
             for (Job currJob : currJobsToComplete)
             {
                 // remove each one from original array
-                synchronized (sharedMemory.getJobsToComplete_LOCK())
+                synchronized (jobsToComplete_LOCK)
                 {
-                    System.out.println("Array size before removal: " + sharedMemory.getJobsToComplete().size()); // for testing... could remove after
+                    System.out.println("Array size before removal: " + jobsToComplete.size()); // for testing... could remove after
                     sharedMemory.getJobsToComplete().remove(currJob);
-                    System.out.println("Array size after removal: " + sharedMemory.getJobsToComplete().size());
+                    System.out.println("Array size after removal: " + jobsToComplete.size());
                 }
 
                 // Perform job type-specific logic
-                synchronized (sharedMemory.getSlaveALoad_LOCK()) {
-                    synchronized (sharedMemory.getSlaveBLoad_LOCK()) {
+                synchronized (slaveALoad_LOCK) {
+                    synchronized (slaveBLoad_LOCK) {
                         if (currJob.getType() == 'a') {
-                            if ( (sharedMemory.getSlaveALoad() + 2) <= (sharedMemory.getSlaveBLoad() + 10) ) {
+                            if ((slaveALoad + 2) <= (slaveBLoad + 10) ) {
                                 //send to slave A array
-                                synchronized (sharedMemory.getJobsForSlaveA_LOCK()) {
-                                    sharedMemory.getJobsForSlaveA().add(currJob);
+                                synchronized (jobsForSlaveA_LOCK) {
+                                    jobsForSlaveA.add(currJob);
                                 }
                                 System.out.println("Sending to slave A array: " + currJob.getType() + currJob.getID());
                                 sharedMemory.addSlaveALoad(2);
                             } else {
                                 //send to Slave B array
-                                synchronized (sharedMemory.getJobsForSlaveB_LOCK()) {
-                                    sharedMemory.getJobsForSlaveB().add(currJob);
+                                synchronized (jobsForSlaveB_LOCK) {
+                                    jobsForSlaveB.add(currJob);
                                 }
                                 System.out.println("Sending to slave B array: " + currJob.getType() + currJob.getID());
                                 sharedMemory.addSlaveBLoad(10);
                             }
                         } else if (currJob.getType() == 'b') {
-                            if ( (sharedMemory.getSlaveBLoad() + 2) <= (sharedMemory.getSlaveALoad() + 10) ) {
+                            if ( (slaveBLoad + 2) <= (slaveALoad + 10) ) {
                                 //sending to Slave B array
-                                synchronized (sharedMemory.getJobsForSlaveB_LOCK()) {
-                                    sharedMemory.getJobsForSlaveB().add(currJob);
+                                synchronized (jobsForSlaveB_LOCK) {
+                                    jobsForSlaveB.add(currJob);
                                 }
                                 System.out.println("Sending to slave B array: " + currJob.getType() + currJob.getID());
                                 sharedMemory.addSlaveBLoad(2);
@@ -108,69 +108,6 @@ public class ServerThreadDecider implements Runnable{
                     }
                 }
             }
-
-            // old attempt:
-            /*
-            while (!currJobsToComplete.isEmpty())
-            // NOT WORKING: for some reason it never realizes that the other thread added jobs to the array
-            {
-                System.out.println("inside while loop");
-                System.out.println("Current array: " + currJobsToComplete);
-//                System.out.flush();
-                Job currJob;
-                synchronized (sharedMemory.getJobsToComplete_LOCK()) {
-                    // Ensure exclusive access to jobsToComplete
-                    currJob = sharedMemory.getJobsToComplete().get(0);
-                }
-                //
-
-                // Perform job type-specific logic
-                synchronized (sharedMemory.getSlaveALoad_LOCK()) {
-                    synchronized (sharedMemory.getSlaveBLoad_LOCK()) {
-                        if (currJob.getType() == 'a') {
-                            if ( (sharedMemory.getSlaveALoad() + 2) <= (sharedMemory.getSlaveBLoad() + 10) ) {
-                                //send to slave A array
-                                synchronized (sharedMemory.getJobsForSlaveA_LOCK()) {
-                                    sharedMemory.getJobsForSlaveA().add(currJob);
-                                }
-                                System.out.println("Sending to slave A array: " + currJob.getType() + currJob.getID());
-                                sharedMemory.addSlaveALoad(2);
-                            } else {
-                                //send to Slave B array
-                                synchronized (sharedMemory.getJobsForSlaveB_LOCK()) {
-                                    sharedMemory.getJobsForSlaveB().add(currJob);
-                                }
-                                System.out.println("Sending to slave B array: " + currJob.getType() + currJob.getID());
-                                sharedMemory.addSlaveBLoad(10);
-                            }
-                        } else if (currJob.getType() == 'b') {
-                            if ( (sharedMemory.getSlaveBLoad() + 2) <= (sharedMemory.getSlaveALoad() + 10) ) {
-                                //sending to Slave B array
-                                synchronized (sharedMemory.getJobsForSlaveB_LOCK()) {
-                                    sharedMemory.getJobsForSlaveB().add(currJob);
-                                }
-                                System.out.println("Sending to slave B array: " + currJob.getType() + currJob.getID());
-                                sharedMemory.addSlaveBLoad(2);
-                            } else {
-                                //sending to Slave A array
-                                synchronized (sharedMemory.getJobsForSlaveA_LOCK()) {
-                                    sharedMemory.getJobsForSlaveA().add(currJob);
-                                }
-                                System.out.println("Sending to slave A array: " + currJob.getType() + currJob.getID());
-                                sharedMemory.addSlaveALoad(10);
-
-                            }
-                        }
-                    }
-                }
-                synchronized (sharedMemory.getJobsToComplete_LOCK()) {
-                    // Ensure exclusive access to jobsToComplete
-                    sharedMemory.getJobsToComplete().remove(currJob);
-                }
-
-
-            }*/
-
         }
 
     }
