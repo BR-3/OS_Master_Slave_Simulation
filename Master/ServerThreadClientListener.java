@@ -1,7 +1,6 @@
 package yg.Master;
 
 import yg.Job;
-import yg.SharedMemory;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -21,11 +20,11 @@ public class ServerThreadClientListener implements Runnable{
     int clientID;
 //    private volatile ArrayList<Job> jobsToComplete;
     //jobsToCompleteClass jobsToComplete2;
-    private SharedMemory sharedMemory;
+    private ServerSharedMemory sharedMemory;
     private ArrayList<Job> jobsToComplete;
     private Object jobsToComplete_LOCK;
 
-    public ServerThreadClientListener(ServerSocket serverSocket, int clientID, SharedMemory sharedMemory) {
+    public ServerThreadClientListener(ServerSocket serverSocket, int clientID, ServerSharedMemory sharedMemory) {
         this.serverSocket = serverSocket;
         this.clientID = clientID;
         this.jobsToComplete = sharedMemory.getJobsToComplete();

@@ -3,9 +3,6 @@
 
 package yg.Master;
 
-import yg.Job;
-import yg.SharedMemory;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -36,7 +33,7 @@ public class ThreadedServer {
             ArrayList<Thread> allThreads = new ArrayList<>();
 
             //SHARED MEMORY---------------------------------------------------------------------------------------------
-            SharedMemory sharedMemory = new SharedMemory();
+            ServerSharedMemory sharedMemory = new ServerSharedMemory();
 
             // FOR THE CLIENT LISTENERS-----------------------------------------------------------------------------
             for (int i = 0; i < CLIENT_THREADS; i++)

@@ -2,7 +2,6 @@
 package yg.Master;
 
 import yg.Job;
-import yg.SharedMemory;
 import yg.Slave.*;
 
 import java.net.*;
@@ -18,14 +17,14 @@ public class ServerThreadSlaveWriter implements Runnable{
 
     // a reference to the server socket is passed in, all threads share it
     private ServerSocket serverSocket = null;
-    private SharedMemory sharedMemory;
+    private ServerSharedMemory sharedMemory;
     int id;
     ArrayList<Job> jobsForSlaveA;
     ArrayList<Job> jobsForSlaveB;
     private Object jobsForSlaveA_Lock;
     private Object jobsForSlaveB_Lock;
 
-    public ServerThreadSlaveWriter(ServerSocket serverSocket, int id, SharedMemory sharedMemory)  {
+    public ServerThreadSlaveWriter(ServerSocket serverSocket, int id, ServerSharedMemory sharedMemory)  {
         this.serverSocket = serverSocket;
         this.id = id;
         this.jobsForSlaveA = sharedMemory.getJobsForSlaveA();
@@ -43,14 +42,14 @@ public class ServerThreadSlaveWriter implements Runnable{
         ) {
             while (!jobsForSlaveA.isEmpty() || !jobsForSlaveB.isEmpty())
             {
-                while(SlaveA.getIsOpen())
+                while(sharedMemory.getSlaveAIsOpen())
                 {
                     synchronized(jobsForSlaveA_Lock)
                     {
                         objectOut.writeObject(jobsForSlaveA.remove(0));
                     }
                 }
-                while(SlaveA.getIsOpen()) // switch to B when working
+                while(sharedMemory.getSlaveAIsOpen()) // switch to B when working
                 {
                     synchronized(jobsForSlaveB_Lock)
                     {

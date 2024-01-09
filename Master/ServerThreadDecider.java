@@ -1,7 +1,6 @@
 package yg.Master;
 
 import yg.Job;
-import yg.SharedMemory;
 
 import java.util.ArrayList;
 
@@ -14,7 +13,7 @@ import java.util.ArrayList;
  * to slaves over socket)
  */
 public class ServerThreadDecider implements Runnable{
-    private SharedMemory sharedMemory = new SharedMemory();
+    private ServerSharedMemory sharedMemory = new ServerSharedMemory();
    // jobsToCompleteClass jobsToComplete2;
     private volatile ArrayList<Job> jobsToComplete;
     private ArrayList<Job> jobsForSlaveA;
@@ -27,7 +26,7 @@ public class ServerThreadDecider implements Runnable{
     private Object slaveALoad_LOCK;
     private Object slaveBLoad_LOCK;
 
-    public ServerThreadDecider(SharedMemory sharedMemory) {
+    public ServerThreadDecider(ServerSharedMemory sharedMemory) {
         this.jobsToComplete = sharedMemory.getJobsToComplete();
         this.jobsForSlaveA = sharedMemory.getJobsForSlaveA();
         this.jobsForSlaveB = sharedMemory.getJobsForSlaveB();

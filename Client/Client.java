@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- *
+ * The client instantiates its writer and listener threads,
+ * which listen from the user and master and write to the master.
  */
 public class Client {
 
@@ -25,40 +26,21 @@ public class Client {
         String hostName = args[0];
         int portNumberC = Integer.parseInt(args[1]);
 
-        final int CLIENT_THREADS = 2;
-
         /*------------------------------------------------------------*/
         try (
                 //sockets for connections between client and master (server)
                 Socket clientSocket = new Socket(hostName, portNumberC);
-
-//                ObjectOutputStream clientObjectOutput = new ObjectOutputStream (clientSocket.getOutputStream());
-                /*ObjectOutputStream clientObjectOutput = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
-                PrintWriter out = //stream to write text requests to server
-                        new PrintWriter(clientSocket.getOutputStream(), true);
-                BufferedReader in = //stream to read response from server
-                        new BufferedReader(
-                                new InputStreamReader(clientSocket.getInputStream()));
-                BufferedReader stdIn = // read from user
-                        new BufferedReader(
-                                new InputStreamReader(System.in))*/
                 )
         {
             // array for the client threads:
             ArrayList<Thread> clientThreads = new ArrayList<>();
 
             // need some instance of shared memory here
+            ClientSharedMemory sharedMemory = new ClientSharedMemory();
 
             // creating the threads
-            for(int i = 0;i<CLIENT_THREADS;i++)
-            {
-                clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, i)));
-            }
-
-            for(int i = 0; i<CLIENT_THREADS;i++)
-            {
-                clientThreads.add(new Thread(new ClientThreadServerWriter(clientSocket, i)));
-            }
+            clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, 1, sharedMemory)));
+            clientThreads.add(new Thread(new ClientThreadServerWriter(clientSocket, 1, sharedMemory)));
 
             // starting the client threads
             for (Thread t : clientThreads)
@@ -78,37 +60,6 @@ public class Client {
                 }
             }
 
-           /*
-           this needs to be worked through and divided into threads.
-
-            String userInput;
-            int id = 0;
-            while((userInput = stdIn.readLine()) != null)
-            {
-                if (userInput.equals("a") || userInput.equals("b"))
-                {
-                    char type = userInput.charAt(0);  // Extract the first character
-                    // this is the new job OBJECT that it will send to master
-                    Job newJob = new Job(type, id, 0);
-                    System.out.println("New job created. Type: " + type + " ID: " + id);
-                    id++;
-
-                    // this sends the newJob to the master
-                    clientObjectOutput.writeObject(newJob);
-                    clientObjectOutput.flush();
-
-                    //write message to console:
-                    System.out.println("Sending to master.");
-
-                }
-                else
-                {
-                    System.out.println("Invalid entry. Please enter a type of job (a or b): ");
-                }
-            }*/
-
-
-
         }
         catch (UnknownHostException e)
         {
@@ -121,23 +72,5 @@ public class Client {
             System.err.println("Couldn't get I/O for the connection to " + hostName);
             System.exit(1);
         }
-
-
-
-        /*------------------------------------------------------------*/
-
-
-
-
-
-        // everything the client does will be on a thread
-        //RB edited this since prof. Novick said on slack that we just run the same client program twice.
-        // so we only need one instanciation of it, but when we run it in command line we should run it twice.
-        /*
-        ClientThread clientThread = new ClientThread(hostName, portNumber);
-        clientThread.start();
-        */
-
-
-    }
+            }
 }

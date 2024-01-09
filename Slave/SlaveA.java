@@ -1,16 +1,15 @@
 package yg.Slave;
 
 import yg.Job;
-import yg.SharedMemory;
+import yg.Master.ServerSharedMemory;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 public class SlaveA {
     static int currentLoad = 0;
     static boolean isOpen = true;
-    private SharedMemory sharedMemory;
+    private ServerSharedMemory sharedMemory;
 
     public SlaveA() {
         this.currentLoad = sharedMemory.getSlaveALoad();

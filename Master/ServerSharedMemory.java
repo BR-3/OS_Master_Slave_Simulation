@@ -1,8 +1,10 @@
-package yg;
+package yg.Master;
+
+import yg.Job;
 
 import java.util.ArrayList;
 
-public class SharedMemory {
+public class ServerSharedMemory {
     // we need to add more to shared memory and create locks for it
     int SlaveALoad = 0;
     int SlaveBLoad = 0;

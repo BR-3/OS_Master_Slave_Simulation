@@ -1,6 +1,6 @@
 // don't need this anymore bc incorporated in the other files...
 //need to edit to make threads in line with how Prof. Novick did threads in video 5D
-package yg.Client;
+package yg.old_drafts;
 
 import yg.Job;
 
@@ -38,14 +38,8 @@ public class ClientThread extends Thread{
                 String jobType = kb.nextLine();
                 if (jobType.equals("a") || jobType.equals("b"))
                 {
-                    System.out.println("Received: User entered a new job of type: " + jobType);
                     char type = jobType.charAt(0);  // Extract the first character
-                    /*char type ='a';
-                    if(jobType.equals('a')) {
-                        type = 'a';
-                    } else if(jobType.equals('b')) {
-                        type = 'b';
-                    }*/
+
                     // this is the new job that it will send to master
                     Job newJob = new Job(type,id, 0);
                     id++;
