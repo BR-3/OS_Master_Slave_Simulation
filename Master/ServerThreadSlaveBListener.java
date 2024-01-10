@@ -24,8 +24,6 @@ public class ServerThreadSlaveBListener implements Runnable {
         try (
                 Socket clientSocket = serverSocket.accept();
                 ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-                //to read incoming messages from slave:
-                BufferedReader inSlave = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         ) {
             Object input;
             while ((input = objectIn.readObject()) != null)
@@ -33,7 +31,7 @@ public class ServerThreadSlaveBListener implements Runnable {
                 Job finishedJob = (Job) input;
                 synchronized(doneJobs_Lock)
                 {
-                    doneJobs.add(finishedJob); // need a synchronized lock on this
+                    doneJobs.add(finishedJob);
                 }
             }
 

@@ -53,7 +53,7 @@ public class SlaveA {
                     Thread.sleep(10000);
                 }
                 System.out.println("Completed job and sending to master. Client: " + currentJob.getClient() + ", Type: " + currentJob.getType() + " ID: " + currentJob.getID());
-//                jobOutputStream.writeObject(currentJob); // sending the done job to the master
+                jobOutputStream.writeObject(currentJob); // sending the done job to the master
             }
 
         } catch (UnknownHostException e) {

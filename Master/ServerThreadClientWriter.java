@@ -1,7 +1,10 @@
 package yg.Master;
 
+import yg.Job;
+
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 /**
  * Master's WRITER threads to clients
@@ -11,25 +14,36 @@ import java.net.*;
 
 public class ServerThreadClientWriter implements Runnable {
     private ServerSocket serverSocket = null;
+    private ServerSharedMemory sharedMemory;
     int id;
+    Object doneJobs_LOCK;
+    ArrayList<Job> doneJobs;
 
-    public ServerThreadClientWriter(ServerSocket serverSocket, int id) {
+    public ServerThreadClientWriter(ServerSocket serverSocket, int id, ServerSharedMemory sharedMemory) {
         this.serverSocket = serverSocket;
+        this.sharedMemory = sharedMemory;
         this.id = id;
+        this.doneJobs_LOCK = sharedMemory.getDoneJobs_LOCK();
+        this.doneJobs = sharedMemory.getDoneJobs();
     }
 
     @Override
     public void run() {
         try (Socket clientSocket = serverSocket.accept();
-             PrintWriter textOut = new PrintWriter(clientSocket.getOutputStream());
-             BufferedReader textIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
              // object streams:
-             ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
              ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
 
         ) {
+           ArrayList<Job> currDoneJobs = new ArrayList<>(sharedMemory.getDoneJobs());
 
+           for (Job currDoneJob : currDoneJobs)
+           System.out.println("Sending finished job " + currDoneJob.getID() + " type " + currDoneJob.getType() + " to client " + currDoneJob.getClient());
+           {
+               synchronized(doneJobs_LOCK)
+               {
+                   objectOut.writeObject(doneJobs.remove(0));
+               }
+           }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
