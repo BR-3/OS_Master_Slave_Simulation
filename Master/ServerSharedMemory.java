@@ -58,6 +58,7 @@ public class ServerSharedMemory {
     {
         this.SlaveBLoad = SlaveBLoad + add;
     }
+
     public void setSlaveALoad(int load) {
         SlaveALoad = load;
     }

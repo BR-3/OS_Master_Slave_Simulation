@@ -48,8 +48,8 @@ public class ThreadedServer {
             allThreads.add(deciderThread);
 
             // FOR THE SLAVE WRITERS-----------------------------------------------------------------------------
-            for (int i = 0; i < SLAVE_THREADS; i++)
-                allThreads.add(new Thread(new ServerThreadSlaveWriter(serverSocketS, i, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveAWriter(serverSocketS, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveBWriter(serverSocketS, sharedMemory)));
 
             // FOR THE SLAVE LISTENERS-------------------------------------
             for (int i = 0;i<SLAVE_THREADS;i++)
