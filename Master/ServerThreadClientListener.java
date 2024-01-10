@@ -48,7 +48,6 @@ public class ServerThreadClientListener implements Runnable{
             {
                 Job newJob = (Job) input;
 
-//                newJob.setClient(clientID); done already in ClientThreadServerWriter
                 System.out.println("Received new job. Client: " + newJob.getClient() +
                         ", Type: " + newJob.getType() +
                         ", ID: " + newJob.getID());
@@ -56,7 +55,7 @@ public class ServerThreadClientListener implements Runnable{
                 // place new job on shared arraylist with lock
                 synchronized(jobsToComplete_LOCK) {
                     sharedMemory.getJobsToComplete().add(newJob);
-                    System.out.println("Added new job to array in shared memory");
+//                    System.out.println("Added new job to array in shared memory");
                 }
 
 

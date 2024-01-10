@@ -13,6 +13,8 @@ import java.net.Socket;
 public class ClientThreadServerWriter implements Runnable{
     private Socket clientSocket;
     private int clientID;
+
+
     boolean runThread = true;
     public ClientThreadServerWriter(Socket clientSocket, int clientId)
     {
@@ -28,7 +30,7 @@ public class ClientThreadServerWriter implements Runnable{
                 ) {
             while(runThread)
             {
-                System.out.println("Please enter a job type (a or b) for the slave to complete.");
+                System.out.println("Please enter a job type (a or b) for the slave to complete: ");
                 String user;
                 int jobId = 0;
 
@@ -38,10 +40,13 @@ public class ClientThreadServerWriter implements Runnable{
                     {
                         System.out.println("Received: User entered a new job of type: " + user);
                         char type = user.charAt(0);  // Extract the first character
+                        // get the curr jobIdCount:
+
                         // this is the new job OBJECT that it will send to master
                         Job newJob = new Job(type, jobId, clientID);
                         System.out.println("New job created. Type: " + type + ", ID: " + jobId);
-                        jobId ++;
+
+                        jobId++;
 
                         //write message to console:
                         System.out.println("Sending to master.");
