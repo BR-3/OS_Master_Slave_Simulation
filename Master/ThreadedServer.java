@@ -12,7 +12,7 @@ public class ThreadedServer {
         // hardcoded port for now...
         args = new String[] {"30121", "30122", "30123"};
 
-        if (args.length != 2)
+        if (args.length != 3)
         {
             System.out.println("Usage: java Server <port number>");
             System.exit(1);
@@ -23,7 +23,6 @@ public class ThreadedServer {
         int portNumberSB = Integer.parseInt(args[2]); // for slave b connections
 
         final int CLIENT_THREADS = 2;
-        final int SLAVE_THREADS = 2;
 
         try (
                 ServerSocket serverSocketC = new ServerSocket(portNumberC);
