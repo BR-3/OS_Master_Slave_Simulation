@@ -36,7 +36,6 @@ public class ServerThreadSlaveBWriter implements Runnable{
         ) {
             while(true)
             {
-                // new attempt:
                 // to use as current status:
                 ArrayList<Job> currJobsForSlaveB;
 
@@ -61,8 +60,6 @@ public class ServerThreadSlaveBWriter implements Runnable{
                 }
 
             }
-
-
 
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -53,8 +53,8 @@ public class ThreadedServer {
             allThreads.add(new Thread(new ServerThreadSlaveBWriter(serverSocketSB, sharedMemory)));
 
             // FOR THE SLAVE LISTENERS-------------------------------------
-            allThreads.add(new Thread(new ServerThreadSlaveListener(serverSocketSA, portNumberSA, sharedMemory)));
-            allThreads.add(new Thread(new ServerThreadSlaveListener(serverSocketSB, portNumberSB, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveAListener(serverSocketSA, portNumberSA, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveBListener(serverSocketSB, portNumberSB, sharedMemory)));
 
             // start all threads
             for (Thread t : allThreads)

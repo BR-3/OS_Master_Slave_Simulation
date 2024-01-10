@@ -10,14 +10,14 @@ import java.util.*;
  * This thread will listen for finished jobs from the slave
  * and add them to the arraylist of done jobs in shared memory.
  */
-public class ServerThreadSlaveListener implements Runnable{
+public class ServerThreadSlaveAListener implements Runnable{
     private ServerSocket serverSocket = null;
     private ServerSharedMemory sharedMemory;
     int args;
     ArrayList<Job> doneJobs;
     private Object doneJobs_Lock;
-    public ServerThreadSlaveListener(ServerSocket serverSocket, int args,
-                                     ServerSharedMemory sharedMemory) {
+    public ServerThreadSlaveAListener(ServerSocket serverSocket, int args,
+                                      ServerSharedMemory sharedMemory) {
         this.args = args;
         this.serverSocket = serverSocket;
         this.doneJobs = sharedMemory.getDoneJobs();
