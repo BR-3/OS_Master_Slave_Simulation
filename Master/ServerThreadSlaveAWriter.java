@@ -18,17 +18,13 @@ public class ServerThreadSlaveAWriter implements Runnable{
     private ServerSocket serverSocket;
     private ServerSharedMemory sharedMemory;
     ArrayList<Job> jobsForSlaveA;
-    ArrayList<Job> jobsForSlaveB;
     private Object jobsForSlaveA_Lock;
-    private Object jobsForSlaveB_Lock;
 
     public ServerThreadSlaveAWriter(ServerSocket serverSocket, ServerSharedMemory sharedMemory)  {
         this.serverSocket = serverSocket;
         this.sharedMemory = sharedMemory;
         this.jobsForSlaveA = sharedMemory.getJobsForSlaveA();
-        this.jobsForSlaveB = sharedMemory.getJobsForSlaveB();
         this.jobsForSlaveA_Lock = sharedMemory.getJobsForSlaveA_LOCK();
-        this.jobsForSlaveB_Lock = sharedMemory.getJobsForSlaveB_LOCK();
     }
 
     @Override

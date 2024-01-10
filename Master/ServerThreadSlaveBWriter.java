@@ -17,17 +17,13 @@ public class ServerThreadSlaveBWriter implements Runnable{
     // a reference to the server socket is passed in, all threads share it
     private ServerSocket serverSocket;
     private ServerSharedMemory sharedMemory;
-    ArrayList<Job> jobsForSlaveA;
     ArrayList<Job> jobsForSlaveB;
-    private Object jobsForSlaveA_Lock;
     private Object jobsForSlaveB_Lock;
 
     public ServerThreadSlaveBWriter(ServerSocket serverSocket, ServerSharedMemory sharedMemory)  {
         this.serverSocket = serverSocket;
         this.sharedMemory = sharedMemory;
-        this.jobsForSlaveA = sharedMemory.getJobsForSlaveA();
         this.jobsForSlaveB = sharedMemory.getJobsForSlaveB();
-        this.jobsForSlaveA_Lock = sharedMemory.getJobsForSlaveA_LOCK();
         this.jobsForSlaveB_Lock = sharedMemory.getJobsForSlaveB_LOCK();
     }
 

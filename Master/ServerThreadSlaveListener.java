@@ -13,14 +13,12 @@ import java.util.*;
 public class ServerThreadSlaveListener implements Runnable{
     private ServerSocket serverSocket = null;
     private ServerSharedMemory sharedMemory;
-    int id;
     int args;
     ArrayList<Job> doneJobs;
     private Object doneJobs_Lock;
-    public ServerThreadSlaveListener(ServerSocket serverSocket, int id, int args,
+    public ServerThreadSlaveListener(ServerSocket serverSocket, int args,
                                      ServerSharedMemory sharedMemory) {
         this.args = args;
-        this.id = id;
         this.serverSocket = serverSocket;
         this.doneJobs = sharedMemory.getDoneJobs();
         this.doneJobs_Lock = sharedMemory.getDoneJobs_LOCK();
