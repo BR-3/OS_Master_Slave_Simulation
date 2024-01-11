@@ -34,7 +34,7 @@ public class ClientThreadServerWriter implements Runnable{
                 String user;
                 int jobId = 0;
 
-                while( (user = userIn.readLine()) != null)
+                while((user = userIn.readLine()) != null)
                 {
                     if (user.equals("a") || user.equals("b"))
                     {

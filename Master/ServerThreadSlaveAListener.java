@@ -4,12 +4,12 @@ import yg.Job;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 /**
  * This thread will listen for finished jobs from the slave
  * and add them to the arraylist of done jobs in shared memory.
  */
+
 public class ServerThreadSlaveAListener implements Runnable{
     private ServerSocket serverSocket = null;
     private ServerSharedMemory sharedMemory;

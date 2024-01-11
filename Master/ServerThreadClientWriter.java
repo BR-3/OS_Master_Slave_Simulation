@@ -44,6 +44,7 @@ public class ServerThreadClientWriter implements Runnable {
                     synchronized(doneJobs_LOCK)
                     {
                         objectOut.writeObject(sharedMemory.getDoneJobs().remove(0));
+                        objectOut.flush();
                     }
                 }
             }

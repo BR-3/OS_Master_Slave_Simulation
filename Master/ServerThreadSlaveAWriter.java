@@ -13,17 +13,14 @@ import java.util.ArrayList;
  * actually writes it over on the slave socket
  */
 public class ServerThreadSlaveAWriter implements Runnable{
-
     // a reference to the server socket is passed in, all threads share it
     private ServerSocket serverSocket;
     private ServerSharedMemory sharedMemory;
-    ArrayList<Job> jobsForSlaveA;
     private Object jobsForSlaveA_Lock;
 
     public ServerThreadSlaveAWriter(ServerSocket serverSocket, ServerSharedMemory sharedMemory)  {
         this.serverSocket = serverSocket;
         this.sharedMemory = sharedMemory;
-        this.jobsForSlaveA = sharedMemory.getJobsForSlaveA();
         this.jobsForSlaveA_Lock = sharedMemory.getJobsForSlaveA_LOCK();
     }
 

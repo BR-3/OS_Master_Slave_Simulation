@@ -7,15 +7,6 @@ import java.io.*;
 import java.net.*;
 
 public class SlaveB {
-    static int currentLoad = 0;
-    static boolean isOpen = true;
-    private ServerSharedMemory sharedMemory;
-
-    public SlaveB() {
-        this.currentLoad = sharedMemory.getSlaveBLoad();
-        this.isOpen = sharedMemory.getSlaveBIsOpen();
-    }
-
     public static void main(String[] args) {
         args = new String[]{"127.0.0.1", "30123"};
 
@@ -52,6 +43,7 @@ public class SlaveB {
                 }
                 System.out.println("Completed job and sending to master. Client: " + currentJob.getClient() + ", Type: " + currentJob.getType() + " ID: " + currentJob.getID());
                 jobOutputStream.writeObject(currentJob); // sending the done job to the master
+                jobOutputStream.flush();
             }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
@@ -65,7 +57,4 @@ public class SlaveB {
             throw new RuntimeException(e);
         }
     }
-
-
-
 }
