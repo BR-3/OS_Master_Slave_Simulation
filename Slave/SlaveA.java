@@ -33,8 +33,7 @@ public class SlaveA {
                 while ((input = jobInputStream.readObject()) != null)
                 {
                     Job currentJob = (Job) input;
-                    System.out.println("Received Job. Client: " + currentJob.getClient() +
-                            ", Type: " + currentJob.getType() + ", ID: " + currentJob.getID());
+                    System.out.println("Received Job. Client: " + currentJob.getClient() + ", Type: " + currentJob.getType() + ", ID: " + currentJob.getID());
                     if(currentJob.getType() == optimalJob)
                     {
                         System.out.println("Job is optimal, takes 2 seconds to complete.");
@@ -45,13 +44,11 @@ public class SlaveA {
                         System.out.println("Job is not optimal, takes 10 seconds to complete.");
                         Thread.sleep(10000);
                     }
-                    System.out.println("Completed job and sending to master. Client: " + currentJob.getClient() +
-                            ", Type: " + currentJob.getType() + " ID: " + currentJob.getID() + "\n");
+                    System.out.println("Completed job and sending to master. Client: " + currentJob.getClient() + ", Type: " + currentJob.getType() + " ID: " + currentJob.getID() + "\n");
                     jobOutputStream.writeObject(currentJob); // sending the done job to the master
                     jobOutputStream.flush();
                 }
             }
-
 
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
