@@ -30,8 +30,6 @@ public class SlaveA {
         try (
                 //sockets for connections between client (= slave) and master (server)
                 Socket clientSocket = new Socket(hostName, portNumber);
-                PrintWriter requestWriter = //stream to write text requests to server
-                        new PrintWriter(clientSocket.getOutputStream(), true);
                 ObjectInputStream jobInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
                 ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream())
         ) {
@@ -39,7 +37,7 @@ public class SlaveA {
             char optimalJob = 'a';
 
             Object input;
-            while ( (input = jobInputStream.readObject()) != null)
+            while ((input = jobInputStream.readObject()) != null)
             {
                 Job currentJob = (Job) input;
                 if(currentJob.getType() == optimalJob)

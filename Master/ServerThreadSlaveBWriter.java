@@ -8,8 +8,8 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * Master's WRITER threads to slaveA
- * takes the jobs from sendToSlaveA array and
+ * Master's WRITER threads to slaveB
+ * takes the jobs from sendToSlaveB array and
  * actually writes it over on the slave socket
  */
 public class ServerThreadSlaveBWriter implements Runnable{

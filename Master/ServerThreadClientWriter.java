@@ -34,17 +34,19 @@ public class ServerThreadClientWriter implements Runnable {
              ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
 
         ) {
-           ArrayList<Job> currDoneJobs = new ArrayList<>(sharedMemory.getDoneJobs());
+            while((sharedMemory.getDoneJobs() != null))
+            {
+                ArrayList<Job> currDoneJobs = new ArrayList<>(sharedMemory.getDoneJobs());
 
-           for (Job currDoneJob : currDoneJobs)
-           System.out.println("Sending finished job " + currDoneJob.getID() + " type " + currDoneJob.getType() + " to client " + currDoneJob.getClient());
-           {
-               synchronized(doneJobs_LOCK)
-               {
-                   objectOut.writeObject(doneJobs.remove(0));
-               }
-           }
-
+                for (Job currDoneJob : currDoneJobs)
+                    System.out.println("Sending finished job " + currDoneJob.getID() + " type " + currDoneJob.getType() + " to client " + currDoneJob.getClient());
+                {
+                    synchronized(doneJobs_LOCK)
+                    {
+                        objectOut.writeObject(sharedMemory.getDoneJobs().remove(0));
+                    }
+                }
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -14,28 +14,26 @@ public class ServerThreadSlaveAListener implements Runnable{
     private ServerSocket serverSocket = null;
     private ServerSharedMemory sharedMemory;
     int args;
-    ArrayList<Job> doneJobs;
     private Object doneJobs_Lock;
     public ServerThreadSlaveAListener(ServerSocket serverSocket, int args,
                                       ServerSharedMemory sharedMemory) {
         this.args = args;
         this.serverSocket = serverSocket;
-        this.doneJobs = sharedMemory.getDoneJobs();
         this.doneJobs_Lock = sharedMemory.getDoneJobs_LOCK();
     }
     public void run() {
         try (
                 Socket clientSocket = serverSocket.accept();
                 ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-                //to read incoming messages from slave:
         ) {
             Object input;
             while ((input = objectIn.readObject()) != null)
             {
                 Job finishedJob = (Job) input;
+                System.out.println("Received job type " + finishedJob.getType() + " from slave A");
                 synchronized(doneJobs_Lock)
                 {
-                    doneJobs.add(finishedJob);
+                    sharedMemory.getDoneJobs().add(finishedJob);
                 }
             }
 
