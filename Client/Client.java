@@ -36,7 +36,6 @@ public class Client {
                 )
         {
 
-
             // array for the client threads:
             ArrayList<Thread> clientThreads = new ArrayList<>();
 
@@ -63,7 +62,6 @@ public class Client {
                     e.printStackTrace();;
                 }
             }
-
         }
         catch (UnknownHostException e)
         {
@@ -76,6 +74,5 @@ public class Client {
             System.err.println("Couldn't get I/O for the connection to " + hostName);
             System.exit(1);
         }
-
     }
 }

@@ -45,6 +45,7 @@ public class SlaveB {
                 jobOutputStream.writeObject(currentJob); // sending the done job to the master
                 jobOutputStream.flush();
             }
+
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
