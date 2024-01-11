@@ -36,10 +36,6 @@ public class ServerThreadClientListener implements Runnable{
     public void run() {
         // This thread accepts its own client socket from the shared server socket
         try (Socket clientSocket = serverSocket.accept();
-             PrintWriter textOut = new PrintWriter(clientSocket.getOutputStream(), true);
-             BufferedReader textIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-             //object streams:
              ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
              )
         {
@@ -55,7 +51,6 @@ public class ServerThreadClientListener implements Runnable{
                 // place new job on shared arraylist with lock
                 synchronized(jobsToComplete_LOCK) {
                     sharedMemory.getJobsToComplete().add(newJob);
-//                    System.out.println("Added new job to array in shared memory");
                 }
 
 

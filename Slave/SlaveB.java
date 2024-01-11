@@ -7,17 +7,8 @@ import java.io.*;
 import java.net.*;
 
 public class SlaveB {
-    static int currentLoad = 0;
-    static boolean isOpen = true;
-    private ServerSharedMemory sharedMemory;
-
-    public SlaveB() {
-        this.currentLoad = sharedMemory.getSlaveBLoad();
-        this.isOpen = sharedMemory.getSlaveBIsOpen();
-    }
-
     public static void main(String[] args) {
-        args = new String[]{"127.0.0.1", "30122"};
+        args = new String[]{"127.0.0.1", "30123"};
 
         if (args.length != 2) {
             System.err.println("Usage: java client <host name> <port number>");
@@ -30,35 +21,31 @@ public class SlaveB {
         try (
                 //sockets for connections between client and master (server)
                 Socket clientSocket = new Socket(hostName, portNumber);
-                PrintWriter requestWriter = //stream to write text requests to server
-                        new PrintWriter(clientSocket.getOutputStream(), true);
                 ObjectInputStream jobInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
                 ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream())
         ) {
             // this is what it does better
             char optimalJob = 'b';
 
-            Job currentJob;
-            while(jobInputStream.readObject() != null) {
-                currentJob = (Job) jobInputStream.readObject();
-                if(currentJob.getType() == optimalJob) {
+            Object input;
+            while((input = jobInputStream.readObject()) != null)
+            {
+                Job currentJob = (Job) input;
+                if(currentJob.getType() == optimalJob)
+                {
                     System.out.println("Job is optimal, takes 2 seconds to complete.");
-                    // increase load by 2 and sleep for 2 seconds
-                    currentLoad += 2;
                     Thread.sleep(2000);
-                    // when finish job, decrease load by 2
-                    currentLoad -= 2;
-                } else {
-                    System.out.println("Job is not optimal, takes 10 seconds to complete.");
-                    // increase load by 10 and sleep for 10 seconds
-                    currentLoad += 10;
-                    Thread.sleep(10000);
-                    // when finish job, decrease load by 10
-                    currentLoad -= 10;
                 }
-                System.out.println("Completed job and sending to master, type: " + currentJob.getType() + " ID: " + currentJob.getID());
+                else
+                {
+                    System.out.println("Job is not optimal, takes 10 seconds to complete.");
+                    Thread.sleep(10000);
+                }
+                System.out.println("Completed job and sending to master. Client: " + currentJob.getClient() + ", Type: " + currentJob.getType() + " ID: " + currentJob.getID());
                 jobOutputStream.writeObject(currentJob); // sending the done job to the master
+                jobOutputStream.flush();
             }
+
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
@@ -71,7 +58,4 @@ public class SlaveB {
             throw new RuntimeException(e);
         }
     }
-
-
-
 }

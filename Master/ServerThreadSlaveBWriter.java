@@ -8,26 +8,19 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * Master's WRITER threads to slaveA
- * takes the jobs from sendToSlaveA array and
+ * Master's WRITER threads to slaveB
+ * takes the jobs from sendToSlaveB array and
  * actually writes it over on the slave socket
  */
 public class ServerThreadSlaveBWriter implements Runnable{
-
     // a reference to the server socket is passed in, all threads share it
     private ServerSocket serverSocket;
     private ServerSharedMemory sharedMemory;
-    ArrayList<Job> jobsForSlaveA;
-    ArrayList<Job> jobsForSlaveB;
-    private Object jobsForSlaveA_Lock;
     private Object jobsForSlaveB_Lock;
 
     public ServerThreadSlaveBWriter(ServerSocket serverSocket, ServerSharedMemory sharedMemory)  {
         this.serverSocket = serverSocket;
         this.sharedMemory = sharedMemory;
-        this.jobsForSlaveA = sharedMemory.getJobsForSlaveA();
-        this.jobsForSlaveB = sharedMemory.getJobsForSlaveB();
-        this.jobsForSlaveA_Lock = sharedMemory.getJobsForSlaveA_LOCK();
         this.jobsForSlaveB_Lock = sharedMemory.getJobsForSlaveB_LOCK();
     }
 
@@ -40,7 +33,6 @@ public class ServerThreadSlaveBWriter implements Runnable{
         ) {
             while(true)
             {
-                // new attempt:
                 // to use as current status:
                 ArrayList<Job> currJobsForSlaveB;
 
@@ -65,8 +57,6 @@ public class ServerThreadSlaveBWriter implements Runnable{
                 }
 
             }
-
-
 
         } catch (IOException e) {
             throw new RuntimeException(e);

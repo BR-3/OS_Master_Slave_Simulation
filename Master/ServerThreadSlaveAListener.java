@@ -4,41 +4,36 @@ import yg.Job;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 /**
  * This thread will listen for finished jobs from the slave
  * and add them to the arraylist of done jobs in shared memory.
  */
-public class ServerThreadSlaveListener implements Runnable{
+
+public class ServerThreadSlaveAListener implements Runnable{
     private ServerSocket serverSocket = null;
     private ServerSharedMemory sharedMemory;
-    int id;
     int args;
-    ArrayList<Job> doneJobs;
     private Object doneJobs_Lock;
-    public ServerThreadSlaveListener(ServerSocket serverSocket, int id, int args,
-                                     ServerSharedMemory sharedMemory) {
+    public ServerThreadSlaveAListener(ServerSocket serverSocket, int args,
+                                      ServerSharedMemory sharedMemory) {
         this.args = args;
-        this.id = id;
         this.serverSocket = serverSocket;
-        this.doneJobs = sharedMemory.getDoneJobs();
         this.doneJobs_Lock = sharedMemory.getDoneJobs_LOCK();
     }
     public void run() {
         try (
                 Socket clientSocket = serverSocket.accept();
                 ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-                //to read incoming messages from slave:
-                BufferedReader inSlave = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         ) {
             Object input;
             while ((input = objectIn.readObject()) != null)
             {
                 Job finishedJob = (Job) input;
+                System.out.println("Received job type " + finishedJob.getType() + " from slave A");
                 synchronized(doneJobs_Lock)
                 {
-                    doneJobs.add(finishedJob); // need a synchronized lock on this
+                    sharedMemory.getDoneJobs().add(finishedJob);
                 }
             }
 

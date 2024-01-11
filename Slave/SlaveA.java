@@ -7,15 +7,6 @@ import java.io.*;
 import java.net.*;
 
 public class SlaveA {
-    static int currentLoad = 0;
-    static boolean isOpen = true;
-    private ServerSharedMemory sharedMemory;
-
-    public SlaveA() {
-        this.currentLoad = sharedMemory.getSlaveALoad();
-        this.isOpen = sharedMemory.getSlaveAIsOpen();
-    }
-
     public static void main(String[] args) {
        args = new String[]{"127.0.0.1", "30122"};
 
@@ -30,8 +21,6 @@ public class SlaveA {
         try (
                 //sockets for connections between client (= slave) and master (server)
                 Socket clientSocket = new Socket(hostName, portNumber);
-                PrintWriter requestWriter = //stream to write text requests to server
-                        new PrintWriter(clientSocket.getOutputStream(), true);
                 ObjectInputStream jobInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
                 ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream())
         ) {
@@ -39,7 +28,7 @@ public class SlaveA {
             char optimalJob = 'a';
 
             Object input;
-            while ( (input = jobInputStream.readObject()) != null)
+            while ((input = jobInputStream.readObject()) != null)
             {
                 Job currentJob = (Job) input;
                 if(currentJob.getType() == optimalJob)
@@ -53,7 +42,8 @@ public class SlaveA {
                     Thread.sleep(10000);
                 }
                 System.out.println("Completed job and sending to master. Client: " + currentJob.getClient() + ", Type: " + currentJob.getType() + " ID: " + currentJob.getID());
-//                jobOutputStream.writeObject(currentJob); // sending the done job to the master
+                jobOutputStream.writeObject(currentJob); // sending the done job to the master
+                jobOutputStream.flush();
             }
 
         } catch (UnknownHostException e) {
@@ -68,7 +58,4 @@ public class SlaveA {
             throw new RuntimeException(e);
         }
     }
-
-
-
 }

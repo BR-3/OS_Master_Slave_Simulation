@@ -15,7 +15,7 @@ public class Client {
 
     public static void main(String[] args) {
         // these args are hardcoded, but we can enter them if we want into the command line
-//        args = new String[]{"127.0.0.1", "30121", "1"}; // 3rd arg is client #, will have to be inputed on command prompt
+        args = new String[]{"127.0.0.1", "30121", "1"}; // 3rd arg is client #, will have to be inputed on command prompt
 
         if (args.length != 3)
         {
@@ -35,7 +35,6 @@ public class Client {
                 Socket clientSocket = new Socket(hostName, portNumberC);
                 )
         {
-
 
             // array for the client threads:
             ArrayList<Thread> clientThreads = new ArrayList<>();
@@ -63,7 +62,6 @@ public class Client {
                     e.printStackTrace();;
                 }
             }
-
         }
         catch (UnknownHostException e)
         {
@@ -76,6 +74,5 @@ public class Client {
             System.err.println("Couldn't get I/O for the connection to " + hostName);
             System.exit(1);
         }
-
     }
 }

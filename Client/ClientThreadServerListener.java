@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * This thread will listen for the messages from the server
  * saying which jobs are finished. When it receives a finished job, it will
- * remove it from its list of jobs
+ * print it out
  */
 
 public class ClientThreadServerListener implements Runnable{
@@ -36,7 +36,6 @@ public class ClientThreadServerListener implements Runnable{
                 if(clientID == finishedJob.getClient())
                 {
                     System.out.println("Client " + clientID + " received finished job type " + finishedJob.getType() + ", id " + finishedJob.getID());
-
                 }
             }
         } catch (IOException e) {

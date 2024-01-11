@@ -10,23 +10,24 @@ import java.util.ArrayList;
 public class ThreadedServer {
     public static void main(String[] args) {
         // hardcoded port for now...
-        args = new String[] {"30121", "30122"};
+        args = new String[] {"30121", "30122", "30123"};
 
-        if (args.length != 2)
+        if (args.length != 3)
         {
             System.out.println("Usage: java Server <port number>");
             System.exit(1);
         }
 
         int portNumberC = Integer.parseInt(args[0]); // for client connection
-        int portNumberS = Integer.parseInt(args[1]); // for slave connections
+        int portNumberSA = Integer.parseInt(args[1]); // for slave A connections
+        int portNumberSB = Integer.parseInt(args[2]); // for slave b connections
 
         final int CLIENT_THREADS = 2;
-        final int SLAVE_THREADS = 2;
 
         try (
                 ServerSocket serverSocketC = new ServerSocket(portNumberC);
-                ServerSocket serverSocketS = new ServerSocket(portNumberS);
+                ServerSocket serverSocketSA = new ServerSocket(portNumberSA);
+                ServerSocket serverSocketSB = new ServerSocket(portNumberSB);
         )
         {
             //Array for all threads:
@@ -41,19 +42,19 @@ public class ThreadedServer {
 
             // FOR THE CLIENT WRITERS-----------------------------------------------
             for(int i = 0;i< CLIENT_THREADS; i++)
-                allThreads.add(new Thread(new ServerThreadClientWriter(serverSocketC, i)));
+                allThreads.add(new Thread(new ServerThreadClientWriter(serverSocketC, i, sharedMemory)));
 
             // FOR DECIDING WHICH SLAVE TO SEND TO- DECIDER THREAD---------------------------------------
             Thread deciderThread = new Thread(new ServerThreadDecider(sharedMemory));
             allThreads.add(deciderThread);
 
             // FOR THE SLAVE WRITERS-----------------------------------------------------------------------------
-            allThreads.add(new Thread(new ServerThreadSlaveAWriter(serverSocketS, sharedMemory)));
-            allThreads.add(new Thread(new ServerThreadSlaveBWriter(serverSocketS, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveAWriter(serverSocketSA, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveBWriter(serverSocketSB, sharedMemory)));
 
             // FOR THE SLAVE LISTENERS-------------------------------------
-            for (int i = 0;i<SLAVE_THREADS;i++)
-                allThreads.add(new Thread(new ServerThreadSlaveListener(serverSocketS, i, portNumberS, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveAListener(serverSocketSA, portNumberSA, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveBListener(serverSocketSB, portNumberSB, sharedMemory)));
 
             // start all threads
             for (Thread t : allThreads)
