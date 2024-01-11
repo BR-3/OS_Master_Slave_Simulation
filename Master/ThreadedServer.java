@@ -41,8 +41,10 @@ public class ThreadedServer {
                 allThreads.add(new Thread(new ServerThreadClientListener(serverSocketC, i, sharedMemory)));
 
             // FOR THE CLIENT WRITERS-----------------------------------------------
-            for(int i = 0;i< CLIENT_THREADS; i++)
-                allThreads.add(new Thread(new ServerThreadClientWriter(serverSocketC, i, sharedMemory)));
+            /*for(int i = 0;i< CLIENT_THREADS; i++)
+                allThreads.add(new Thread(new ServerThreadClientWriter(serverSocketC, i, sharedMemory)));*/
+
+            allThreads.add(new Thread(new ServerThreadClient0Writer(serverSocketC, 0, sharedMemory)));
 
             // FOR DECIDING WHICH SLAVE TO SEND TO- DECIDER THREAD---------------------------------------
             Thread deciderThread = new Thread(new ServerThreadDecider(sharedMemory));
@@ -53,8 +55,11 @@ public class ThreadedServer {
             allThreads.add(new Thread(new ServerThreadSlaveBWriter(serverSocketSB, sharedMemory)));
 
             // FOR THE SLAVE LISTENERS-------------------------------------
-            allThreads.add(new Thread(new ServerThreadSlaveAListener(serverSocketSA, portNumberSA, sharedMemory)));
-            allThreads.add(new Thread(new ServerThreadSlaveBListener(serverSocketSB, portNumberSB, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveAListener(serverSocketSA, sharedMemory)));
+//            allThreads.add(new Thread(new ServerThreadSlaveBListener(serverSocketSB, portNumberSB, sharedMemory))); testing just with slaveA for now...
+
+            // FOR  DECIDING WHICH CLIENT TO SEND DONE JOBS TO- DONE_DECIDER THREAD-------------------------------------
+            allThreads.add(new Thread(new ServerThreadDoneDecider(sharedMemory)));
 
             // start all threads
             for (Thread t : allThreads)

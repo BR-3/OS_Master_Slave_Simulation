@@ -90,8 +90,7 @@ public class ServerThreadDecider implements Runnable{
                         synchronized (slaveALoad_LOCK) { sharedMemory.addSlaveALoad(10); }
                     }
                 }
-                System.out.println("Updated loads: " + "slaveALoad: " + sharedMemory.getSlaveALoad() + "slaveBLoad: " + sharedMemory.getSlaveBLoad() + "\n");
-                System.out.println("Decider: updated slaveA array: " + sharedMemory.getJobsForSlaveA());
+                System.out.println("Decider: updated loads: " + "slaveALoad: " + sharedMemory.getSlaveALoad() + ", slaveBLoad: " + sharedMemory.getSlaveBLoad() + "\n");
 
 
 

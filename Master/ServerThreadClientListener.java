@@ -40,7 +40,7 @@ public class ServerThreadClientListener implements Runnable{
              )
         {
             Object input;
-            while ((input = objectIn.readObject()) != null)
+            while ( (input = objectIn.readObject()) != null)
             {
                 Job newJob = (Job) input;
 

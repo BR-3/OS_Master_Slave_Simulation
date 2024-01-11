@@ -32,10 +32,10 @@ public class ClientThreadServerWriter implements Runnable{
             {
                 String user;
                 int jobId = 0;
+                System.out.println("Please enter jobs of type a or b: ");
 
                 while((user = userIn.readLine()) != null)
                 {
-                    System.out.println("Please enter a job type (a or b) for the slave to complete: ");
                     if (user.equals("a") || user.equals("b"))
                     {
                         System.out.println("Received: User entered a new job of type: " + user);

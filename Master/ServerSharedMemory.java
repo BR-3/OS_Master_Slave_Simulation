@@ -12,6 +12,9 @@ public class ServerSharedMemory {
     ArrayList<Job> jobsToComplete = new ArrayList<>();
     ArrayList<Job> jobsForSlaveA = new ArrayList<>();
     ArrayList<Job> jobsForSlaveB = new ArrayList<>();
+    ArrayList<Job> client0DoneJobs = new ArrayList<>();
+    ArrayList<Job> client1DoneJobs = new ArrayList<>();
+
     // these will be the locks that we can create synchronized blocks
     Object jobsToComplete_LOCK = new Object();
     Object jobsForSlaveA_LOCK = new Object();
@@ -19,9 +22,10 @@ public class ServerSharedMemory {
     Object doneJobs_LOCK = new Object();
     Object slaveALoad_LOCK = new Object();
     Object slaveBLoad_LOCK = new Object();
+    Object client0DoneJobs_LOCK = new Object();
+    Object client1DoneJobs_LOCK = new Object();
 
-
-    // getters and setters:
+// getters and setters:
 
     public ArrayList<Job> getJobsToComplete() {
         return jobsToComplete;
@@ -48,6 +52,37 @@ public class ServerSharedMemory {
     }
 
     public ArrayList<Job> getDoneJobs() {return doneJobs;}
+    public ArrayList<Job> getClient0DoneJobs() {
+        return client0DoneJobs;
+    }
+
+    public void setClient0DoneJobs(ArrayList<Job> client0DoneJobs) {
+        this.client0DoneJobs = client0DoneJobs;
+    }
+
+    public ArrayList<Job> getClient1DoneJobs() {
+        return client1DoneJobs;
+    }
+
+    public void setClient1DoneJobs(ArrayList<Job> client1DoneJobs) {
+        this.client1DoneJobs = client1DoneJobs;
+    }
+
+    public Object getClient0DoneJobs_LOCK() {
+        return client0DoneJobs_LOCK;
+    }
+
+    public void setClient0DoneJobs_LOCK(Object client0DoneJobs_LOCK) {
+        this.client0DoneJobs_LOCK = client0DoneJobs_LOCK;
+    }
+
+    public Object getClient1DoneJobs_LOCK() {
+        return client1DoneJobs_LOCK;
+    }
+
+    public void setClient1DoneJobs_LOCK(Object client1DoneJobs_LOCK) {
+        this.client1DoneJobs_LOCK = client1DoneJobs_LOCK;
+    }
     public Object getJobsToComplete_LOCK() {return jobsToComplete_LOCK;}
     public Object getJobsForSlaveA_LOCK() {return jobsForSlaveA_LOCK;}
     public Object getJobsForSlaveB_LOCK() {return jobsForSlaveB_LOCK;}

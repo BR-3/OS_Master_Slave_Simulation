@@ -28,7 +28,7 @@ public class ServerThreadSlaveAWriter implements Runnable{
     public void run() {
         try (Socket clientSocket = serverSocket.accept();
              // object streams to send  jobs to slaves:
-             ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
+             ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
 
         ) {
             while(true)
@@ -43,15 +43,14 @@ public class ServerThreadSlaveAWriter implements Runnable{
 
                 for (Job currJob : currJobsForSlaveA)
                 {
-                    System.out.println("ServerTSlaveWriter: slaveA array BEFORE: " + sharedMemory.getJobsForSlaveA());
                     // remove each one from original array:
                     synchronized (jobsForSlaveA_Lock)
                     {
                         sharedMemory.getJobsForSlaveA().remove(currJob);
                     }
-                    System.out.println("ServerTSlaveWriter: slaveA array AFTER: " + sharedMemory.getJobsForSlaveA());
                     // write it to the slave A socket:
-                    System.out.println("Sending to slave A socket: Client" + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
+                    System.out.println("ServerTSlaveAWriter: Sending to slave A socket: Client"
+                            + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
                     objectOut.writeObject(currJob);
                     objectOut.flush();
                 }

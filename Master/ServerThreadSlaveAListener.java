@@ -15,22 +15,25 @@ public class ServerThreadSlaveAListener implements Runnable{
     private ServerSharedMemory sharedMemory;
     int args;
     private Object doneJobs_Lock;
-    public ServerThreadSlaveAListener(ServerSocket serverSocket, int args,
+    public ServerThreadSlaveAListener(ServerSocket serverSocket,
                                       ServerSharedMemory sharedMemory) {
-        this.args = args;
         this.serverSocket = serverSocket;
         this.doneJobs_Lock = sharedMemory.getDoneJobs_LOCK();
     }
+    @Override
     public void run() {
-        try (
-                Socket clientSocket = serverSocket.accept();
-                ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
+        try (Socket clientSocket = serverSocket.accept();
+             ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
+
         ) {
+            System.out.println("Hi from ServerThreadSlaveAListener- the thread is working:))");
+
             Object input;
-            while ((input = objectIn.readObject()) != null)
+            while ( (input = objectIn.readObject()) != null)
             {
                 Job finishedJob = (Job) input;
-                System.out.println("Received job type " + finishedJob.getType() + " from slave A");
+                System.out.println("Received from slave A - DONE job: Client: " +
+                        finishedJob.getClient() + ", type: " + finishedJob.getType() + ", id: " + finishedJob.getID());
                 synchronized(doneJobs_Lock)
                 {
                     sharedMemory.getDoneJobs().add(finishedJob);
@@ -38,7 +41,9 @@ public class ServerThreadSlaveAListener implements Runnable{
             }
 
         }   catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Exception caught while trying to listen on port " +
+                    serverSocket.getLocalPort() + " or listening for a connection");
+            System.out.println(e.getMessage());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
