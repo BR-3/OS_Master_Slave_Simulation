@@ -25,7 +25,7 @@ public class ClientThreadServerListener implements Runnable{
     public void run()
     {
         try (
-                BufferedInputStream buffer = (BufferedInputStream) clientSocket.getInputStream();
+                BufferedInputStream buffer = new BufferedInputStream(clientSocket.getInputStream());
                 ObjectInputStream objectIn = new ObjectInputStream(buffer);
         ) {
             Object input;
