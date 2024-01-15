@@ -26,7 +26,9 @@ public class ThreadedServer {
 
         try (
                 ServerSocket serverSocketC = new ServerSocket(portNumberC);
+
                 ServerSocket serverSocketSA = new ServerSocket(portNumberSA);
+
                 ServerSocket serverSocketSB = new ServerSocket(portNumberSB);
         )
         {
@@ -56,7 +58,7 @@ public class ThreadedServer {
 
             // FOR THE SLAVE LISTENERS-------------------------------------
             allThreads.add(new Thread(new ServerThreadSlaveAListener(serverSocketSA, sharedMemory)));
-//            allThreads.add(new Thread(new ServerThreadSlaveBListener(serverSocketSB, portNumberSB, sharedMemory))); testing just with slaveA for now...
+            allThreads.add(new Thread(new ServerThreadSlaveBListener(serverSocketSB, sharedMemory)));
 
             // FOR  DECIDING WHICH CLIENT TO SEND DONE JOBS TO- DONE_DECIDER THREAD-------------------------------------
             allThreads.add(new Thread(new ServerThreadDoneDecider(sharedMemory)));
@@ -82,6 +84,7 @@ public class ThreadedServer {
         {
             System.out.println("Exception caught while trying to listen on port " + args[0] +
                     " or listening for a connection");
+            e.printStackTrace();
             System.out.println(e.getMessage());
         }
 

@@ -15,9 +15,8 @@ public class ServerThreadSlaveBListener implements Runnable {
     private ServerSharedMemory sharedMemory;
     int args;
     private Object doneJobs_Lock;
-    public ServerThreadSlaveBListener(ServerSocket serverSocket, int args,
+    public ServerThreadSlaveBListener(ServerSocket serverSocket,
                                       ServerSharedMemory sharedMemory) {
-        this.args = args;
         this.serverSocket = serverSocket;
         this.doneJobs_Lock = sharedMemory.getDoneJobs_LOCK();
     }

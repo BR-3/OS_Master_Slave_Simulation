@@ -55,6 +55,7 @@ public class SlaveA {
             System.exit(1);
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " + hostName);
+            e.printStackTrace();
             System.exit(1);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
