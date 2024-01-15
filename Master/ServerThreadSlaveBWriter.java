@@ -43,15 +43,14 @@ public class ServerThreadSlaveBWriter implements Runnable{
 
                 for (Job currJob : currJobsForSlaveB)
                 {
-                    System.out.println("ServerTSlaveWriter: slaveB array BEFORE: " + sharedMemory.getJobsForSlaveB());
                     // remove each one from original array:
                     synchronized (jobsForSlaveB_Lock)
                     {
-                        sharedMemory.getJobsForSlaveA().remove(currJob);
+                        sharedMemory.getJobsForSlaveB().remove(currJob);
                     }
-                    System.out.println("ServerTSlaveWriter: slaveB array AFTER: " + sharedMemory.getJobsForSlaveB());
                     // write it to the slave A socket:
-                    System.out.println("Sending to slave B socket: Client" + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
+                    System.out.println("ServerTSlaveBWriter: Sending to slave A socket: Client"
+                            + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
                     objectOut.writeObject(currJob);
                     objectOut.flush();
                 }
@@ -62,5 +61,4 @@ public class ServerThreadSlaveBWriter implements Runnable{
             throw new RuntimeException(e);
         }
     }
-
 }
