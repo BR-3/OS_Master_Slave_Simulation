@@ -25,53 +25,25 @@ public class SlaveA {
                 ObjectInputStream jobInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
                 ObjectOutputStream jobOutputStream = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
         ) {
-            // this is what it does better
             while (true)
             {
                 char optimalJob = 'a';
-                Object input;
-                /*ArrayList<Job> jobs = new ArrayList<Job>();
-
                 Object input = jobInputStream.readObject();
-                jobs.add((Job)input);
-
-                for(Job currJob : jobs)
+                Job currJob = (Job) input;
+                System.out.println("Received Job. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
+                if(currJob.getType() == optimalJob)
                 {
-                    System.out.println("Received Job. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
-                    if(currJob.getType() == optimalJob)
-                    {
-                        System.out.println("Job is optimal, takes 2 seconds to complete.");
-                        Thread.sleep(2000);
-                    }
-                    else
-                    {
-                        System.out.println("Job is not optimal, takes 10 seconds to complete.");
-                        Thread.sleep(10000);
-                    }
-                    System.out.println("Completed job and sending to master. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + " ID: " + currJob.getID() + "\n");
-                    jobOutputStream.writeObject(jobs.remove(currJob)); // sending the done job to the master
-                    jobOutputStream.flush();
-                }*/
-
-
-                while ((input = jobInputStream.readObject()) != null)
-                {
-                    Job currentJob = (Job) input;
-                    System.out.println("Received Job. Client: " + currentJob.getClient() + ", Type: " + currentJob.getType() + ", ID: " + currentJob.getID());
-                    if(currentJob.getType() == optimalJob)
-                    {
-                        System.out.println("Job is optimal, takes 2 seconds to complete.");
-                        Thread.sleep(2000);
-                    }
-                    else
-                    {
-                        System.out.println("Job is not optimal, takes 10 seconds to complete.");
-                        Thread.sleep(10000);
-                    }
-                    System.out.println("Completed job and sending to master. Client: " + currentJob.getClient() + ", Type: " + currentJob.getType() + " ID: " + currentJob.getID() + "\n");
-                    jobOutputStream.writeObject(currentJob); // sending the done job to the master
-                    jobOutputStream.flush();
+                    System.out.println("Job is optimal, takes 2 seconds to complete.");
+                    Thread.sleep(2000);
                 }
+                else
+                {
+                    System.out.println("Job is not optimal, takes 10 seconds to complete.");
+                    Thread.sleep(10000);
+                }
+                System.out.println("Completed job and sending to master. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + " ID: " + currJob.getID() + "\n");
+                jobOutputStream.writeObject(currJob);
+                jobOutputStream.flush();
             }
 
         } catch (UnknownHostException e) {
