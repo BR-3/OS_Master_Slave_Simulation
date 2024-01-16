@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class SlaveA {
     public static void main(String[] args)  {
-       args = new String[]{"127.0.0.1", "30122"};
+      // args = new String[]{"127.0.0.1", "30122"};
 
         if (args.length != 2) {
             System.err.println("Usage: java client <host name> <port number>");

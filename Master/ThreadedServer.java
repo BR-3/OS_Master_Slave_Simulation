@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ThreadedServer {
     public static void main(String[] args) {
         // hardcoded port for now...
-        args = new String[] {"30121", "30122", "30123"};
+        //args = new String[] {"30121", "30122", "30123"};
 
         if (args.length != 3)
         {

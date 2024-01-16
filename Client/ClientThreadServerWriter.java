@@ -40,11 +40,10 @@ public class ClientThreadServerWriter implements Runnable{
                     {
                         System.out.println("Received: User entered a new job of type: " + user);
                         char type = user.charAt(0);  // Extract the first character
-                        // get the curr jobIdCount:
 
                         // this is the new job OBJECT that it will send to master
                         Job newJob = new Job(type, jobId, clientID);
-                        System.out.println("New job created. Type: " + type + ", ID: " + jobId);
+                        System.out.println("New job created. Type: " + type + ", ID: " + jobId + " Client: " + clientID);
 
                         jobId++;
 
