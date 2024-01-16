@@ -59,22 +59,7 @@ public class ServerThreadClient0Writer implements Runnable {
                     objectOut.writeObject(currDoneJob);
                     objectOut.flush();
                 }
-
             }
-            /*while((sharedMemory.getDoneJobs() != null))
-            {
-                ArrayList<Job> currDoneJobs = new ArrayList<>(sharedMemory.getDoneJobs());
-
-                for (Job currDoneJob : currDoneJobs)
-                    System.out.println("Sending finished job " + currDoneJob.getID() + " type " + currDoneJob.getType() + " to client " + currDoneJob.getClient());
-                {
-                    synchronized(doneJobs_LOCK)
-                    {
-                        objectOut.writeObject(sharedMemory.getDoneJobs().remove(0));
-                        objectOut.flush();
-                    }
-                }
-            }*/
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

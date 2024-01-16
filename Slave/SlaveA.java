@@ -5,9 +5,10 @@ import yg.Master.ServerSharedMemory;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class SlaveA {
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
        args = new String[]{"127.0.0.1", "30122"};
 
         if (args.length != 2) {
@@ -28,8 +29,30 @@ public class SlaveA {
             while (true)
             {
                 char optimalJob = 'a';
+                ArrayList<Job> jobs = new ArrayList<Job>();
 
-                Object input;
+                Object input = jobInputStream.readObject();
+                jobs.add((Job)input);
+
+                for(Job currJob : jobs)
+                {
+                    System.out.println("Received Job. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
+                    if(currJob.getType() == optimalJob)
+                    {
+                        System.out.println("Job is optimal, takes 2 seconds to complete.");
+                        Thread.sleep(2000);
+                    }
+                    else
+                    {
+                        System.out.println("Job is not optimal, takes 10 seconds to complete.");
+                        Thread.sleep(10000);
+                    }
+                    System.out.println("Completed job and sending to master. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + " ID: " + currJob.getID() + "\n");
+                    jobOutputStream.writeObject(jobs.remove(currJob)); // sending the done job to the master
+                    jobOutputStream.flush();
+                }
+
+                /*
                 while ((input = jobInputStream.readObject()) != null)
                 {
                     Job currentJob = (Job) input;
@@ -47,12 +70,14 @@ public class SlaveA {
                     System.out.println("Completed job and sending to master. Client: " + currentJob.getClient() + ", Type: " + currentJob.getType() + " ID: " + currentJob.getID() + "\n");
                     jobOutputStream.writeObject(currentJob); // sending the done job to the master
                     jobOutputStream.flush();
-                }
+                }*/
             }
 
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
+        } catch (EOFException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " + hostName);
             e.printStackTrace();
