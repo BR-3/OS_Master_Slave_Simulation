@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="TermProject" type="CompoundRunConfigurationType">
+    <toRun name="Client0" type="Application" />
+    <toRun name="Client1" type="Application" />
+    <toRun name="SlaveA" type="Application" />
+    <toRun name="SlaveB" type="Application" />
+    <toRun name="ThreadedServer" type="Application" />
+    <method v="2" />
+  </configuration>
+</component>
