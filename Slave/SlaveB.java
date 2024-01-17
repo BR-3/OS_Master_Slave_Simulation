@@ -49,6 +49,8 @@ public class SlaveB {
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
+        } catch (EOFException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " + hostName);
             e.printStackTrace();
