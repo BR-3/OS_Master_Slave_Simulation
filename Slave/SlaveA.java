@@ -27,6 +27,7 @@ public class SlaveA {
         ) {
             while (true)
             {
+                System.out.println("hi from slave A");
                 char optimalJob = 'a';
                 Object input = jobInputStream.readObject();
                 Job currJob = (Job) input;

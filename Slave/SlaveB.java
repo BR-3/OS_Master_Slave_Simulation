@@ -27,8 +27,9 @@ public class SlaveB {
             // this is what it does better
             while (true)
             {
-                while(jobInputStream.available() ==0);
+                //while(jobInputStream.available() ==0);
                 char optimalJob = 'b';
+                System.out.println("hi from slave b");
                 Object input = jobInputStream.readObject();
                 Job currJob = (Job) input;
                 System.out.println("Received Job. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());

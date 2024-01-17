@@ -18,17 +18,13 @@ public class ServerThreadClientListener implements Runnable{
     // a reference to the server socket is passed in, all threads share it
     private ServerSocket serverSocket = null;
     int clientID;
-//    private volatile ArrayList<Job> jobsToComplete;
-    //jobsToCompleteClass jobsToComplete2;
     private ServerSharedMemory sharedMemory;
-    private ArrayList<Job> jobsToComplete;
     private Object jobsToComplete_LOCK;
 
     public ServerThreadClientListener(ServerSocket serverSocket, int clientID, ServerSharedMemory sharedMemory) {
         this.serverSocket = serverSocket;
         this.clientID = clientID;
         this.sharedMemory = sharedMemory;
-        this.jobsToComplete = sharedMemory.getJobsToComplete();
         this.jobsToComplete_LOCK = sharedMemory.getJobsToComplete_LOCK();
     }
 
