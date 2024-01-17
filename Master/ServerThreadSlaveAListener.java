@@ -11,7 +11,7 @@ import java.net.*;
  */
 
 // chatGPT's idea: not sure if works yet...
-public class ServerThreadSlaveAListener implements Runnable {
+/*public class ServerThreadSlaveAListener implements Runnable {
     private ServerSocket serverSocket;
     private ServerSharedMemory sharedMemory;
     private Object doneJobs_Lock;
@@ -20,9 +20,8 @@ public class ServerThreadSlaveAListener implements Runnable {
         this.serverSocket = serverSocket;
         this.doneJobs_Lock = sharedMemory.getDoneJobs_LOCK();
     }
-
     @Override
-    public void run() {
+   public void run() {
         try {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
@@ -44,7 +43,7 @@ public class ServerThreadSlaveAListener implements Runnable {
 
         @Override
         public void run() {
-            try (ObjectInputStream objectIn = new ObjectInputStream(
+            try (   ObjectInputStream objectIn = new ObjectInputStream(
                     new BufferedInputStream(clientSocket.getInputStream()))) {
 
                 System.out.println("Hi from ServerThreadSlaveAListener - the thread is working:))");
@@ -72,14 +71,13 @@ public class ServerThreadSlaveAListener implements Runnable {
             }
         }
     }
-}
+}*/
 
 
 
-/*public class ServerThreadSlaveAListener implements Runnable{
+public class ServerThreadSlaveAListener implements Runnable{
     private ServerSocket serverSocket = null;
     private ServerSharedMemory sharedMemory;
-    int args;
     private Object doneJobs_Lock;
     public ServerThreadSlaveAListener(ServerSocket serverSocket,
                                       ServerSharedMemory sharedMemory) {
@@ -124,4 +122,4 @@ public class ServerThreadSlaveAListener implements Runnable {
         }
 
     }
-}*/
+}

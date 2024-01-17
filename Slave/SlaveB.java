@@ -27,6 +27,7 @@ public class SlaveB {
             // this is what it does better
             while (true)
             {
+                while(jobInputStream.available() ==0);
                 char optimalJob = 'b';
                 Object input = jobInputStream.readObject();
                 Job currJob = (Job) input;

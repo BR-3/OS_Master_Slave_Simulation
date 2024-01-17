@@ -43,9 +43,6 @@ public class ThreadedServer {
                 allThreads.add(new Thread(new ServerThreadClientListener(serverSocketC, i, sharedMemory)));
 
             // FOR THE CLIENT WRITERS-----------------------------------------------
-            /*for(int i = 0;i< CLIENT_THREADS; i++)
-                allThreads.add(new Thread(new ServerThreadClientWriter(serverSocketC, i, sharedMemory)));*/
-
             allThreads.add(new Thread(new ServerThreadClient0Writer(serverSocketC, 0, sharedMemory)));
 
             // FOR DECIDING WHICH SLAVE TO SEND TO- DECIDER THREAD---------------------------------------
