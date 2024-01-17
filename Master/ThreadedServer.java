@@ -26,9 +26,7 @@ public class ThreadedServer {
 
         try (
                 ServerSocket serverSocketC = new ServerSocket(portNumberC);
-
                 ServerSocket serverSocketSA = new ServerSocket(portNumberSA);
-
                 ServerSocket serverSocketSB = new ServerSocket(portNumberSB);
         )
         {
