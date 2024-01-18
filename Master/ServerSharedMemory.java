@@ -51,7 +51,7 @@ public class ServerSharedMemory {
         return SlaveBLoad;
     }
 
-    public static ArrayList<Job> getDoneJobs() {return doneJobs;}
+    public ArrayList<Job> getDoneJobs() {return doneJobs;}
     public ArrayList<Job> getClient0DoneJobs() {
         return client0DoneJobs;
     }

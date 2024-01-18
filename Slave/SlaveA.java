@@ -1,7 +1,6 @@
 package yg.Slave;
 
 import yg.Job;
-import yg.Master.ServerSharedMemory;
 
 import java.io.*;
 import java.net.*;
@@ -22,7 +21,7 @@ public class SlaveA {
                 //sockets for connections between client (= slave) and master (server)
                 Socket clientSocket = new Socket(hostName, portNumber);
                 ObjectInputStream jobInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-                //ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+                ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
         ) {
             while (true)
             {
@@ -43,12 +42,8 @@ public class SlaveA {
                         Thread.sleep(10000);
                     }
                     System.out.println("Completed job and sending to master. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + " ID: " + currJob.getID() + "\n");
-                    Object doneJobs_Lock = null;
-                    synchronized (doneJobs_Lock) {
-                        yg.Master.ServerSharedMemory.getDoneJobs().add(currJob);
-                    }
-                    //jobOutputStream.writeObject(currJob);
-                    //jobOutputStream.flush();
+                    jobOutputStream.writeObject(currJob);
+                    jobOutputStream.flush();
                 }
 
             }
