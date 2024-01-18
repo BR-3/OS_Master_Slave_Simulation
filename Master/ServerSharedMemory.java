@@ -51,42 +51,22 @@ public class ServerSharedMemory {
         return SlaveBLoad;
     }
 
-    public ArrayList<Job> getDoneJobs() {return doneJobs;}
+    public static ArrayList<Job> getDoneJobs() {return doneJobs;}
     public ArrayList<Job> getClient0DoneJobs() {
         return client0DoneJobs;
     }
-
-    public void setClient0DoneJobs(ArrayList<Job> client0DoneJobs) {
-        this.client0DoneJobs = client0DoneJobs;
-    }
-
     public ArrayList<Job> getClient1DoneJobs() {
         return client1DoneJobs;
     }
-
-    public void setClient1DoneJobs(ArrayList<Job> client1DoneJobs) {
-        this.client1DoneJobs = client1DoneJobs;
-    }
-
     public Object getClient0DoneJobs_LOCK() {
         return client0DoneJobs_LOCK;
     }
-
-    public void setClient0DoneJobs_LOCK(Object client0DoneJobs_LOCK) {
-        this.client0DoneJobs_LOCK = client0DoneJobs_LOCK;
-    }
-
     public Object getClient1DoneJobs_LOCK() {
         return client1DoneJobs_LOCK;
-    }
-
-    public void setClient1DoneJobs_LOCK(Object client1DoneJobs_LOCK) {
-        this.client1DoneJobs_LOCK = client1DoneJobs_LOCK;
     }
     public Object getJobsToComplete_LOCK() {return jobsToComplete_LOCK;}
     public Object getJobsForSlaveA_LOCK() {return jobsForSlaveA_LOCK;}
     public Object getJobsForSlaveB_LOCK() {return jobsForSlaveB_LOCK;}
-
     public Object getSlaveALoad_LOCK() {return slaveALoad_LOCK;}
     public Object getSlaveBLoad_LOCK() {return slaveBLoad_LOCK;}
     public Object getDoneJobs_LOCK() {return doneJobs_LOCK;}

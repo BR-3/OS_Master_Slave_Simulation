@@ -1,6 +1,7 @@
 package yg.Slave;
 
 import yg.Job;
+import yg.Master.ServerSharedMemory;
 
 import java.io.*;
 import java.net.*;
@@ -21,13 +22,13 @@ public class SlaveA {
                 //sockets for connections between client (= slave) and master (server)
                 Socket clientSocket = new Socket(hostName, portNumber);
                 ObjectInputStream jobInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-                ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+                //ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
         ) {
             while (true)
             {
                 System.out.println("hi from slave A");
                 char optimalJob = 'a';
-                Object input;// = jobInputStream.readObject();
+                Object input;
                 while((input = jobInputStream.readObject()) != null) {
                     Job currJob = (Job) input;
                     System.out.println("Received Job. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
@@ -42,8 +43,12 @@ public class SlaveA {
                         Thread.sleep(10000);
                     }
                     System.out.println("Completed job and sending to master. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + " ID: " + currJob.getID() + "\n");
-                    jobOutputStream.writeObject(currJob);
-                    jobOutputStream.flush();
+                    Object doneJobs_Lock = null;
+                    synchronized (doneJobs_Lock) {
+                        yg.Master.ServerSharedMemory.getDoneJobs().add(currJob);
+                    }
+                    //jobOutputStream.writeObject(currJob);
+                    //jobOutputStream.flush();
                 }
 
             }

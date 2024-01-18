@@ -91,23 +91,53 @@ public class ServerThreadSlaveAListener implements Runnable{
     public void run() {
         System.out.println("Hi from serverThreadSlaveAListener before connecting");
         try (Socket clientSocket = serverSocket.accept();
-             ObjectInputStream objectIn = new ObjectInputStream(
-                     new BufferedInputStream(clientSocket.getInputStream()));
+             //ObjectInputStream objectIn = new ObjectInputStream(
+                     //new BufferedInputStream(clientSocket.getInputStream()));
         )
         {
             System.out.println("Hi from ServerThreadSlaveAListener- the thread is working:))");
+            while(true)
+            {
+                int size = sharedMemory.getDoneJobs().size();
+                System.out.println(size);
+                if(sharedMemory.getDoneJobs().size() > size)
+                {
+                    Job finishedJob = sharedMemory.getDoneJobs().get(sharedMemory.getDoneJobs().size());
+                    System.out.println("Received from slave A - DONE job: Client: " +
+                            finishedJob.getClient() + ", type: " + finishedJob.getType() + ", id: " + finishedJob.getID());
+                    int reducedLoad;
+                    if(finishedJob.getType() == 'a')
+                    {
+                        reducedLoad = -2;
+                    } else {
+                        reducedLoad = -10;
+                    }
+                    synchronized(doneJobs_Lock)
+                    {
+                        sharedMemory.addSlaveALoad(reducedLoad);
+                    }
+                }
+            }
 
-            Object input;
+            /*Object input;
             while ((input = objectIn.readObject()) != null)
             {
                 Job finishedJob = (Job) input;
                 System.out.println("Received from slave A - DONE job: Client: " +
                         finishedJob.getClient() + ", type: " + finishedJob.getType() + ", id: " + finishedJob.getID());
+                int reducedLoad;
+                if(finishedJob.getType() == 'a')
+                {
+                    reducedLoad = -2;
+                } else {
+                    reducedLoad = -10;
+                }
                 synchronized(doneJobs_Lock)
                 {
                     sharedMemory.getDoneJobs().add(finishedJob);
+                    sharedMemory.addSlaveALoad(reducedLoad);
                 }
-            }
+            }*/
 
         }
         catch (EOFException e)
@@ -119,8 +149,6 @@ public class ServerThreadSlaveAListener implements Runnable{
             System.out.println("Exception caught while trying to listen on port " +
                     serverSocket.getLocalPort() + " or listening for a connection");
             System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
 
     }
