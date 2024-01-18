@@ -14,9 +14,9 @@ import java.util.ArrayList;
  */
 public class ServerThreadSlaveAWriter implements Runnable{
     // a reference to the server socket is passed in, all threads share it
-    private ServerSocket serverSocket;
-    private ServerSharedMemory sharedMemory;
-    private Object jobsForSlaveA_Lock;
+    private final ServerSocket serverSocket;
+    private final ServerSharedMemory sharedMemory;
+    private final Object jobsForSlaveA_Lock;
 
     public ServerThreadSlaveAWriter(ServerSocket serverSocket, ServerSharedMemory sharedMemory)  {
         this.serverSocket = serverSocket;
@@ -26,6 +26,7 @@ public class ServerThreadSlaveAWriter implements Runnable{
 
     @Override
     public void run() {
+        System.out.println("Hi from serverThreadSlaveAWriter!");
         try (Socket clientSocket = serverSocket.accept();
              // object streams to send  jobs to slaves:
              ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
@@ -54,9 +55,7 @@ public class ServerThreadSlaveAWriter implements Runnable{
                     objectOut.writeObject(currJob);
                     objectOut.flush();
                 }
-
             }
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
