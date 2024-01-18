@@ -1,7 +1,6 @@
 package yg.Slave;
 
 import yg.Job;
-import yg.SendMessage;
 
 import java.io.*;
 import java.net.*;
@@ -28,10 +27,9 @@ public class SlaveA {
             {
                 System.out.println("hi from slave A");
                 char optimalJob = 'a';
-                //while(SendMessage.sendingToSlaveA >=0) {
-                    Object input = jobInputStream.readObject();
+                Object input;// = jobInputStream.readObject();
+                while((input = jobInputStream.readObject()) != null) {
                     Job currJob = (Job) input;
-                    SendMessage.readFromSlaveA();
                     System.out.println("Received Job. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
                     if(currJob.getType() == optimalJob)
                     {
@@ -46,7 +44,8 @@ public class SlaveA {
                     System.out.println("Completed job and sending to master. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + " ID: " + currJob.getID() + "\n");
                     jobOutputStream.writeObject(currJob);
                     jobOutputStream.flush();
-               // }
+                }
+
             }
 
         } catch (UnknownHostException e) {

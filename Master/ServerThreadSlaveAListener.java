@@ -91,14 +91,14 @@ public class ServerThreadSlaveAListener implements Runnable{
     public void run() {
         System.out.println("Hi from serverThreadSlaveAListener before connecting");
         try (Socket clientSocket = serverSocket.accept();
-             ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-
+             ObjectInputStream objectIn = new ObjectInputStream(
+                     new BufferedInputStream(clientSocket.getInputStream()));
         )
         {
             System.out.println("Hi from ServerThreadSlaveAListener- the thread is working:))");
 
             Object input;
-            while ( (input = objectIn.readObject()) != null)
+            while ((input = objectIn.readObject()) != null)
             {
                 Job finishedJob = (Job) input;
                 System.out.println("Received from slave A - DONE job: Client: " +
@@ -112,7 +112,7 @@ public class ServerThreadSlaveAListener implements Runnable{
         }
         catch (EOFException e)
         {
-            //Client disconnected, continue accepting connections
+            e.printStackTrace();
         }
         catch (IOException e)
         {
