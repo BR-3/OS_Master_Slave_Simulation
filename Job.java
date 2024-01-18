@@ -3,9 +3,6 @@ package yg;
 import java.io.Serializable;
 
 public class Job implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
-	//	private character type;
 	private int ID;
 	private char type;
 	private int client;

@@ -2,6 +2,7 @@
 package yg.Master;
 
 import yg.Job;
+import yg.SendMessage;
 
 import java.net.*;
 import java.io.*;
@@ -26,12 +27,12 @@ public class ServerThreadSlaveAWriter implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Hi from serverThreadSlaveAWriter!");
         try (Socket clientSocket = serverSocket.accept();
              // object streams to send  jobs to slaves:
              ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
 
         ) {
+            System.out.println("Hi from serverThreadSlaveAWriter!");
             while(true)
             {
                 // to use as current status:
@@ -54,6 +55,7 @@ public class ServerThreadSlaveAWriter implements Runnable{
                             + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
                     objectOut.writeObject(currJob);
                     objectOut.flush();
+                    SendMessage.sendToSlaveA();
                 }
             }
         } catch (IOException e) {

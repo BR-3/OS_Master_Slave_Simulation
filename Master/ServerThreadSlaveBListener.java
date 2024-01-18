@@ -11,25 +11,28 @@ import java.net.*;
  */
 
 public class ServerThreadSlaveBListener implements Runnable {
-    private ServerSocket serverSocket = null;
-    private ServerSharedMemory sharedMemory;
-    int args;
-    private Object doneJobs_Lock;
+    private final ServerSocket serverSocket;
+    private final ServerSharedMemory sharedMemory;
+    private final Object doneJobs_Lock;
     public ServerThreadSlaveBListener(ServerSocket serverSocket,
                                       ServerSharedMemory sharedMemory) {
         this.serverSocket = serverSocket;
         this.doneJobs_Lock = sharedMemory.getDoneJobs_LOCK();
+        this.sharedMemory = sharedMemory;
     }
     public void run() {
+        System.out.println("Hi from serverThreadSlaveBListener before connecting");
         try (
                 Socket clientSocket = serverSocket.accept();
                 ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
         ) {
+            System.out.println("Hi from the serverThreadSlaveBListener! This thread is working.");
             Object input;
             while ((input = objectIn.readObject()) != null)
             {
                 Job finishedJob = (Job) input;
                 System.out.println("Received job type " + finishedJob.getType() + " from slave A");
+
                 synchronized(doneJobs_Lock)
                 {
                     sharedMemory.getDoneJobs().add(finishedJob);

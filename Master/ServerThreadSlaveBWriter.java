@@ -26,12 +26,12 @@ public class ServerThreadSlaveBWriter implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Hi from ServerThreadSlaveBWriter");
         try (Socket clientSocket = serverSocket.accept();
              // object streams to send  jobs to slaves:
              ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
 
         ) {
+            System.out.println("Hi from ServerThreadSlaveBWriter");
             while(true)
             {
                 // to use as current status:

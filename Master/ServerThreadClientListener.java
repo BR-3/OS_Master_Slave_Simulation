@@ -5,7 +5,6 @@ import yg.Job;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 /**
  * Master's LISTENER threads for client 1 and client 2
@@ -16,10 +15,10 @@ public class ServerThreadClientListener implements Runnable{
 
 
     // a reference to the server socket is passed in, all threads share it
-    private ServerSocket serverSocket = null;
+    private final ServerSocket serverSocket;
     int clientID;
-    private ServerSharedMemory sharedMemory;
-    private Object jobsToComplete_LOCK;
+    private final ServerSharedMemory sharedMemory;
+    private final Object jobsToComplete_LOCK;
 
     public ServerThreadClientListener(ServerSocket serverSocket, int clientID, ServerSharedMemory sharedMemory) {
         this.serverSocket = serverSocket;
@@ -36,7 +35,7 @@ public class ServerThreadClientListener implements Runnable{
              )
         {
             Object input;
-            while ( (input = objectIn.readObject()) != null)
+            while ((input = objectIn.readObject()) != null)
             {
                 Job newJob = (Job) input;
 

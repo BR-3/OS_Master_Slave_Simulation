@@ -76,18 +76,20 @@ import java.net.*;
 
 
 public class ServerThreadSlaveAListener implements Runnable{
-    private ServerSocket serverSocket = null;
-    private ServerSharedMemory sharedMemory;
-    private Object doneJobs_Lock;
+    private final ServerSocket serverSocket;
+    private final ServerSharedMemory sharedMemory;
+    private final Object doneJobs_Lock;
     public ServerThreadSlaveAListener(ServerSocket serverSocket,
                                       ServerSharedMemory sharedMemory) {
         this.serverSocket = serverSocket;
         this.doneJobs_Lock = sharedMemory.getDoneJobs_LOCK();
+        this.sharedMemory = sharedMemory;
     }
 
 
     @Override
     public void run() {
+        System.out.println("Hi from serverThreadSlaveAListener before connecting");
         try (Socket clientSocket = serverSocket.accept();
              ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
 
