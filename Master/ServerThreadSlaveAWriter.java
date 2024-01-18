@@ -56,7 +56,6 @@ public class ServerThreadSlaveAWriter implements Runnable{
                     objectOut.writeObject(currJob);
                     objectOut.flush();
                     SendMessage.sendToSlaveA();
-                    System.out.println(SendMessage.sendingToSlaveA);
                 }
             }
         } catch (IOException e) {

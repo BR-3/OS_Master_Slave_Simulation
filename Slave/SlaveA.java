@@ -28,7 +28,7 @@ public class SlaveA {
             {
                 System.out.println("hi from slave A");
                 char optimalJob = 'a';
-                while(SendMessage.sendingToSlaveA >=0) {
+                //while(SendMessage.sendingToSlaveA >=0) {
                     Object input = jobInputStream.readObject();
                     Job currJob = (Job) input;
                     SendMessage.readFromSlaveA();
@@ -46,7 +46,7 @@ public class SlaveA {
                     System.out.println("Completed job and sending to master. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + " ID: " + currJob.getID() + "\n");
                     jobOutputStream.writeObject(currJob);
                     jobOutputStream.flush();
-                }
+               // }
             }
 
         } catch (UnknownHostException e) {
