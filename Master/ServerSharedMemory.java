@@ -2,6 +2,7 @@ package yg.Master;
 
 import yg.Job;
 
+import java.net.ServerSocket;
 import java.util.ArrayList;
 
 public class ServerSharedMemory {
@@ -24,6 +25,12 @@ public class ServerSharedMemory {
     Object slaveBLoad_LOCK = new Object();
     Object client0DoneJobs_LOCK = new Object();
     Object client1DoneJobs_LOCK = new Object();
+
+    // socket locks:
+    Object serverSocketC_LOCK = new Object();
+    Object serverSocketSA_LOCK = new Object();
+    Object serverSocketSB_LOCK = new Object();
+
 
 // getters and setters:
 
@@ -70,4 +77,16 @@ public class ServerSharedMemory {
     public Object getSlaveALoad_LOCK() {return slaveALoad_LOCK;}
     public Object getSlaveBLoad_LOCK() {return slaveBLoad_LOCK;}
     public Object getDoneJobs_LOCK() {return doneJobs_LOCK;}
+
+    public Object getServerSocketC_LOCK() {
+        return serverSocketC_LOCK;
+    }
+
+    public Object getServerSocketSA_LOCK() {
+        return serverSocketSA_LOCK;
+    }
+
+    public Object getServerSocketSB_LOCK() {
+        return serverSocketSB_LOCK;
+    }
 }

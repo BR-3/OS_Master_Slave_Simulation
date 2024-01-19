@@ -26,7 +26,9 @@ public class ServerThreadSlaveAWriter implements Runnable{
 
     @Override
     public void run() {
-        try (Socket clientSocket = serverSocket.accept();
+
+        try (
+                Socket clientSocket = serverSocket.accept();
              // object streams to send  jobs to slaves:
              ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
 
