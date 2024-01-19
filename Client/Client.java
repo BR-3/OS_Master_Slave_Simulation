@@ -5,7 +5,6 @@ import yg.Job;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * The client instantiates its writer and listener threads,
@@ -26,7 +25,7 @@ public class Client {
         String hostName = args[0];
         int portNumberC = Integer.parseInt(args[1]);
         int clientID = Integer.parseInt(args[2]);
-        System.out.println("My ID" + clientID);
+        System.out.println("My ID: " + clientID);
 
 
 
