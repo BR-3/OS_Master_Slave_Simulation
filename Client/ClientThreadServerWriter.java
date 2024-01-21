@@ -15,7 +15,7 @@ public class ClientThreadServerWriter implements Runnable{
     private int clientID;
 
     boolean runThread = true;
-    public ClientThreadServerWriter(ObjectOutputStream objectOut, BufferedReader userIn, int clientId)
+    public ClientThreadServerWriter(Socket clientSocket, int clientId)
     {
         this.clientSocket = clientSocket;
         this.clientID = clientId;

@@ -42,7 +42,7 @@ public class Client {
 
             // creating the threads
             clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, clientID)));
-            clientThreads.add(new Thread(new ClientThreadServerWriter(objectOut, userIn, clientID)));
+            clientThreads.add(new Thread(new ClientThreadServerWriter(clientSocket, clientID)));
 
             // starting the client threads
             for (Thread t : clientThreads)
