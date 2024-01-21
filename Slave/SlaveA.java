@@ -20,9 +20,9 @@ public class SlaveA {
         try (
                 //sockets for connections between client (= slave) and master (server)
                 Socket clientSocket = new Socket(hostName, portNumber);
-                ObjectInputStream jobInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-                ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
         ) {
+            ObjectInputStream jobInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
+            ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             while (true)
             {
                 System.out.println("hi from slave A");

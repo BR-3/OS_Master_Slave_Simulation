@@ -26,14 +26,11 @@ public class ServerThreadSlaveAWriter implements Runnable{
 
     @Override
     public void run() {
-
+        System.out.println("Hi from serverThreadSlaveAWriter before connecting");
         try (
-                /*Socket clientSocket = serverSocket.accept();
-              object streams to send  jobs to slaves:
-             ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));*/
             objectOutSA;
         ) {
-            System.out.println("Hi from serverThreadSlaveAWriter!");
+            System.out.println("Hi from serverThreadSlaveAWriter! the thread is running.");
             while(true)
             {
                 // to use as current status:

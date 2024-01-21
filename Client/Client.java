@@ -29,7 +29,6 @@ public class Client {
 
 
 
-        /*------------------------------------------------------------*/
         try (
                 //sockets for connections between client and master (server)
                 Socket clientSocket = new Socket(hostName, portNumberC);
