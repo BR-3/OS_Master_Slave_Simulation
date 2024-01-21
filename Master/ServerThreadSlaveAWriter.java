@@ -14,12 +14,12 @@ import java.util.ArrayList;
  */
 public class ServerThreadSlaveAWriter implements Runnable{
     // a reference to the server socket is passed in, all threads share it
-    private final ServerSocket serverSocket;
+    private final ObjectOutputStream objectOutSA;
     private final ServerSharedMemory sharedMemory;
     private final Object jobsForSlaveA_Lock;
 
-    public ServerThreadSlaveAWriter(ServerSocket serverSocket, ServerSharedMemory sharedMemory)  {
-        this.serverSocket = serverSocket;
+    public ServerThreadSlaveAWriter(ObjectOutputStream objectOutSA, ServerSharedMemory sharedMemory)  {
+        this.objectOutSA = objectOutSA;
         this.sharedMemory = sharedMemory;
         this.jobsForSlaveA_Lock = sharedMemory.getJobsForSlaveA_LOCK();
     }
@@ -28,10 +28,10 @@ public class ServerThreadSlaveAWriter implements Runnable{
     public void run() {
 
         try (
-                Socket clientSocket = serverSocket.accept();
-             // object streams to send  jobs to slaves:
-             ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
-
+                /*Socket clientSocket = serverSocket.accept();
+              object streams to send  jobs to slaves:
+             ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));*/
+            objectOutSA;
         ) {
             System.out.println("Hi from serverThreadSlaveAWriter!");
             while(true)
@@ -54,8 +54,10 @@ public class ServerThreadSlaveAWriter implements Runnable{
                     // write it to the slave A socket:
                     System.out.println("ServerTSlaveAWriter: Sending to slave A socket: Client"
                             + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
-                    objectOut.writeObject(currJob);
-                    objectOut.flush();
+                    objectOutSA.writeObject(currJob);
+                    objectOutSA.flush();
+
+
                 }
             }
         } catch (IOException e) {

@@ -15,13 +15,13 @@ public class ServerThreadClientListener implements Runnable{
 
 
     // a reference to the server socket is passed in, all threads share it
-    private final ServerSocket serverSocket;
+    private final ObjectInputStream objectInC;
     int clientID;
     private final ServerSharedMemory sharedMemory;
     private final Object jobsToComplete_LOCK;
 
-    public ServerThreadClientListener(ServerSocket serverSocket, int clientID, ServerSharedMemory sharedMemory) {
-        this.serverSocket = serverSocket;
+    public ServerThreadClientListener(ObjectInputStream objectInC, int clientID, ServerSharedMemory sharedMemory) {
+        this.objectInC = objectInC;
         this.clientID = clientID;
         this.sharedMemory = sharedMemory;
         this.jobsToComplete_LOCK = sharedMemory.getJobsToComplete_LOCK();
@@ -30,12 +30,14 @@ public class ServerThreadClientListener implements Runnable{
     @Override
     public void run() {
         // This thread accepts its own client socket from the shared server socket
-        try (Socket clientSocket = serverSocket.accept();
-             ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
+        try (/*Socket clientSocket = serverSocket.accept();
+             ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));*/
+             objectInC;
              )
         {
+            System.out.println("Client Listener " + clientID + " is working.");
             Object input;
-            while ((input = objectIn.readObject()) != null)
+            while ((input = objectInC.readObject()) != null)
             {
                 Job newJob = (Job) input;
 
@@ -56,8 +58,6 @@ public class ServerThreadClientListener implements Runnable{
         }
         catch (IOException e)
         {
-            System.out.println("Exception caught while trying to listen on port " +
-                    serverSocket.getLocalPort() + " or listening for a connection");
             System.out.println(e.getMessage());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);

@@ -10,78 +10,17 @@ import java.net.*;
  * and add them to the arraylist of done jobs in shared memory.
  */
 
-// chatGPT's idea: not sure if works yet...
-/*public class ServerThreadSlaveAListener implements Runnable {
-    private ServerSocket serverSocket;
-    private ServerSharedMemory sharedMemory;
-    private Object doneJobs_Lock;
 
-    public ServerThreadSlaveAListener(ServerSocket serverSocket, ServerSharedMemory sharedMemory) {
-        this.serverSocket = serverSocket;
-        this.doneJobs_Lock = sharedMemory.getDoneJobs_LOCK();
-    }
-    @Override
-   public void run() {
-        try {
-            while (true) {
-                Socket clientSocket = serverSocket.accept();
-                new Thread(new ConnectionHandler(clientSocket)).start();
-            }
-        } catch (IOException e) {
-            System.out.println("Exception caught while trying to listen on port " +
-                    serverSocket.getLocalPort() + " or listening for a connection");
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private class ConnectionHandler implements Runnable {
-        private Socket clientSocket;
-
-        public ConnectionHandler(Socket clientSocket) {
-            this.clientSocket = clientSocket;
-        }
-
-        @Override
-        public void run() {
-            try (   ObjectInputStream objectIn = new ObjectInputStream(
-                    new BufferedInputStream(clientSocket.getInputStream()))) {
-
-                System.out.println("Hi from ServerThreadSlaveAListener - the thread is working:))");
-
-                Object input;
-                while ((input = objectIn.readObject()) != null) {
-                    Job finishedJob = (Job) input;
-                    System.out.println("Received from slave A - DONE job: Client: " +
-                            finishedJob.getClient() + ", type: " + finishedJob.getType() + ", id: " + finishedJob.getID());
-                    synchronized (doneJobs_Lock) {
-                        sharedMemory.getDoneJobs().add(finishedJob);
-                    }
-                }
-
-            } catch (EOFException e) {
-                // Client disconnected, continue accepting connections
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    clientSocket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-}*/
 
 
 
 public class ServerThreadSlaveAListener implements Runnable{
-    private final ServerSocket serverSocket;
+    private final ObjectInputStream objectInSA;
     private final ServerSharedMemory sharedMemory;
     private final Object doneJobs_Lock;
-    public ServerThreadSlaveAListener(ServerSocket serverSocket,
+    public ServerThreadSlaveAListener(ObjectInputStream objectInSA,
                                       ServerSharedMemory sharedMemory) {
-        this.serverSocket = serverSocket;
+        this.objectInSA = objectInSA;
         this.doneJobs_Lock = sharedMemory.getDoneJobs_LOCK();
         this.sharedMemory = sharedMemory;
     }
@@ -91,14 +30,15 @@ public class ServerThreadSlaveAListener implements Runnable{
     @Override
     public void run() {
         System.out.println("Hi from serverThreadSlaveAListener before connecting");
-        try (Socket clientSocket = serverSocket.accept();
+        try ( /*Socket clientSocket = serverSocket.accept();
              ObjectInputStream objectIn = new ObjectInputStream(
-                     new BufferedInputStream(clientSocket.getInputStream()));
+                     new BufferedInputStream(clientSocket.getInputStream()));*/
+        objectInSA;
         )
         {
-            System.out.println("Hi from ServerThreadSlaveAListener- the thread is working:))");
+            System.out.println("Hi from ServerThreadSlaveAListener- the thread is working:))"); // THIS IS NOT WORKING YET
             Object input;
-            while ((input = objectIn.readObject()) != null)
+            while ((input = objectInSA.readObject()) != null)
             {
                 Job finishedJob = (Job) input;
                 System.out.println("Received from slave A - DONE job: Client: " +
@@ -124,8 +64,6 @@ public class ServerThreadSlaveAListener implements Runnable{
         }
         catch (IOException e)
         {
-            System.out.println("Exception caught while trying to listen on port " +
-                    serverSocket.getLocalPort() + " or listening for a connection");
             System.out.println(e.getMessage());
         }
 

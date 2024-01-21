@@ -41,7 +41,7 @@ public class Client {
 
 
             // creating the threads
-            clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, clientID)));
+//            clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, clientID)));
             clientThreads.add(new Thread(new ClientThreadServerWriter(clientSocket, clientID)));
 
 

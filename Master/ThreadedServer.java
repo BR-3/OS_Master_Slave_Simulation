@@ -3,8 +3,9 @@
 
 package yg.Master;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class ThreadedServer {
@@ -28,8 +29,27 @@ public class ThreadedServer {
                 ServerSocket serverSocketC = new ServerSocket(portNumberC);
                 ServerSocket serverSocketSA = new ServerSocket(portNumberSA);
                 ServerSocket serverSocketSB = new ServerSocket(portNumberSB);
+
+
         )
         {
+            // socket streams- client:
+            Socket clientSocketC = serverSocketC.accept();
+            System.out.println("Client is connected to Master");
+            // send to client listener:
+            ObjectInputStream objectInC = new ObjectInputStream(new BufferedInputStream(clientSocketC.getInputStream()));
+
+            System.out.println("Before serverSocketSA.accept() called...");
+            // socket streams- slave A:
+            Socket clientSocketSA = serverSocketSA.accept();
+            System.out.println("Slave A is connected to Master.");
+            // send to slaveAWriter:
+            ObjectOutputStream objectOutSA = new ObjectOutputStream(new BufferedOutputStream(clientSocketSA.getOutputStream()));
+            // send to slaveAListener:
+            ObjectInputStream objectInSA = new ObjectInputStream(new BufferedInputStream(clientSocketSA.getInputStream()));
+
+
+
             //Array for all threads:
             ArrayList<Thread> allThreads = new ArrayList<>();
 
@@ -37,23 +57,23 @@ public class ThreadedServer {
             ServerSharedMemory sharedMemory = new ServerSharedMemory();
 
             // FOR THE CLIENT LISTENERS-----------------------------------------------------------------------------
-            for (int i = 0; i < CLIENT_THREADS; i++)
-                allThreads.add(new Thread(new ServerThreadClientListener(serverSocketC, i, sharedMemory)));
+//            for (int i = 0; i < CLIENT_THREADS; i++) made into only 1 thread for now...
+            allThreads.add(new Thread(new ServerThreadClientListener(objectInC, 0, sharedMemory)));
 
             // FOR THE CLIENT WRITERS-----------------------------------------------
-            allThreads.add(new Thread(new ServerThreadClient0Writer(serverSocketC, 0, sharedMemory)));
+//            allThreads.add(new Thread(new ServerThreadClient0Writer(serverSocketC, 0, sharedMemory)));
 
             // FOR DECIDING WHICH SLAVE TO SEND TO- DECIDER THREAD---------------------------------------
             Thread deciderThread = new Thread(new ServerThreadDecider(sharedMemory));
             allThreads.add(deciderThread);
 
             // FOR THE SLAVE WRITERS-----------------------------------------------------------------------------
-            allThreads.add(new Thread(new ServerThreadSlaveAWriter(serverSocketSA, sharedMemory)));
-            allThreads.add(new Thread(new ServerThreadSlaveBWriter(serverSocketSB, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveAWriter(objectOutSA, sharedMemory)));
+//            allThreads.add(new Thread(new ServerThreadSlaveBWriter(serverSocketSB, sharedMemory)));
 
             // FOR THE SLAVE LISTENERS-------------------------------------
-            allThreads.add(new Thread(new ServerThreadSlaveAListener(serverSocketSA, sharedMemory)));
-            allThreads.add(new Thread(new ServerThreadSlaveBListener(serverSocketSB, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveAListener(objectInSA, sharedMemory)));
+//            allThreads.add(new Thread(new ServerThreadSlaveBListener(serverSocketSB, sharedMemory)));
 
             // FOR  DECIDING WHICH CLIENT TO SEND DONE JOBS TO- DONE_DECIDER THREAD-------------------------------------
             allThreads.add(new Thread(new ServerThreadDoneDecider(sharedMemory)));
