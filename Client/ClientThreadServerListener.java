@@ -15,18 +15,19 @@ import java.util.ArrayList;
 public class ClientThreadServerListener implements Runnable{
     private Socket clientSocket;
     private int clientID;
+    private final ObjectInputStream objectIn;
 
-    public ClientThreadServerListener(Socket clientSocket, int clientID)
+    public ClientThreadServerListener(ObjectInputStream objectIn, int clientID)
     {
         this.clientSocket = clientSocket;
         this.clientID = clientID;
+        this.objectIn = objectIn;
     }
 
     public void run()
     {
         try (
-                ObjectInputStream objectIn = new ObjectInputStream(
-                        clientSocket.getInputStream());
+                objectIn;
         ) {
             Object input;
             while((input = objectIn.readObject()) != null)
