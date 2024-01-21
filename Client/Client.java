@@ -31,12 +31,7 @@ public class Client {
 
         try (
                 //sockets for connections between client and master (server)
-                Socket clientSocket = new Socket(hostName, portNumberC);
-                BufferedInputStream buffer = new BufferedInputStream(clientSocket.getInputStream());
-                ObjectInputStream objectIn = new ObjectInputStream(buffer);
-                ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
-                BufferedReader userIn = new BufferedReader(new InputStreamReader(System.in));
-                )
+                Socket clientSocket = new Socket(hostName, portNumberC);)
         {
             System.out.println("Hi from the client! all connected :D");
 
@@ -45,8 +40,8 @@ public class Client {
 
 
             // creating the threads
-            clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, clientID, objectIn)));
-            clientThreads.add(new Thread(new ClientThreadServerWriter(clientSocket, clientID, objectOut, userIn)));
+            clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, clientID)));
+            clientThreads.add(new Thread(new ClientThreadServerWriter(clientSocket, clientID)));
 
 
             // starting the client threads

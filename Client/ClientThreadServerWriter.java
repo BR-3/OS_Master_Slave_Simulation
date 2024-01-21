@@ -13,24 +13,19 @@ import java.net.Socket;
 public class ClientThreadServerWriter implements Runnable{
     private Socket clientSocket;
     private int clientID;
-    private final ObjectOutputStream objectOut;
-    private final BufferedReader userIn;
-
 
     boolean runThread = true;
-    public ClientThreadServerWriter(Socket clientSocket, int clientId, ObjectOutputStream objectOut, BufferedReader userIn)
+    public ClientThreadServerWriter(Socket clientSocket, int clientId)
     {
         this.clientSocket = clientSocket;
         this.clientID = clientId;
-        this.objectOut = objectOut;
-        this.userIn = userIn;
     }
 
     public void run() {
         try (
                 // this output stream will send jobs to master.
-                objectOut;
-                userIn;
+                ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
+                BufferedReader userIn = new BufferedReader(new InputStreamReader(System.in));
                 ) {
             while(runThread)
             {
