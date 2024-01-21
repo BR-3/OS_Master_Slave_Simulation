@@ -28,7 +28,7 @@ public class SlaveA {
                 System.out.println("hi from slave A");
                 char optimalJob = 'a';
                 Object input;
-                while((input = jobInputStream.readObject()) != null) {
+               /* while((input = jobInputStream.readObject()) != null) {
                     Job currJob = (Job) input;
                     System.out.println("Received Job. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
                     if(currJob.getType() == optimalJob)
@@ -44,7 +44,7 @@ public class SlaveA {
                     System.out.println("Completed job and sending to master. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + " ID: " + currJob.getID() + "\n");
                     jobOutputStream.writeObject(currJob);
                     jobOutputStream.flush();
-                }
+                }*/
 
             }
 
@@ -57,10 +57,6 @@ public class SlaveA {
             System.err.println("Couldn't get I/O for the connection to " + hostName);
             e.printStackTrace();
             System.exit(1);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
     }
 }

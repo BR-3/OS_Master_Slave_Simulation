@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * over the socket
  */
 
-public class ServerThreadClient0Writer implements Runnable {
+public class ServerThreadClientWriter implements Runnable {
     //private ServerSocket serverSocket = null;
     private Socket clientSocket;
     private ServerSharedMemory sharedMemory;
@@ -21,7 +21,7 @@ public class ServerThreadClient0Writer implements Runnable {
     Object doneJobs_LOCK;
     ArrayList<Job> doneJobs;
 
-    public ServerThreadClient0Writer(Socket clientSocket, int clientId, ServerSharedMemory sharedMemory) {
+    public ServerThreadClientWriter(Socket clientSocket, int clientId, ServerSharedMemory sharedMemory) {
         //this.serverSocket = serverSocket;
         this.clientSocket = clientSocket;
         this.sharedMemory = sharedMemory;

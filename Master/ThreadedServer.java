@@ -36,7 +36,7 @@ public class ThreadedServer {
             System.out.println("Before serverSocketSA.accept() called...");
 
             // socket streams- slave A:
-            /*Socket clientSocketSA = serverSocketSA.accept();
+            Socket clientSocketSA = serverSocketSA.accept();
             System.out.println("Slave A is connected to Master.");
             // send to slaveAWriter:
             ObjectOutputStream objectOutSA = new ObjectOutputStream(new BufferedOutputStream(clientSocketSA.getOutputStream()));
@@ -44,8 +44,15 @@ public class ThreadedServer {
             // send to slaveAListener:
             ObjectInputStream objectInSA = new ObjectInputStream(new BufferedInputStream(clientSocketSA.getInputStream()));
             System.out.println("slaveA input created");
-            // socket streams - slave B*/
 
+            /*// socket streams - slave B
+            Socket clientSocketSB = serverSocketSB.accept();
+            System.out.println("Slave B is connected to the Master.");
+            // sending to SlaveBWriter:
+            ObjectOutputStream objectOutSB = new ObjectOutputStream((new BufferedOutputStream(clientSocketSB.getOutputStream())));
+            // send to slaveBListener:
+            ObjectInputStream objectInSB = new ObjectInputStream(new BufferedInputStream((clientSocketSB.getInputStream())));
+             */
 
             //Array for all threads:
             ArrayList<Thread> allThreads = new ArrayList<>();
@@ -57,18 +64,18 @@ public class ThreadedServer {
             allThreads.add(new Thread(new ServerThreadClientListener(clientSocketC, 0, sharedMemory)));
 System.out.println("client listener created");
             // FOR THE CLIENT WRITER-----------------------------------------------
-            allThreads.add(new Thread(new ServerThreadClient0Writer(clientSocketC, 0, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadClientWriter(clientSocketC, 0, sharedMemory)));
 System.out.println("client writer created");
             // FOR DECIDING WHICH SLAVE TO SEND TO- DECIDER THREAD---------------------------------------
             Thread deciderThread = new Thread(new ServerThreadDecider(sharedMemory));
             allThreads.add(deciderThread);
 System.out.println("decider thread created");
             // FOR THE SLAVE WRITERS-----------------------------------------------------------------------------
-           // allThreads.add(new Thread(new ServerThreadSlaveAWriter(objectOutSA, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveAWriter(objectOutSA, sharedMemory)));
 //            allThreads.add(new Thread(new ServerThreadSlaveBWriter(serverSocketSB, sharedMemory)));
 System.out.println("slave A writer created");
             // FOR THE SLAVE LISTENERS-------------------------------------
-            //allThreads.add(new Thread(new ServerThreadSlaveAListener(objectInSA, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveAListener(objectInSA, sharedMemory)));
 //            allThreads.add(new Thread(new ServerThreadSlaveBListener(serverSocketSB, sharedMemory)));
 System.out.println("slaveA listener created");
             // FOR  DECIDING WHICH CLIENT TO SEND DONE JOBS TO- DONE_DECIDER THREAD-------------------------------------

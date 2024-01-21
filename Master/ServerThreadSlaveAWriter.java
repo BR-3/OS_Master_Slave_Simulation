@@ -53,8 +53,6 @@ public class ServerThreadSlaveAWriter implements Runnable{
                             + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
                     objectOutSA.writeObject(currJob);
                     objectOutSA.flush();
-
-
                 }
             }
         } catch (IOException e) {
