@@ -31,10 +31,6 @@ public class Client {
         try (
                 //sockets for connections between client and master (server)
                 Socket clientSocket = new Socket(hostName, portNumberC);
-                ObjectInputStream objectIn = new ObjectInputStream(
-                        clientSocket.getInputStream());
-                ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
-                BufferedReader userIn = new BufferedReader(new InputStreamReader(System.in));
                 )
                 // seems like we should instantiate the input and output streams here, but when I do I get an error
 
@@ -45,7 +41,7 @@ public class Client {
             ArrayList<Thread> clientThreads = new ArrayList<>();
 
             // creating the threads
-            clientThreads.add(new Thread(new ClientThreadServerListener(objectIn, clientID)));
+            clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, clientID)));
             clientThreads.add(new Thread(new ClientThreadServerWriter(objectOut, userIn, clientID)));
 
             // starting the client threads
