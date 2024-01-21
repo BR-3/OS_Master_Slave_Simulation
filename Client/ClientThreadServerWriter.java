@@ -64,7 +64,5 @@ public class ClientThreadServerWriter implements Runnable{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }

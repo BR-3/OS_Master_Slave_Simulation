@@ -1,7 +1,5 @@
 package yg.Client;
 
-import yg.Job;
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -38,11 +36,9 @@ public class Client {
             // array for the client threads:
             ArrayList<Thread> clientThreads = new ArrayList<>();
 
-
             // creating the threads
             clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, clientID)));
             clientThreads.add(new Thread(new ClientThreadServerWriter(clientSocket, clientID)));
-
 
             // starting the client threads
             for (Thread t : clientThreads)

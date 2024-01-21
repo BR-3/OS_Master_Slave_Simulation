@@ -36,7 +36,7 @@ public class ThreadedServer {
             System.out.println("Before serverSocketSA.accept() called...");
 
             // socket streams- slave A:
-            Socket clientSocketSA = serverSocketSA.accept();
+            /*Socket clientSocketSA = serverSocketSA.accept();
             System.out.println("Slave A is connected to Master.");
             // send to slaveAWriter:
             ObjectOutputStream objectOutSA = new ObjectOutputStream(new BufferedOutputStream(clientSocketSA.getOutputStream()));
@@ -44,7 +44,7 @@ public class ThreadedServer {
             // send to slaveAListener:
             ObjectInputStream objectInSA = new ObjectInputStream(new BufferedInputStream(clientSocketSA.getInputStream()));
             System.out.println("slaveA input created");
-            // socket streams - slave B
+            // socket streams - slave B*/
 
 
             //Array for all threads:
@@ -64,11 +64,11 @@ System.out.println("client writer created");
             allThreads.add(deciderThread);
 System.out.println("decider thread created");
             // FOR THE SLAVE WRITERS-----------------------------------------------------------------------------
-            allThreads.add(new Thread(new ServerThreadSlaveAWriter(objectOutSA, sharedMemory)));
+           // allThreads.add(new Thread(new ServerThreadSlaveAWriter(objectOutSA, sharedMemory)));
 //            allThreads.add(new Thread(new ServerThreadSlaveBWriter(serverSocketSB, sharedMemory)));
 System.out.println("slave A writer created");
             // FOR THE SLAVE LISTENERS-------------------------------------
-            allThreads.add(new Thread(new ServerThreadSlaveAListener(objectInSA, sharedMemory)));
+            //allThreads.add(new Thread(new ServerThreadSlaveAListener(objectInSA, sharedMemory)));
 //            allThreads.add(new Thread(new ServerThreadSlaveBListener(serverSocketSB, sharedMemory)));
 System.out.println("slaveA listener created");
             // FOR  DECIDING WHICH CLIENT TO SEND DONE JOBS TO- DONE_DECIDER THREAD-------------------------------------
