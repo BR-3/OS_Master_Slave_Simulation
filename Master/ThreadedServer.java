@@ -42,9 +42,10 @@ public class ThreadedServer {
             System.out.println("Slave A is connected to Master.");
             // send to slaveAWriter:
             ObjectOutputStream objectOutSA = new ObjectOutputStream(new BufferedOutputStream(clientSocketSA.getOutputStream()));
+            System.out.println("slaveA output connected");
             // send to slaveAListener:
             ObjectInputStream objectInSA = new ObjectInputStream(new BufferedInputStream(clientSocketSA.getInputStream()));
-
+            System.out.println("slaveA input created");
             // socket streams - slave B
 
 
