@@ -32,8 +32,6 @@ public class ThreadedServer {
             // socket streams- client:
             Socket clientSocketC = serverSocketC.accept();
             System.out.println("Client is connected to Master");
-            // send to client listener:
-            ObjectInputStream objectInC = new ObjectInputStream(new BufferedInputStream(clientSocketC.getInputStream()));
 
             System.out.println("Before serverSocketSA.accept() called...");
 

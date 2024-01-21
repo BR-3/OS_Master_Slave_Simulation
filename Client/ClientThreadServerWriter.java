@@ -29,6 +29,7 @@ public class ClientThreadServerWriter implements Runnable{
                 ) {
             while(runThread)
             {
+                System.out.println("hi from clientThreadServerWriter running");
                 String user;
                 int jobId = 0;
                 System.out.println("Please enter jobs of type a or b: ");
