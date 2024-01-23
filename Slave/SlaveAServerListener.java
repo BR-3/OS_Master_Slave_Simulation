@@ -27,7 +27,7 @@ public class SlaveAServerListener implements Runnable{
             while((input = objectIn.readObject()) != null)
             {
                 Job currJob = (Job) input;
-                System.out.println("Received Job. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
+                System.out.println("Slave" + optimalJob +"Received Job. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
                 if(currJob.getType() == optimalJob)
                 {
                     System.out.println("Job is optimal, takes 2 seconds to complete.");

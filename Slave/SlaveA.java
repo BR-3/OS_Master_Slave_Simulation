@@ -29,6 +29,8 @@ public class SlaveA {
 
             slaveThreads.add(new Thread(new SlaveAServerListener(clientSocket, 'a', doneJobs_Lock)));
             slaveThreads.add(new Thread(new SlaveAServerWriter(clientSocket, doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveAServerListener(clientSocket, 'b', doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveAServerWriter(clientSocket, doneJobs_Lock)));
 
             for (Thread t: slaveThreads)
             {
