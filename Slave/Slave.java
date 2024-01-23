@@ -6,7 +6,7 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
-public class SlaveA {
+public class Slave {
     static ArrayList<Job> doneJobs = new ArrayList<Job>();
     static Object doneJobs_Lock = new Object();
     public static void main(String[] args)  {

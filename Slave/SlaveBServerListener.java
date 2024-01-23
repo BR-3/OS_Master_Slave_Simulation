@@ -44,7 +44,7 @@ public class SlaveBServerListener implements Runnable {
 
                 synchronized (doneJobs_Lock)
                 {
-                    SlaveA.doneJobs.add(currJob);
+                    Slave.doneJobs.add(currJob);
                 }
             }
 
