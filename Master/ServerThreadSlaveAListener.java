@@ -30,10 +30,8 @@ public class ServerThreadSlaveAListener implements Runnable{
     @Override
     public void run() {
         System.out.println("Hi from serverThreadSlaveAListener before connecting");
-        try ( /*Socket clientSocket = serverSocket.accept();
-             ObjectInputStream objectIn = new ObjectInputStream(
-                     new BufferedInputStream(clientSocket.getInputStream()));*/
-        objectInSA;
+        try (
+            objectInSA;
         )
         {
             System.out.println("Hi from ServerThreadSlaveAListener- the thread is working:))"); // THIS IS NOT WORKING YET
@@ -43,6 +41,8 @@ public class ServerThreadSlaveAListener implements Runnable{
                 Job finishedJob = (Job) input;
                 System.out.println("Received from slave A - DONE job: Client: " +
                         finishedJob.getClient() + ", type: " + finishedJob.getType() + ", id: " + finishedJob.getID());
+
+                // adjusting the load
                 int reducedLoad;
                 if(finishedJob.getType() == 'a')
                 {

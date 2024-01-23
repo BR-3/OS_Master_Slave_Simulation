@@ -14,7 +14,6 @@ public class ClientThreadServerWriter implements Runnable{
     private Socket clientSocket;
     private int clientID;
 
-
     boolean runThread = true;
     public ClientThreadServerWriter(Socket clientSocket, int clientId)
     {
@@ -30,6 +29,7 @@ public class ClientThreadServerWriter implements Runnable{
                 ) {
             while(runThread)
             {
+                System.out.println("hi from clientThreadServerWriter running");
                 String user;
                 int jobId = 0;
                 System.out.println("Please enter jobs of type a or b: ");
@@ -64,7 +64,5 @@ public class ClientThreadServerWriter implements Runnable{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }

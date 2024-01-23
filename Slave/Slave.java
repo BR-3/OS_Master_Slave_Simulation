@@ -4,25 +4,62 @@ import yg.Job;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
-public class SlaveA {
+public class Slave {
+    static ArrayList<Job> doneJobs = new ArrayList<Job>();
+    static Object doneJobs_Lock = new Object();
     public static void main(String[] args)  {
       // args = new String[]{"127.0.0.1", "30122"};
 
-        if (args.length != 2) {
+        if (args.length != 3) {
             System.err.println("Usage: java client <host name> <port number>");
             System.exit(1);
         }
 
         String hostName = args[0];
-        int portNumber = Integer.parseInt(args[1]);
+        int portNumberSA = Integer.parseInt(args[1]);
+        int portNumberSB = Integer.parseInt(args[2]);
 
         try (
+                Socket slaveASocket = new Socket(hostName, portNumberSA);
+                Socket slaveBSocket = new Socket(hostName, portNumberSB);
+                                ) {
+            System.out.println("Hi from Slave A!");
+
+            ArrayList<Thread> slaveThreads = new ArrayList<>();
+
+            slaveThreads.add(new Thread(new SlaveAServerListener(slaveASocket, 'a', doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveAServerWriter(slaveASocket, doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveBServerListener(slaveBSocket, 'b', doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveBServerWriter(slaveBSocket, doneJobs_Lock)));
+
+            for (Thread t: slaveThreads)
+            {
+                t.start();
+            }
+
+            for (Thread t: slaveThreads)
+            {
+                try
+                {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        /*try (
                 //sockets for connections between client (= slave) and master (server)
                 Socket clientSocket = new Socket(hostName, portNumber);
-                ObjectInputStream jobInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-                ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
         ) {
+            ObjectInputStream jobInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
+            ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             while (true)
             {
                 System.out.println("hi from slave A");
@@ -61,6 +98,6 @@ public class SlaveA {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        }
+        } */
     }
 }

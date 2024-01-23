@@ -36,7 +36,6 @@ public class ServerThreadDecider implements Runnable{
 
         while (true)
         {
-            System.out.println("ServerThreadDoneDecider is running! ");
             // to use as current statuses:
             ArrayList<Job> currJobsToComplete;
             int currSlaveALoad;

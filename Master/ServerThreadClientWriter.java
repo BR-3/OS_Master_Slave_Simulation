@@ -13,15 +13,17 @@ import java.util.ArrayList;
  * over the socket
  */
 
-public class ServerThreadClient0Writer implements Runnable {
-    private ServerSocket serverSocket = null;
+public class ServerThreadClientWriter implements Runnable {
+    //private ServerSocket serverSocket = null;
+    private Socket clientSocket;
     private ServerSharedMemory sharedMemory;
     int clientId;
     Object doneJobs_LOCK;
     ArrayList<Job> doneJobs;
 
-    public ServerThreadClient0Writer(ServerSocket serverSocket, int clientId, ServerSharedMemory sharedMemory) {
-        this.serverSocket = serverSocket;
+    public ServerThreadClientWriter(Socket clientSocket, int clientId, ServerSharedMemory sharedMemory) {
+        //this.serverSocket = serverSocket;
+        this.clientSocket = clientSocket;
         this.sharedMemory = sharedMemory;
         this.clientId = clientId;
         this.doneJobs_LOCK = sharedMemory.getDoneJobs_LOCK();
@@ -30,7 +32,7 @@ public class ServerThreadClient0Writer implements Runnable {
 
     @Override
     public void run() {
-        try (Socket clientSocket = serverSocket.accept();
+        try (
              // object streams:
              ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
 

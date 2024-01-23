@@ -1,7 +1,5 @@
 package yg.Client;
 
-import yg.Job;
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -10,6 +8,7 @@ import java.util.ArrayList;
  * The client instantiates its writer and listener threads,
  * which listen from the user and master and write to the master.
  */
+
 public class Client {
 
     public static void main(String[] args) {
@@ -29,21 +28,21 @@ public class Client {
 
 
 
-        /*------------------------------------------------------------*/
         try (
                 //sockets for connections between client and master (server)
                 Socket clientSocket = new Socket(hostName, portNumberC);
                 )
+                // seems like we should instantiate the input and output streams here, but when I do I get an error
+
         {
+            System.out.println("Hi from the client! all connected :D");
 
             // array for the client threads:
             ArrayList<Thread> clientThreads = new ArrayList<>();
 
-
             // creating the threads
-//            clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, clientID)));
+            clientThreads.add(new Thread(new ClientThreadServerListener(clientSocket, clientID)));
             clientThreads.add(new Thread(new ClientThreadServerWriter(clientSocket, clientID)));
-
 
             // starting the client threads
             for (Thread t : clientThreads)

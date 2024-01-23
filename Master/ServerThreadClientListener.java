@@ -3,7 +3,6 @@ package yg.Master;
 import yg.Job;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
@@ -15,13 +14,14 @@ public class ServerThreadClientListener implements Runnable{
 
 
     // a reference to the server socket is passed in, all threads share it
-    private final ObjectInputStream objectInC;
+    //private final ObjectInputStream objectInC;
+    private final Socket clientSocket;
     int clientID;
     private final ServerSharedMemory sharedMemory;
     private final Object jobsToComplete_LOCK;
 
-    public ServerThreadClientListener(ObjectInputStream objectInC, int clientID, ServerSharedMemory sharedMemory) {
-        this.objectInC = objectInC;
+    public ServerThreadClientListener(Socket clientSocket, int clientID, ServerSharedMemory sharedMemory) {
+        this.clientSocket = clientSocket;
         this.clientID = clientID;
         this.sharedMemory = sharedMemory;
         this.jobsToComplete_LOCK = sharedMemory.getJobsToComplete_LOCK();
@@ -30,9 +30,8 @@ public class ServerThreadClientListener implements Runnable{
     @Override
     public void run() {
         // This thread accepts its own client socket from the shared server socket
-        try (/*Socket clientSocket = serverSocket.accept();
-             ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));*/
-             objectInC;
+        try (
+             ObjectInputStream objectInC = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
              )
         {
             System.out.println("Client Listener " + clientID + " is working.");
@@ -49,12 +48,7 @@ public class ServerThreadClientListener implements Runnable{
                 synchronized(jobsToComplete_LOCK) {
                     sharedMemory.getJobsToComplete().add(newJob);
                 }
-
-
-
             }
-
-
         }
         catch (IOException e)
         {
