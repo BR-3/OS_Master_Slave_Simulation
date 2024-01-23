@@ -7,13 +7,34 @@ import java.net.*;
 import java.util.ArrayList;
 
 public class Slave {
-    static ArrayList<Job> doneJobs = new ArrayList<Job>();
-    static Object doneJobs_Lock = new Object();
+    static ArrayList<Job> doneAJobs = new ArrayList<Job>();
+    static ArrayList<Job> doneBJobs = new ArrayList<Job>();
+    static Object doneAJobs_Lock = new Object();
+    static Object doneBJobs_Lock = new Object();
+
+    // getters and setters
+
+    public static ArrayList<Job> getDoneAJobs() {
+        return doneAJobs;
+    }
+
+    public static void setDoneAJobs(ArrayList<Job> doneAJobs) {
+        Slave.doneAJobs = doneAJobs;
+    }
+
+    public static ArrayList<Job> getDoneBJobs() {
+        return doneBJobs;
+    }
+
+    public static void setDoneBJobs(ArrayList<Job> doneBJobs) {
+        Slave.doneBJobs = doneBJobs;
+    }
+
     public static void main(String[] args)  {
-      // args = new String[]{"127.0.0.1", "30122"};
+      // args = new String[]{"127.0.0.1", "30122", "30123"};
 
         if (args.length != 3) {
-            System.err.println("Usage: java client <host name> <port number>");
+            System.err.println("Usage: java client <host name> <port number> <port number>");
             System.exit(1);
         }
 
@@ -29,10 +50,10 @@ public class Slave {
 
             ArrayList<Thread> slaveThreads = new ArrayList<>();
 
-            slaveThreads.add(new Thread(new SlaveAServerListener(slaveASocket, 'a', doneJobs_Lock)));
-            slaveThreads.add(new Thread(new SlaveAServerWriter(slaveASocket, doneJobs_Lock)));
-            slaveThreads.add(new Thread(new SlaveBServerListener(slaveBSocket, 'b', doneJobs_Lock)));
-            slaveThreads.add(new Thread(new SlaveBServerWriter(slaveBSocket, doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveAServerListener(slaveASocket, 'a', doneAJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveAServerWriter(slaveASocket, doneAJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveBServerListener(slaveBSocket, 'b', doneBJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveBServerWriter(slaveBSocket, doneBJobs_Lock)));
 
             for (Thread t: slaveThreads)
             {

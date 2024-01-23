@@ -10,13 +10,13 @@ import java.net.Socket;
 public class SlaveBServerListener implements Runnable {
     private Socket clientSocket;
     private char optimalJob;
-    private Object doneJobs_Lock;
+    private Object doneBJobs_Lock;
 
-    public SlaveBServerListener(Socket clientSocket, char optimalJob, Object doneJobs_Lock)
+    public SlaveBServerListener(Socket clientSocket, char optimalJob, Object doneBJobs_Lock)
     {
         this.clientSocket = clientSocket;
         this.optimalJob = optimalJob;
-        this.doneJobs_Lock = doneJobs_Lock;
+        this.doneBJobs_Lock = doneBJobs_Lock;
     }
 
     public void run()
@@ -29,7 +29,7 @@ public class SlaveBServerListener implements Runnable {
             while((input = objectIn.readObject()) != null)
             {
                 Job currJob = (Job) input;
-                System.out.println("Slave" + optimalJob +"Received Job. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
+                System.out.println("Slave " + optimalJob +" Received Job. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
                 if(currJob.getType() == optimalJob)
                 {
                     System.out.println("Job is optimal, takes 2 seconds to complete.");
@@ -42,9 +42,9 @@ public class SlaveBServerListener implements Runnable {
                 }
                 System.out.println("Completed job and sending to master. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + " ID: " + currJob.getID() + "\n");
 
-                synchronized (doneJobs_Lock)
+                synchronized (doneBJobs_Lock)
                 {
-                    Slave.doneJobs.add(currJob);
+                    Slave.doneBJobs.add(currJob);
                 }
             }
 

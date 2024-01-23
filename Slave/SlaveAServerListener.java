@@ -8,13 +8,13 @@ import java.net.Socket;
 public class SlaveAServerListener implements Runnable{
     private Socket clientSocket;
     private char optimalJob;
-    private Object doneJobs_Lock;
+    private Object doneAJobs_Lock;
 
-    public SlaveAServerListener(Socket clientSocket, char optimalJob, Object doneJobs_Lock)
+    public SlaveAServerListener(Socket clientSocket, char optimalJob, Object doneAJobs_Lock)
     {
         this.clientSocket = clientSocket;
         this.optimalJob = optimalJob;
-        this.doneJobs_Lock = doneJobs_Lock;
+        this.doneAJobs_Lock = doneAJobs_Lock;
     }
 
     public void run()
@@ -22,6 +22,8 @@ public class SlaveAServerListener implements Runnable{
         try(
                 ObjectInputStream objectIn = new ObjectInputStream(
                         new BufferedInputStream(clientSocket.getInputStream()));
+                // draft:
+//                ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream())
                 ) {
             Object input;
             while((input = objectIn.readObject()) != null)
@@ -40,10 +42,11 @@ public class SlaveAServerListener implements Runnable{
                 }
                 System.out.println("Completed job and sending to master. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + " ID: " + currJob.getID() + "\n");
 
-                synchronized (doneJobs_Lock)
+                synchronized (doneAJobs_Lock)
                 {
-                    Slave.doneJobs.add(currJob);
+                    Slave.doneAJobs.add(currJob);
                 }
+
             }
 
         } catch (IOException e) {

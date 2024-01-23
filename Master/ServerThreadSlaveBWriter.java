@@ -21,16 +21,16 @@ public class ServerThreadSlaveBWriter implements Runnable{
     public ServerThreadSlaveBWriter(ObjectOutputStream objectOutSB, ServerSharedMemory sharedMemory)  {
         this.objectOutSB = objectOutSB;
         this.sharedMemory = sharedMemory;
-        this.jobsForSlaveB_Lock = sharedMemory.getJobsForSlaveA_LOCK();
+        this.jobsForSlaveB_Lock = sharedMemory.getJobsForSlaveB_LOCK();
     }
 
     @Override
     public void run() {
-        System.out.println("Hi from serverThreadSlaveAWriter before connecting");
+        System.out.println("Hi from serverThreadSlaveBWriter before connecting");
         try (
                 objectOutSB;
         ) {
-            System.out.println("Hi from serverThreadSlaveAWriter! the thread is running.");
+            System.out.println("Hi from serverThreadSlaveBWriter! the thread is running.");
             while(true)
             {
                 // to use as current status:
@@ -38,7 +38,7 @@ public class ServerThreadSlaveBWriter implements Runnable{
 
                 synchronized (jobsForSlaveB_Lock)
                 {
-                    currJobsForSlaveB = new ArrayList<>(sharedMemory.getJobsForSlaveA());
+                    currJobsForSlaveB = new ArrayList<>(sharedMemory.getJobsForSlaveB());
                 }
 
                 for (Job currJob : currJobsForSlaveB)
@@ -46,10 +46,10 @@ public class ServerThreadSlaveBWriter implements Runnable{
                     // remove each one from original array:
                     synchronized (jobsForSlaveB_Lock)
                     {
-                        sharedMemory.getJobsForSlaveA().remove(currJob);
+                        sharedMemory.getJobsForSlaveB().remove(currJob);
                     }
                     // write it to the slave A socket:
-                    System.out.println("ServerTSlaveAWriter: Sending to slave A socket: Client"
+                    System.out.println("ServerTSlaveBWriter: Sending to slave B socket: Client"
                             + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
                     objectOutSB.writeObject(currJob);
                     objectOutSB.flush();
