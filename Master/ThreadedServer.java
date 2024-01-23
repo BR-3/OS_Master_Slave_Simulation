@@ -71,11 +71,11 @@ System.out.println("client writer created");
             allThreads.add(deciderThread);
 System.out.println("decider thread created");
             // FOR THE SLAVE WRITERS-----------------------------------------------------------------------------
-        //    allThreads.add(new Thread(new ServerThreadSlaveAWriter(objectOutSA, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveAWriter(objectOutSA, sharedMemory)));
 //            allThreads.add(new Thread(new ServerThreadSlaveBWriter(serverSocketSB, sharedMemory)));
 System.out.println("slave A writer created");
             // FOR THE SLAVE LISTENERS-------------------------------------
-          //  allThreads.add(new Thread(new ServerThreadSlaveAListener(objectInSA, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveAListener(objectInSA, sharedMemory)));
 //            allThreads.add(new Thread(new ServerThreadSlaveBListener(serverSocketSB, sharedMemory)));
 System.out.println("slaveA listener created");
             // FOR  DECIDING WHICH CLIENT TO SEND DONE JOBS TO- DONE_DECIDER THREAD-------------------------------------

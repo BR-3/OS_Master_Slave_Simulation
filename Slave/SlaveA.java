@@ -27,7 +27,6 @@ public class SlaveA {
 
             ArrayList<Thread> slaveThreads = new ArrayList<>();
 
-
             slaveThreads.add(new Thread(new SlaveAServerListener(clientSocket, 'a', doneJobs_Lock)));
             slaveThreads.add(new Thread(new SlaveAServerWriter(clientSocket, doneJobs_Lock)));
 
