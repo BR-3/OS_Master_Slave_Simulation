@@ -11,31 +11,39 @@ import java.net.*;
  */
 
 public class ServerThreadSlaveBListener implements Runnable {
-    private final ServerSocket serverSocket;
+    private final ObjectInputStream objectInSB;
     private final ServerSharedMemory sharedMemory;
     private final Object doneJobs_Lock;
-    public ServerThreadSlaveBListener(ServerSocket serverSocket,
+    public ServerThreadSlaveBListener(ObjectInputStream objectInSB,
                                       ServerSharedMemory sharedMemory) {
-        this.serverSocket = serverSocket;
+        this.objectInSB = objectInSB;
         this.doneJobs_Lock = sharedMemory.getDoneJobs_LOCK();
         this.sharedMemory = sharedMemory;
     }
     public void run() {
         System.out.println("Hi from serverThreadSlaveBListener before connecting");
-        try (
-                Socket clientSocket = serverSocket.accept();
-                ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
+        try (objectInSB;
         ) {
-            System.out.println("Hi from the serverThreadSlaveBListener! This thread is working.");
+            System.out.println("Hi from ServerThreadSlaveAListener- the thread is working:))"); // THIS IS NOT WORKING YET
             Object input;
-            while ((input = objectIn.readObject()) != null)
+            while ((input = objectInSB.readObject()) != null)
             {
                 Job finishedJob = (Job) input;
-                System.out.println("Received job type " + finishedJob.getType() + " from slave A");
+                System.out.println("Received from slave B - DONE job: Client: " +
+                        finishedJob.getClient() + ", type: " + finishedJob.getType() + ", id: " + finishedJob.getID());
 
+                // adjusting the load
+                int reducedLoad;
+                if(finishedJob.getType() == 'b')
+                {
+                    reducedLoad = -2;
+                } else {
+                    reducedLoad = -10;
+                }
                 synchronized(doneJobs_Lock)
                 {
                     sharedMemory.getDoneJobs().add(finishedJob);
+                    sharedMemory.addSlaveBLoad(reducedLoad);
                 }
             }
 

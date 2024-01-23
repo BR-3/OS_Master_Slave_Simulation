@@ -45,14 +45,14 @@ public class ThreadedServer {
             ObjectInputStream objectInSA = new ObjectInputStream(new BufferedInputStream(clientSocketSA.getInputStream()));
             System.out.println("slaveA input created");
 
-            /*// socket streams - slave B
+            // socket streams - slave B
             Socket clientSocketSB = serverSocketSB.accept();
             System.out.println("Slave B is connected to the Master.");
             // sending to SlaveBWriter:
             ObjectOutputStream objectOutSB = new ObjectOutputStream((new BufferedOutputStream(clientSocketSB.getOutputStream())));
             // send to slaveBListener:
             ObjectInputStream objectInSB = new ObjectInputStream(new BufferedInputStream((clientSocketSB.getInputStream())));
-             */
+
 
             //Array for all threads:
             ArrayList<Thread> allThreads = new ArrayList<>();
@@ -72,11 +72,11 @@ System.out.println("client writer created");
 System.out.println("decider thread created");
             // FOR THE SLAVE WRITERS-----------------------------------------------------------------------------
             allThreads.add(new Thread(new ServerThreadSlaveAWriter(objectOutSA, sharedMemory)));
-//            allThreads.add(new Thread(new ServerThreadSlaveBWriter(serverSocketSB, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveBWriter(objectOutSB, sharedMemory)));
 System.out.println("slave A writer created");
             // FOR THE SLAVE LISTENERS-------------------------------------
             allThreads.add(new Thread(new ServerThreadSlaveAListener(objectInSA, sharedMemory)));
-//            allThreads.add(new Thread(new ServerThreadSlaveBListener(serverSocketSB, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadSlaveBListener(objectInSB, sharedMemory)));
 System.out.println("slaveA listener created");
             // FOR  DECIDING WHICH CLIENT TO SEND DONE JOBS TO- DONE_DECIDER THREAD-------------------------------------
             allThreads.add(new Thread(new ServerThreadDoneDecider(sharedMemory)));

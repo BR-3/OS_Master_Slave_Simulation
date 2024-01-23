@@ -14,24 +14,23 @@ import java.util.ArrayList;
  */
 public class ServerThreadSlaveBWriter implements Runnable{
     // a reference to the server socket is passed in, all threads share it
-    private final ServerSocket serverSocket;
+    private final ObjectOutputStream objectOutSB;
     private final ServerSharedMemory sharedMemory;
     private final Object jobsForSlaveB_Lock;
 
-    public ServerThreadSlaveBWriter(ServerSocket serverSocket, ServerSharedMemory sharedMemory)  {
-        this.serverSocket = serverSocket;
+    public ServerThreadSlaveBWriter(ObjectOutputStream objectOutSB, ServerSharedMemory sharedMemory)  {
+        this.objectOutSB = objectOutSB;
         this.sharedMemory = sharedMemory;
-        this.jobsForSlaveB_Lock = sharedMemory.getJobsForSlaveB_LOCK();
+        this.jobsForSlaveB_Lock = sharedMemory.getJobsForSlaveA_LOCK();
     }
 
     @Override
     public void run() {
-        try (Socket clientSocket = serverSocket.accept();
-             // object streams to send  jobs to slaves:
-             ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
-
+        System.out.println("Hi from serverThreadSlaveAWriter before connecting");
+        try (
+                objectOutSB;
         ) {
-            System.out.println("Hi from ServerThreadSlaveBWriter");
+            System.out.println("Hi from serverThreadSlaveAWriter! the thread is running.");
             while(true)
             {
                 // to use as current status:
@@ -39,7 +38,7 @@ public class ServerThreadSlaveBWriter implements Runnable{
 
                 synchronized (jobsForSlaveB_Lock)
                 {
-                    currJobsForSlaveB = new ArrayList<>(sharedMemory.getJobsForSlaveB());
+                    currJobsForSlaveB = new ArrayList<>(sharedMemory.getJobsForSlaveA());
                 }
 
                 for (Job currJob : currJobsForSlaveB)
@@ -47,13 +46,13 @@ public class ServerThreadSlaveBWriter implements Runnable{
                     // remove each one from original array:
                     synchronized (jobsForSlaveB_Lock)
                     {
-                        sharedMemory.getJobsForSlaveB().remove(currJob);
+                        sharedMemory.getJobsForSlaveA().remove(currJob);
                     }
                     // write it to the slave A socket:
-                    System.out.println("ServerTSlaveBWriter: Sending to slave A socket: Client"
+                    System.out.println("ServerTSlaveAWriter: Sending to slave A socket: Client"
                             + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
-                    objectOut.writeObject(currJob);
-                    objectOut.flush();
+                    objectOutSB.writeObject(currJob);
+                    objectOutSB.flush();
                 }
             }
         } catch (IOException e) {
