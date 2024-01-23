@@ -41,11 +41,13 @@ public class SlaveServerWriter implements Runnable{
                     {
                         synchronized(doneJobs_Lock)
                         {
-                            objectOut.writeObject(Slave.getDoneAJobs().remove(currJob));
-                            objectOut.flush();
+                            Slave.getDoneAJobs().remove(currJob);
                         }
                         System.out.println("SlaveServerAWriter: Sending to Slave socket on master: Client: "
                                 + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
+
+                        objectOut.writeObject(currJob);
+                        objectOut.flush();
                     }
                 }
                 else if(slaveType == 'B')
@@ -59,11 +61,13 @@ public class SlaveServerWriter implements Runnable{
                     {
                         synchronized(doneJobs_Lock)
                         {
-                            objectOut.writeObject(Slave.getDoneBJobs().remove(currJob));
-                            objectOut.flush();
+                            Slave.getDoneBJobs().remove(currJob);
                         }
                         System.out.println("SlaveServerBWriter: Sending to Slave socket on master: Client: "
                                 + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
+
+                        objectOut.writeObject(currJob);
+                        objectOut.flush();
                     }
                 }
             }
