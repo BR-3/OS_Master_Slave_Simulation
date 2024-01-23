@@ -18,19 +18,21 @@ public class SlaveA {
         }
 
         String hostName = args[0];
-        int portNumber = Integer.parseInt(args[1]);
+        int portNumberSA = Integer.parseInt(args[1]);
+        int portNumberSB = Integer.parseInt(args[2]);
 
         try (
-                Socket clientSocket = new Socket(hostName, portNumber);
-                ) {
+                Socket slaveASocket = new Socket(hostName, portNumberSA);
+                Socket slaveBSocket = new Socket(hostName, portNumberSB);
+                                ) {
             System.out.println("Hi from Slave A!");
 
             ArrayList<Thread> slaveThreads = new ArrayList<>();
 
-            slaveThreads.add(new Thread(new SlaveAServerListener(clientSocket, 'a', doneJobs_Lock)));
-            slaveThreads.add(new Thread(new SlaveAServerWriter(clientSocket, doneJobs_Lock)));
-            slaveThreads.add(new Thread(new SlaveAServerListener(clientSocket, 'b', doneJobs_Lock)));
-            slaveThreads.add(new Thread(new SlaveAServerWriter(clientSocket, doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveAServerListener(slaveASocket, 'a', doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveAServerWriter(slaveASocket, doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveBServerListener(slaveBSocket, 'b', doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveBServerWriter(slaveBSocket, doneJobs_Lock)));
 
             for (Thread t: slaveThreads)
             {
