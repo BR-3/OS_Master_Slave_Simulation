@@ -12,21 +12,11 @@ public class Slave {
     static Object doneJobs_Lock = new Object();
 
     // getters and setters
-
     public static ArrayList<Job> getDoneAJobs() {
         return doneAJobs;
     }
-
-    public static void setDoneAJobs(ArrayList<Job> doneAJobs) {
-        Slave.doneAJobs = doneAJobs;
-    }
-
     public static ArrayList<Job> getDoneBJobs() {
         return doneBJobs;
-    }
-
-    public static void setDoneBJobs(ArrayList<Job> doneBJobs) {
-        Slave.doneBJobs = doneBJobs;
     }
 
     public static void main(String[] args)  {
@@ -50,9 +40,9 @@ public class Slave {
             ArrayList<Thread> slaveThreads = new ArrayList<>();
 
             slaveThreads.add(new Thread(new SlaveServerListener(slaveASocket, 'a', doneJobs_Lock)));
-            slaveThreads.add(new Thread(new SlaveServerWriter(slaveASocket, doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveServerWriter(slaveASocket, doneJobs_Lock, 'A')));
             slaveThreads.add(new Thread(new SlaveServerListener(slaveBSocket, 'b', doneJobs_Lock)));
-            slaveThreads.add(new Thread(new SlaveServerWriter(slaveBSocket, doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveServerWriter(slaveBSocket, doneJobs_Lock, 'B')));
 
             for (Thread t: slaveThreads)
             {

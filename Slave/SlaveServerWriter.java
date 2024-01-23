@@ -10,12 +10,15 @@ import java.util.ArrayList;
 public class SlaveServerWriter implements Runnable{
     private Socket clientSocket;
     private Object doneJobs_Lock;
+    private char slaveType;
+    private Job currJob;
 
     boolean runThread = true;
 
-    public SlaveServerWriter(Socket clientSocket, Object doneJobs_Lock) {
+    public SlaveServerWriter(Socket clientSocket, Object doneJobs_Lock, char slaveType) {
         this.clientSocket = clientSocket;
         this.doneJobs_Lock = doneJobs_Lock;
+        this.slaveType = slaveType;
     }
 
     public void run()
@@ -25,15 +28,24 @@ public class SlaveServerWriter implements Runnable{
                 ) {
             while(runThread)
             {
-                // to use as current statuses:
-                ArrayList<Job> currDoneAJobs;
-
-                synchronized (doneJobs_Lock)
+                ArrayList<Job> currDoneJobs = null;
+                
+                if(slaveType == 'A')
                 {
-                    currDoneAJobs = new ArrayList<>(Slave.getDoneAJobs());
+                    synchronized (doneJobs_Lock)
+                    {
+                        currDoneJobs = new ArrayList<>(Slave.getDoneAJobs());
+                    }
                 }
-
-                for (Job currJob : currDoneAJobs)
+                else if(slaveType == 'B')
+                {
+                    synchronized (doneJobs_Lock)
+                    {
+                        currDoneJobs = new ArrayList<>(Slave.getDoneAJobs());
+                    }
+                }
+                
+                for (Job currJob : currDoneJobs)
                 {
                     // remove each one from original array
                     if(currJob.getType() == 'a' )
@@ -45,16 +57,17 @@ public class SlaveServerWriter implements Runnable{
                     } else {
                         synchronized (doneJobs_Lock)
                         {
-                            Slave.getDoneAJobs().remove(currJob);
+                            Slave.getDoneBJobs().remove(currJob);
                         }
                     }
-
-                    // write it to the socket
-                    System.out.println("SlaveServerWriter: Sending to Slave socket on master: Client: "
-                            + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
-                    objectOut.writeObject(currJob);
-                    objectOut.flush();
                 }
+                
+                // to use as current statuses:
+                // write it to the socket
+                System.out.println("SlaveServerWriter: Sending to Slave socket on master: Client: "
+                        + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
+                objectOut.writeObject(currJob);
+                objectOut.flush();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

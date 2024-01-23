@@ -29,12 +29,10 @@ public class ServerThreadSlaveAListener implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Hi from serverThreadSlaveAListener before connecting");
         try (
             objectInSA;
         )
         {
-            System.out.println("Hi from ServerThreadSlaveAListener- the thread is working:))"); // THIS IS NOT WORKING YET
             Object input;
             while ((input = objectInSA.readObject()) != null)
             {

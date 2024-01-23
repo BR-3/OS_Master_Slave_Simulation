@@ -26,11 +26,9 @@ public class ServerThreadSlaveBWriter implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Hi from serverThreadSlaveBWriter before connecting");
         try (
                 objectOutSB;
         ) {
-            System.out.println("Hi from serverThreadSlaveBWriter! the thread is running.");
             while(true)
             {
                 // to use as current status:
