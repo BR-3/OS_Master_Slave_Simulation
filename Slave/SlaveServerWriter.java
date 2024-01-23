@@ -50,7 +50,7 @@ public class SlaveServerWriter implements Runnable{
                     }
 
                     // write it to the socket
-                    System.out.println("SlaveAServerWriter: Sending to Slave A socket: Client: "
+                    System.out.println("SlaveServerWriter: Sending to Slave socket on master: Client: "
                             + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
                     objectOut.writeObject(currJob);
                     objectOut.flush();

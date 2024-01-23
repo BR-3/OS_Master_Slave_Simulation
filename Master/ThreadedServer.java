@@ -35,6 +35,7 @@ public class ThreadedServer {
             Socket clientSocketC0 = serverSocketC0.accept();
             System.out.println("Client0 is connected to Master");
             Socket clientSocketC1 = serverSocketC1.accept();
+            System.out.println("Client1 is connected to Master");
 
             System.out.println("Before serverSocketSA.accept() called...");
 
