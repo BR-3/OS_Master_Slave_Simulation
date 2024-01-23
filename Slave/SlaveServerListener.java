@@ -40,21 +40,11 @@ public class SlaveServerListener implements Runnable{
                 }
                 System.out.println("Completed job and sending to master. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + " ID: " + currJob.getID() + "\n");
 
-                if(currJob.getType() == 'a')
+                // this puts finished jobs on an arraylist of finished jobs
+                synchronized (doneJobs_Lock)
                 {
-                    synchronized (doneJobs_Lock)
-                    {
-                        Slave.doneAJobs.add(currJob);
-                    }
-                } else
-                {
-                    synchronized (doneJobs_Lock)
-                    {
-                        Slave.doneBJobs.add(currJob);
-                    }
+                    Slave.slaveDoneJobs.add(currJob);
                 }
-
-
             }
 
         } catch (IOException e) {
