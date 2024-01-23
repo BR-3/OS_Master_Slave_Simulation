@@ -4,8 +4,11 @@ import yg.Job;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class SlaveA {
+    static ArrayList<Job> doneJobs = new ArrayList<Job>();
+    static Object doneJobs_Lock = new Object();
     public static void main(String[] args)  {
       // args = new String[]{"127.0.0.1", "30122"};
 
@@ -18,6 +21,37 @@ public class SlaveA {
         int portNumber = Integer.parseInt(args[1]);
 
         try (
+                Socket clientSocket = new Socket(hostName, portNumber);
+                ) {
+            System.out.println("Hi from Slave A!");
+
+            ArrayList<Thread> slaveThreads = new ArrayList<>();
+
+
+            slaveThreads.add(new Thread(new SlaveAServerListener(clientSocket, 'a', doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveAServerWriter(clientSocket, doneJobs_Lock)));
+
+            for (Thread t: slaveThreads)
+            {
+                t.start();
+            }
+
+            for (Thread t: slaveThreads)
+            {
+                try
+                {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        /*try (
                 //sockets for connections between client (= slave) and master (server)
                 Socket clientSocket = new Socket(hostName, portNumber);
         ) {
@@ -61,6 +95,6 @@ public class SlaveA {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        }
+        } */
     }
 }

@@ -35,7 +35,7 @@ public class ThreadedServer {
 
             System.out.println("Before serverSocketSA.accept() called...");
 
-          /*  // socket streams- slave A:
+           // socket streams- slave A:
             Socket clientSocketSA = serverSocketSA.accept();
             System.out.println("Slave A is connected to Master.");
             // send to slaveAWriter:
@@ -43,7 +43,7 @@ public class ThreadedServer {
             System.out.println("slaveA output connected");
             // send to slaveAListener:
             ObjectInputStream objectInSA = new ObjectInputStream(new BufferedInputStream(clientSocketSA.getInputStream()));
-            System.out.println("slaveA input created"); */
+            System.out.println("slaveA input created");
 
             /*// socket streams - slave B
             Socket clientSocketSB = serverSocketSB.accept();
