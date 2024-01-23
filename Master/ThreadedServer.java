@@ -11,27 +11,30 @@ import java.util.ArrayList;
 public class ThreadedServer {
     public static void main(String[] args) {
         // hardcoded port for now...
-        //args = new String[] {"30121", "30122", "30123"};
+        //args = new String[] {"30120", "30121", "30122", "30123"};
 
-        if (args.length != 3)
+        if (args.length != 4)
         {
             System.out.println("Usage: java Server <port number>");
             System.exit(1);
         }
 
-        int portNumberC = Integer.parseInt(args[0]); // for client connection
-        int portNumberSA = Integer.parseInt(args[1]); // for slave A connections
-        int portNumberSB = Integer.parseInt(args[2]); // for slave b connections
+        int portNumberC0 = Integer.parseInt(args[0]); // for client connection
+        int portNumberC1 = Integer.parseInt(args[1]); // for second client connection
+        int portNumberSA = Integer.parseInt(args[2]); // for slave A connections
+        int portNumberSB = Integer.parseInt(args[3]); // for slave b connections
 
         try (
-                ServerSocket serverSocketC = new ServerSocket(portNumberC);
+                ServerSocket serverSocketC0 = new ServerSocket(portNumberC0);
+                ServerSocket serverSocketC1 = new ServerSocket(portNumberC1);
                 ServerSocket serverSocketSA = new ServerSocket(portNumberSA);
                 ServerSocket serverSocketSB = new ServerSocket(portNumberSB);
         )
         {
             // socket streams- client:
-            Socket clientSocketC = serverSocketC.accept();
-            System.out.println("Client is connected to Master");
+            Socket clientSocketC0 = serverSocketC0.accept();
+            System.out.println("Client0 is connected to Master");
+            Socket clientSocketC1 = serverSocketC1.accept();
 
             System.out.println("Before serverSocketSA.accept() called...");
 
@@ -61,10 +64,12 @@ public class ThreadedServer {
             ServerSharedMemory sharedMemory = new ServerSharedMemory();
 
             // FOR THE CLIENT LISTENER-----------------------------------------------------------------------------
-            allThreads.add(new Thread(new ServerThreadClientListener(clientSocketC, 0, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadClientListener(clientSocketC0, 0, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadClientListener(clientSocketC1, 1, sharedMemory)));
 System.out.println("client listener created");
             // FOR THE CLIENT WRITER-----------------------------------------------
-            allThreads.add(new Thread(new ServerThreadClientWriter(clientSocketC, 0, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadClientWriter(clientSocketC0, 0, sharedMemory)));
+            allThreads.add(new Thread(new ServerThreadClientWriter(clientSocketC1, 1, sharedMemory)));
 System.out.println("client writer created");
             // FOR DECIDING WHICH SLAVE TO SEND TO- DECIDER THREAD---------------------------------------
             Thread deciderThread = new Thread(new ServerThreadDecider(sharedMemory));

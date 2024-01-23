@@ -7,41 +7,50 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class SlaveBServerWriter implements Runnable{
+public class SlaveServerWriter implements Runnable{
     private Socket clientSocket;
-    private Object doneBJobs_Lock;
+    private Object doneJobs_Lock;
 
     boolean runThread = true;
 
-    public SlaveBServerWriter(Socket clientSocket, Object doneBJobs_Lock) {
+    public SlaveServerWriter(Socket clientSocket, Object doneJobs_Lock) {
         this.clientSocket = clientSocket;
-        this.doneBJobs_Lock = doneBJobs_Lock;
+        this.doneJobs_Lock = doneJobs_Lock;
     }
 
     public void run()
     {
         try(
                 ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
-        ) {
+                ) {
             while(runThread)
             {
                 // to use as current statuses:
-                ArrayList<Job> currDoneBJobs;
+                ArrayList<Job> currDoneAJobs;
 
-                synchronized (doneBJobs_Lock)
+                synchronized (doneJobs_Lock)
                 {
-                    currDoneBJobs = new ArrayList<>(Slave.getDoneBJobs());
+                    currDoneAJobs = new ArrayList<>(Slave.getDoneAJobs());
                 }
 
-                for (Job currJob : currDoneBJobs)
+                for (Job currJob : currDoneAJobs)
                 {
                     // remove each one from original array
-                    synchronized (doneBJobs_Lock)
+                    if(currJob.getType() == 'a' )
                     {
-                        Slave.getDoneBJobs().remove(currJob);
+                        synchronized (doneJobs_Lock)
+                        {
+                            Slave.getDoneAJobs().remove(currJob);
+                        }
+                    } else {
+                        synchronized (doneJobs_Lock)
+                        {
+                            Slave.getDoneAJobs().remove(currJob);
+                        }
                     }
+
                     // write it to the socket
-                    System.out.println("SlaveBServerWriter: Sending to Slave B socket: Client: "
+                    System.out.println("SlaveAServerWriter: Sending to Slave A socket: Client: "
                             + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
                     objectOut.writeObject(currJob);
                     objectOut.flush();
@@ -52,4 +61,3 @@ public class SlaveBServerWriter implements Runnable{
         }
     }
 }
-
