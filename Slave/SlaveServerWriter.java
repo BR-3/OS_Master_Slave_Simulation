@@ -60,14 +60,12 @@ public class SlaveServerWriter implements Runnable{
                             Slave.getDoneBJobs().remove(currJob);
                         }
                     }
+                    // write it to the socket
+                    System.out.println("SlaveServerWriter: Sending to Slave socket on master: Client: "
+                            + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
+                    objectOut.writeObject(currJob);
+                    objectOut.flush();
                 }
-                
-                // to use as current statuses:
-                // write it to the socket
-                System.out.println("SlaveServerWriter: Sending to Slave socket on master: Client: "
-                        + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
-                objectOut.writeObject(currJob);
-                objectOut.flush();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
