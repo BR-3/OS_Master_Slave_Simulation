@@ -40,26 +40,53 @@ public class ServerThreadClientWriter implements Runnable {
             while (true)
             {
                 ArrayList<Job> currDoneJobsForClient0;
+                ArrayList<Job> currDoneJobsForClient1;
 
-                synchronized (sharedMemory.getClient0DoneJobs_LOCK())
+                if(clientId == 0)
                 {
-                    currDoneJobsForClient0 = new ArrayList<>(sharedMemory.getClient0DoneJobs());
-                }
-
-                for (Job currDoneJob : currDoneJobsForClient0)
-                {
-                    // remove each one from original array
                     synchronized (sharedMemory.getClient0DoneJobs_LOCK())
                     {
-                        sharedMemory.getClient0DoneJobs().remove(currDoneJob);
+                        currDoneJobsForClient0 = new ArrayList<>(sharedMemory.getClient0DoneJobs());
                     }
 
-                    // write it to the client0 socket:
-                    System.out.println("ServerTClient0Writer: Sending to client0 socket: " +
-                            "Client: " + currDoneJob.getClient() + ", Type: " + currDoneJob.getType() +
-                            "ID: " + currDoneJob.getID());
-                    objectOut.writeObject(currDoneJob);
-                    objectOut.flush();
+                    for (Job currDoneJob : currDoneJobsForClient0)
+                    {
+                        // remove each one from original array
+                        synchronized (sharedMemory.getClient0DoneJobs_LOCK())
+                        {
+                            sharedMemory.getClient0DoneJobs().remove(currDoneJob);
+                        }
+
+                        // write it to the client0 socket:
+                        System.out.println("ServerTClient0Writer: Sending to client0 socket: " +
+                                "Client: " + currDoneJob.getClient() + ", Type: " + currDoneJob.getType() +
+                                "ID: " + currDoneJob.getID());
+                        objectOut.writeObject(currDoneJob);
+                        objectOut.flush();
+                    }
+                }
+                else if (clientId == 1)
+                {
+                    synchronized (sharedMemory.getClient0DoneJobs_LOCK())
+                    {
+                        currDoneJobsForClient1 = new ArrayList<>(sharedMemory.getClient1DoneJobs());
+                    }
+
+                    for (Job currDoneJob : currDoneJobsForClient1)
+                    {
+                        // remove each one from original array
+                        synchronized (sharedMemory.getClient1DoneJobs_LOCK())
+                        {
+                            sharedMemory.getClient1DoneJobs().remove(currDoneJob);
+                        }
+
+                        // write it to the client0 socket:
+                        System.out.println("ServerTClient1Writer: Sending to client1 socket: " +
+                                "Client: " + currDoneJob.getClient() + ", Type: " + currDoneJob.getType() +
+                                "ID: " + currDoneJob.getID());
+                        objectOut.writeObject(currDoneJob);
+                        objectOut.flush();
+                    }
                 }
             }
         } catch (IOException e) {

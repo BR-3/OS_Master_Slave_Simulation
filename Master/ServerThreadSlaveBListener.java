@@ -21,10 +21,8 @@ public class ServerThreadSlaveBListener implements Runnable {
         this.sharedMemory = sharedMemory;
     }
     public void run() {
-        System.out.println("Hi from serverThreadSlaveBListener before connecting");
         try (objectInSB;
         ) {
-            System.out.println("Hi from ServerThreadSlaveAListener- the thread is working:))"); // THIS IS NOT WORKING YET
             Object input;
             while ((input = objectInSB.readObject()) != null)
             {

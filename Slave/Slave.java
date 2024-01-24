@@ -9,25 +9,14 @@ import java.util.ArrayList;
 public class Slave {
     static ArrayList<Job> doneAJobs = new ArrayList<Job>();
     static ArrayList<Job> doneBJobs = new ArrayList<Job>();
-    static Object doneAJobs_Lock = new Object();
-    static Object doneBJobs_Lock = new Object();
+    static Object doneJobs_Lock = new Object();
 
     // getters and setters
-
     public static ArrayList<Job> getDoneAJobs() {
         return doneAJobs;
     }
-
-    public static void setDoneAJobs(ArrayList<Job> doneAJobs) {
-        Slave.doneAJobs = doneAJobs;
-    }
-
     public static ArrayList<Job> getDoneBJobs() {
         return doneBJobs;
-    }
-
-    public static void setDoneBJobs(ArrayList<Job> doneBJobs) {
-        Slave.doneBJobs = doneBJobs;
     }
 
     public static void main(String[] args)  {
@@ -46,14 +35,13 @@ public class Slave {
                 Socket slaveASocket = new Socket(hostName, portNumberSA);
                 Socket slaveBSocket = new Socket(hostName, portNumberSB);
                                 ) {
-            System.out.println("Hi from Slave A!");
 
             ArrayList<Thread> slaveThreads = new ArrayList<>();
 
-            slaveThreads.add(new Thread(new SlaveAServerListener(slaveASocket, 'a', doneAJobs_Lock)));
-            slaveThreads.add(new Thread(new SlaveAServerWriter(slaveASocket, doneAJobs_Lock)));
-            slaveThreads.add(new Thread(new SlaveBServerListener(slaveBSocket, 'b', doneBJobs_Lock)));
-            slaveThreads.add(new Thread(new SlaveBServerWriter(slaveBSocket, doneBJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveServerListener(slaveASocket, 'a', doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveServerWriter(slaveASocket, doneJobs_Lock, 'A')));
+            slaveThreads.add(new Thread(new SlaveServerListener(slaveBSocket, 'b', doneJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveServerWriter(slaveBSocket, doneJobs_Lock, 'B')));
 
             for (Thread t: slaveThreads)
             {
