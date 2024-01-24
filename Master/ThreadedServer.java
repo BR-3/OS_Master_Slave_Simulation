@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 public class ThreadedServer {
     public static void main(String[] args) {
-        // hardcoded port for now...
+        // hardcoded port in configuration:
         //args = new String[] {"30120", "30121", "30122", "30123"};
 
         if (args.length != 4)
         {
-            System.out.println("Usage: java Server <port number>");
+            System.out.println("Usage: java Server <port number> <port number> <port number> <port number>");
             System.exit(1);
         }
 
@@ -67,6 +67,7 @@ public class ThreadedServer {
             // FOR THE CLIENT WRITER-----------------------------------------------
             allThreads.add(new Thread(new ServerThreadClientWriter(clientSocketC0, 0, sharedMemory)));
             allThreads.add(new Thread(new ServerThreadClientWriter(clientSocketC1, 1, sharedMemory)));
+
             // FOR DECIDING WHICH SLAVE TO SEND TO- DECIDER THREAD---------------------------------------
             Thread deciderThread = new Thread(new ServerThreadDecider(sharedMemory));
             allThreads.add(deciderThread);

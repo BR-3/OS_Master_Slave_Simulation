@@ -29,7 +29,6 @@ public class ClientThreadServerWriter implements Runnable{
                 ) {
             while(runThread)
             {
-                System.out.println("hi from clientThreadServerWriter running");
                 String user;
                 int jobId = 0;
                 System.out.println("Please enter jobs of type a or b: ");
@@ -48,7 +47,7 @@ public class ClientThreadServerWriter implements Runnable{
                         jobId++;
 
                         //write message to console:
-                        System.out.println("Sending to master.");
+                        System.out.println("Sending to master. \n");
 
                         // this sends the newJob to the master
                         objectOut.writeObject(newJob);

@@ -44,7 +44,7 @@ public class SlaveServerWriter implements Runnable{
                             Slave.getDoneAJobs().remove(currJob);
                         }
                         System.out.println("SlaveServerAWriter: Sending to Slave socket on master: Client: "
-                                + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
+                                + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID() + "\n");
 
                         objectOut.writeObject(currJob);
                         objectOut.flush();

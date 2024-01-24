@@ -10,8 +10,8 @@ public class Job implements Serializable {
 	
 	//Constructor
 	public Job(char type, int ID, int client) {
-		this.type=type;
-		this.ID=ID;
+		this.type = type;
+		this.ID = ID;
 		this.client = client;
 	}
 

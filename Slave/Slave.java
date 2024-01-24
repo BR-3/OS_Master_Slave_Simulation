@@ -63,50 +63,5 @@ public class Slave {
             throw new RuntimeException(e);
         }
 
-        /*try (
-                //sockets for connections between client (= slave) and master (server)
-                Socket clientSocket = new Socket(hostName, portNumber);
-        ) {
-            ObjectInputStream jobInputStream = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-            ObjectOutputStream jobOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-            while (true)
-            {
-                System.out.println("hi from slave A");
-                char optimalJob = 'a';
-                Object input;
-                while((input = jobInputStream.readObject()) != null) {
-                    Job currJob = (Job) input;
-                    System.out.println("Received Job. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
-                    if(currJob.getType() == optimalJob)
-                    {
-                        System.out.println("Job is optimal, takes 2 seconds to complete.");
-                        Thread.sleep(2000);
-                    }
-                    else
-                    {
-                        System.out.println("Job is not optimal, takes 10 seconds to complete.");
-                        Thread.sleep(10000);
-                    }
-                    System.out.println("Completed job and sending to master. Client: " + currJob.getClient() + ", Type: " + currJob.getType() + " ID: " + currJob.getID() + "\n");
-                    jobOutputStream.writeObject(currJob);
-                    jobOutputStream.flush();
-                }
-
-            }
-
-        } catch (UnknownHostException e) {
-            System.err.println("Don't know about host " + hostName);
-            System.exit(1);
-        } catch (EOFException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to " + hostName);
-            e.printStackTrace();
-            System.exit(1);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } */
     }
 }

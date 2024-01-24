@@ -38,7 +38,7 @@ public class ServerThreadSlaveAListener implements Runnable{
             {
                 Job finishedJob = (Job) input;
                 System.out.println("Received from slave A - DONE job: Client: " +
-                        finishedJob.getClient() + ", type: " + finishedJob.getType() + ", id: " + finishedJob.getID());
+                        finishedJob.getClient() + ", type: " + finishedJob.getType() + ", id: " + finishedJob.getID() + "\n");
 
                 // adjusting the load
                 int reducedLoad;
@@ -51,6 +51,9 @@ public class ServerThreadSlaveAListener implements Runnable{
                 synchronized(doneJobs_Lock)
                 {
                     sharedMemory.getDoneJobs().add(finishedJob);
+                }
+                synchronized (sharedMemory.slaveALoad_LOCK)
+                {
                     sharedMemory.addSlaveALoad(reducedLoad);
                 }
             }
