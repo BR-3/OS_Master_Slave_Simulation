@@ -83,7 +83,7 @@ public class ServerThreadClientWriter implements Runnable {
                         // write it to the client0 socket:
                         System.out.println("ServerTClient1Writer: Sending to client1 socket: " +
                                 "Client: " + currDoneJob.getClient() + ", Type: " + currDoneJob.getType() +
-                                "ID: " + currDoneJob.getID());
+                                ", ID: " + currDoneJob.getID());
                         objectOut.writeObject(currDoneJob);
                         objectOut.flush();
                     }

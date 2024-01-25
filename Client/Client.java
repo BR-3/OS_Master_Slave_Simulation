@@ -12,8 +12,7 @@ import java.util.ArrayList;
 public class Client {
 
     public static void main(String[] args) {
-        // these args are hardcoded, but we can enter them if we want into the command line
-        //args = new String[]{"127.0.0.1", "30121", "1"}; // 3rd arg is client #, will have to be inputed on command prompt
+        //args = new String[]{"127.0.0.1", "30121", "1"}; // 3rd arg is client id#
 
         if (args.length != 3)
         {
@@ -35,7 +34,7 @@ public class Client {
                 // seems like we should instantiate the input and output streams here, but when I do I get an error
 
         {
-            System.out.println("Hi from the client! all connected :D");
+            System.out.println("Client is connected. ");
 
             // array for the client threads:
             ArrayList<Thread> clientThreads = new ArrayList<>();

@@ -34,7 +34,7 @@ public class ServerThreadClientListener implements Runnable{
              ObjectInputStream objectInC = new ObjectInputStream(new BufferedInputStream(clientSocket.getInputStream()));
              )
         {
-            System.out.println("Client Listener " + clientID + " is working.");
+
             Object input;
             while ((input = objectInC.readObject()) != null)
             {

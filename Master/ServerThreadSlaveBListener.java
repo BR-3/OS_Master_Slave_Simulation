@@ -41,6 +41,9 @@ public class ServerThreadSlaveBListener implements Runnable {
                 synchronized(doneJobs_Lock)
                 {
                     sharedMemory.getDoneJobs().add(finishedJob);
+                }
+                synchronized (sharedMemory.slaveBLoad_LOCK)
+                {
                     sharedMemory.addSlaveBLoad(reducedLoad);
                 }
             }

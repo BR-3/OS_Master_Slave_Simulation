@@ -38,7 +38,7 @@ public class ServerThreadDoneDecider implements Runnable {
 
                 if (currDoneJob.getClient() == 0)
                 {
-                    System.out.println("DoneDecider sending to client0 array.");
+                    System.out.println("DoneDecider sending to client0 array. \n");
                     synchronized (sharedMemory.getClient0DoneJobs_LOCK())
                     {
                         sharedMemory.getClient0DoneJobs().add(currDoneJob);
@@ -46,14 +46,12 @@ public class ServerThreadDoneDecider implements Runnable {
                 }
                 else
                 {
-                    System.out.println("DoneDecider sending to client1 array.");
+                    System.out.println("DoneDecider sending to client1 array. \n");
                     synchronized (sharedMemory.getClient1DoneJobs_LOCK())
                     {
                         sharedMemory.getClient1DoneJobs().add(currDoneJob);
                     }
                 }
-                System.out.println("UPDATE: Client0 array: " + sharedMemory.getClient0DoneJobs() +
-                        ", Client1 array: " + sharedMemory.getClient1DoneJobs());
             }
 
         }

@@ -46,8 +46,8 @@ public class ServerThreadSlaveBWriter implements Runnable{
                     {
                         sharedMemory.getJobsForSlaveB().remove(currJob);
                     }
-                    // write it to the slave A socket:
-                    System.out.println("ServerTSlaveBWriter: Sending to slave B socket: Client"
+                    // write it to the slave B socket:
+                    System.out.println("ServerTSlaveBWriter: Sending to slave B socket: Client: "
                             + currJob.getClient() + ", Type: " + currJob.getType() + ", ID: " + currJob.getID());
                     objectOutSB.writeObject(currJob);
                     objectOutSB.flush();
