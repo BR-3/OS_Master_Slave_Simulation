@@ -30,7 +30,7 @@ public class SlaveServerWriter implements Runnable{
             {
                 ArrayList<Job> currDoneJobs = null;
 
-                if(slaveType == 'A')
+                if(slaveType == 'a')
                 {
                     synchronized(doneJobs_Lock)
                     {
@@ -50,7 +50,7 @@ public class SlaveServerWriter implements Runnable{
                         objectOut.flush();
                     }
                 }
-                else if(slaveType == 'B')
+                else if(slaveType == 'b')
                 {
                     synchronized(doneJobs_Lock)
                     {
