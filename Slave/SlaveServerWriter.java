@@ -9,14 +9,16 @@ import java.util.ArrayList;
 
 public class SlaveServerWriter implements Runnable{
     private Socket clientSocket;
-    private Object doneJobs_Lock;
+    private Object doneAJobs_Lock;
+    private Object doneBJobs_Lock;
     private char slaveType;
 
     boolean runThread = true;
 
-    public SlaveServerWriter(Socket clientSocket, Object doneJobs_Lock, char slaveType) {
+    public SlaveServerWriter(Socket clientSocket, Object doneAJobs_Lock, Object doneBJobs_Lock, char slaveType) {
         this.clientSocket = clientSocket;
-        this.doneJobs_Lock = doneJobs_Lock;
+        this.doneAJobs_Lock = doneAJobs_Lock;
+        this.doneBJobs_Lock = doneBJobs_Lock;
         this.slaveType = slaveType;
     }
 
@@ -32,14 +34,14 @@ public class SlaveServerWriter implements Runnable{
 
                 if(slaveType == 'a')
                 {
-                    synchronized(doneJobs_Lock)
+                    synchronized(doneAJobs_Lock)
                     {
                         currDoneJobs = new ArrayList<>(Slave.getDoneAJobs());
                     }
 
                     for(Job currJob : currDoneJobs)
                     {
-                        synchronized(doneJobs_Lock)
+                        synchronized(doneAJobs_Lock)
                         {
                             Slave.getDoneAJobs().remove(currJob);
                         }
@@ -52,14 +54,14 @@ public class SlaveServerWriter implements Runnable{
                 }
                 else if(slaveType == 'b')
                 {
-                    synchronized(doneJobs_Lock)
+                    synchronized(doneBJobs_Lock)
                     {
                         currDoneJobs = new ArrayList<>(Slave.getDoneBJobs());
                     }
 
                     for(Job currJob : currDoneJobs)
                     {
-                        synchronized(doneJobs_Lock)
+                        synchronized(doneBJobs_Lock)
                         {
                             Slave.getDoneBJobs().remove(currJob);
                         }

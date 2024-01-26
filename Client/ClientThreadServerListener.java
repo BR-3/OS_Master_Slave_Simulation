@@ -33,11 +33,8 @@ public class ClientThreadServerListener implements Runnable{
             {
                 Job finishedJob = (Job) input;
 
-                // this will print out the received job only if it is the client that sent it
-                if(clientID == finishedJob.getClient())
-                {
-                    System.out.println("Received DONE job:  Type: " + finishedJob.getType() + ", ID: " + finishedJob.getID() + " Client: " + finishedJob.getClient());
-                }
+                System.out.println("Received DONE job:  Type: " + finishedJob.getType() + ", ID: " + finishedJob.getID() + " Client: " + finishedJob.getClient());
+
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

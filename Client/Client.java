@@ -31,7 +31,6 @@ public class Client {
                 //sockets for connections between client and master (server)
                 Socket clientSocket = new Socket(hostName, portNumberC);
                 )
-                // seems like we should instantiate the input and output streams here, but when I do I get an error
 
         {
             System.out.println("Client is connected. ");

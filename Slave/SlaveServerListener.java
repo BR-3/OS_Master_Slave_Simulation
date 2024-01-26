@@ -8,13 +8,15 @@ import java.net.Socket;
 public class SlaveServerListener implements Runnable{
     private Socket clientSocket;
     private char optimalJob;
-    private Object doneJobs_Lock;
+    private Object doneAJobs_Lock;
+    private Object doneBJobs_Lock;
 
-    public SlaveServerListener(Socket clientSocket, char optimalJob, Object doneJobs_Lock)
+    public SlaveServerListener(Socket clientSocket, char optimalJob, Object doneAJobs_Lock, Object doneBJobs_Lock)
     {
         this.clientSocket = clientSocket;
         this.optimalJob = optimalJob;
-        this.doneJobs_Lock = doneJobs_Lock;
+        this.doneAJobs_Lock = doneAJobs_Lock;
+        this.doneBJobs_Lock = doneBJobs_Lock;
     }
 
     public void run()
@@ -43,12 +45,12 @@ public class SlaveServerListener implements Runnable{
                 // this puts finished jobs on an arraylist of finished jobs
                 if(optimalJob == 'a')
                 {
-                    synchronized (doneJobs_Lock)
+                    synchronized (doneAJobs_Lock)
                     {
                         Slave.doneAJobs.add(currJob);
                     }
                 } else {
-                    synchronized (doneJobs_Lock)
+                    synchronized (doneBJobs_Lock)
                     {
                         Slave.doneBJobs.add(currJob);
                     }

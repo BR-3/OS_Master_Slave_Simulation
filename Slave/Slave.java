@@ -9,7 +9,8 @@ import java.util.ArrayList;
 public class Slave {
     static ArrayList<Job> doneAJobs = new ArrayList<Job>();
     static ArrayList<Job> doneBJobs = new ArrayList<Job>();
-    static Object doneJobs_Lock = new Object();
+    static Object doneAJobs_Lock = new Object();
+    static Object doneBJobs_Lock = new Object();
 
     // getters and setters
     public static ArrayList<Job> getDoneAJobs() {
@@ -39,8 +40,8 @@ public class Slave {
 
             ArrayList<Thread> slaveThreads = new ArrayList<>();
 
-            slaveThreads.add(new Thread(new SlaveServerListener(slaveSocket, slaveType, doneJobs_Lock)));
-            slaveThreads.add(new Thread(new SlaveServerWriter(slaveSocket, doneJobs_Lock, slaveType)));
+            slaveThreads.add(new Thread(new SlaveServerListener(slaveSocket, slaveType, doneAJobs_Lock, doneBJobs_Lock)));
+            slaveThreads.add(new Thread(new SlaveServerWriter(slaveSocket, doneAJobs_Lock, doneBJobs_Lock, slaveType)));
 
             for (Thread t: slaveThreads)
             {
